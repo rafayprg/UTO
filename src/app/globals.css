@@ -133,3 +133,436 @@
 .related-tool-pill{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:7px;font-size:13px;color:#334155;transition:border-color .15s,box-shadow .15s}
 .related-tool-pill:hover{border-color:#93c5fd;box-shadow:0 2px 6px rgba(0,0,0,0.04);color:#2563eb;text-decoration:none}
 @media(max-width:768px){.guide-cta-banner{flex-direction:column;align-items:flex-start}.scenarios-grid{grid-template-columns:1fr}.step-card{flex-direction:column;gap:14px}}
+
+/* ========================================================
+   LANDING PAGE & SPECIFICATIONS DESIGN SYSTEM
+   ======================================================== */
+.landing-wrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 32px 80px;
+}
+
+.landing-hero {
+  padding: 65px 0 55px;
+  text-align: center;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.landing-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: #edf4fe;
+  border: 1px solid #cfe0f9;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #1e52b5;
+  margin-bottom: 24px;
+}
+
+.landing-hero-title {
+  font-size: clamp(34px, 4.4vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  color: #0f172a;
+  margin-bottom: 22px;
+}
+
+.hero-gradient-text {
+  background: linear-gradient(135deg, #1d4ed8 0%, #0284c7 50%, #0f766e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.landing-hero-subtitle {
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.75;
+  color: #475569;
+  max-width: 780px;
+  margin: 0 auto 32px;
+}
+
+.landing-hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+}
+
+.button.large {
+  padding: 13px 26px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.landing-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px 32px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+}
+
+.landing-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.landing-stat strong {
+  font-size: clamp(24px, 2.5vw, 32px);
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+}
+
+.landing-stat span {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Sections */
+.landing-section {
+  padding: 60px 0;
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.section-head.text-center {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.section-head h2 {
+  font-size: clamp(24px, 2.5vw, 34px);
+  color: #0f172a;
+  letter-spacing: -0.03em;
+  margin-top: 6px;
+}
+
+.section-subtext {
+  font-size: 14px;
+  color: #64748b;
+  max-width: 620px;
+  margin-top: 8px;
+  line-height: 1.7;
+}
+
+/* Pillars Grid */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.pillar-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 28px 24px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pillar-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+.pillar-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 20px;
+}
+
+.bg-emerald { background: #ecfdf5; color: #059669; }
+.bg-blue { background: #eff6ff; color: #2563eb; }
+.bg-purple { background: #faf5ff; color: #9333ea; }
+.bg-orange { background: #fff7ed; color: #ea580c; }
+
+.pillar-card h3 {
+  font-size: 16px;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+.pillar-card p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #64748b;
+}
+
+/* Suites Grid */
+.suites-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.suite-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.suite-card:hover {
+  transform: translateY(-2px);
+  border-color: #93c5fd;
+  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.08);
+  text-decoration: none;
+}
+
+.suite-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.suite-card h3 {
+  font-size: 18px;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.suite-card p {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.65;
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.suite-explore-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+/* How It Works Grid */
+.how-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.how-step-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 32px 26px;
+  position: relative;
+}
+
+.how-step-num {
+  font-size: 28px;
+  font-weight: 900;
+  color: #2563eb;
+  letter-spacing: -0.04em;
+  margin-bottom: 16px;
+}
+
+.how-step-card h3 {
+  font-size: 17px;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+.how-step-card p {
+  font-size: 13px;
+  line-height: 1.75;
+  color: #64748b;
+}
+
+/* Guides Highlight Card */
+.guides-highlight-card {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 16px;
+  padding: 50px 45px;
+  color: #f8fafc;
+}
+
+.guides-highlight-content {
+  max-width: 780px;
+}
+
+.guides-highlight-content h2 {
+  font-size: clamp(24px, 2.6vw, 36px);
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.guides-highlight-content p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #cbd5e1;
+  margin-bottom: 28px;
+}
+
+.guides-highlight-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.button.hero-light-btn {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #ffffff;
+}
+
+.button.hero-light-btn:hover {
+  background: #f1f5f9;
+}
+
+.text-white {
+  color: #ffffff !important;
+}
+
+/* Landing FAQs */
+.landing-faqs-container {
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-accordion {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 18px 22px;
+}
+
+.faq-accordion summary {
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.faq-accordion p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #64748b;
+  margin-top: 14px;
+}
+
+/* Landing CTA Banner */
+.landing-cta-banner {
+  margin-top: 40px;
+  padding: 55px 35px;
+  background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.landing-cta-banner h2 {
+  font-size: clamp(24px, 2.6vw, 36px);
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+
+.landing-cta-banner p {
+  font-size: 15px;
+  color: #475569;
+  max-width: 620px;
+  margin: 0 auto 26px;
+}
+
+/* Specifications Table */
+.specs-table-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.specs-table th {
+  width: 25%;
+  min-width: 170px;
+  padding: 12px 18px;
+  background: #f8fafc;
+  color: #475569;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  font-weight: 600;
+}
+
+.specs-table td {
+  padding: 12px 18px;
+  color: #1e293b;
+  border-bottom: 1px solid #f1f5f9;
+  line-height: 1.6;
+}
+
+/* Responsive tweaks */
+@media (max-width: 1024px) {
+  .pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .suites-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-wrapper {
+    padding: 0 18px 60px;
+  }
+  .landing-stats-strip {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 20px;
+  }
+  .pillars-grid,
+  .suites-grid,
+  .how-steps-grid {
+    grid-template-columns: 1fr;
+  }
+  .guides-highlight-card {
+    padding: 30px 22px;
+  }
+  .specs-table th {
+    width: 35%;
+  }
+}

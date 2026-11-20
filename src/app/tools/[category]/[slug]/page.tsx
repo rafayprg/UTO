@@ -93,6 +93,7 @@ export default async function ToolPage({ params }: Props) {
         <PrivacyBadge/>
         <nav aria-label="On this page">
           <a href="#workspace">Workspace</a>
+          <a href="#specs">Specifications</a>
           {tool.formulaExplanation && <a href="#formula">Formula</a>}
           {tool.workedExamples && tool.workedExamples.length > 0 && <a href="#examples">Examples</a>}
           <a href="#guide">How to use</a>
@@ -115,6 +116,45 @@ export default async function ToolPage({ params }: Props) {
             : "Thumbnail previews request images from i.ytimg.com. Subtitle text is processed locally; no transcript-fetching service is used."}
         </p>
       )}
+
+      <section id="specs" className="tool-specs-section content-section" aria-label="Technical Specifications">
+        <p className="eyebrow">TECHNICAL SPECIFICATIONS</p>
+        <h2>Tool Architecture & Specifications</h2>
+        <div className="specs-table-container">
+          <table className="specs-table">
+            <tbody>
+              <tr>
+                <th>Execution Model</th>
+                <td>Client-Side In-Browser ({tool.isWasm ? "Compiled WebAssembly Sandbox" : "Native V8 JavaScript Engine"})</td>
+              </tr>
+              <tr>
+                <th>Data Ingestion & Privacy</th>
+                <td>100% Zero-Upload · Air-Gapped Local Computation</td>
+              </tr>
+              <tr>
+                <th>Processing Engine</th>
+                <td>{tool.engineType === "wasm" ? "WebAssembly (WASM) / Web Workers" : tool.engineType === "client" ? "HTML5 Canvas & Web API Sandbox" : "High-Precision Mathematical Engine"}</td>
+              </tr>
+              <tr>
+                <th>Category Suite</th>
+                <td>{categories[tool.category]} · {tool.group}</td>
+              </tr>
+              <tr>
+                <th>Operational Status</th>
+                <td>{tool.status === "live" ? "Active / Full Execution" : "Staged Sandbox"}</td>
+              </tr>
+              <tr>
+                <th>Supported Data Types</th>
+                <td>{tool.keywords.slice(0, 5).join(", ")}</td>
+              </tr>
+              <tr>
+                <th>Network Dependency</th>
+                <td>100% Offline Capable (No third-party cookies, tracking, or remote APIs)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       {tool.formulaExplanation && (
         <section id="formula" className="formula-section content-section" aria-label="Formula and calculation logic">
