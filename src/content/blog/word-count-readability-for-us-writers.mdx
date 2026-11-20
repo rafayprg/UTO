@@ -1,0 +1,58 @@
+---
+title: "Word counts and readability checks that help you edit a US English draft"
+description: "Check word limits, character counts, reading time, and approximate English readability without confusing a formula with good writing."
+publishedAt: "2026-11-19"
+category: "Writing & Text"
+relatedToolSlug: "word-counter"
+readingTime: "5 min read"
+---
+
+A 600-word newsletter takes three minutes to read at 200 words per minute. At 150 words per minute, the same draft takes four minutes. Neither estimate tells you whether the opening makes sense, whether the reader understands your terminology, or whether the call to action is useful. Counts answer specific questions. Editing still requires attention to the person reading.
+
+The [Word & Readability Counter](/tools/text/word-counter/) puts those measurements in one browser workspace. Use it to check a submission limit, budget a reading window, or compare two versions of a draft. Your text stays in the current tab; the tool does not send it to a writing service or create a persistent document history.
+
+## Start with the exact text the reader will receive
+
+Paste your draft into **Your text**. The counts update immediately. Include the headline, captions, and footnotes only if they belong in the requirement you are checking. A magazine editor might count the article body alone. A grant application might include headings. The receiving organization’s instructions decide what counts, not the counter.
+
+For a 500-word application, paste the final answer rather than your notes, instructions, and answer together. If the result is 516 words, identify sixteen expendable words in context. Deleting a meaningful qualification just to reach 500 can make the answer less accurate. Removing a repeated explanation usually does less damage.
+
+Compare the final draft in the receiving application before submitting. Applications can count hyphenated expressions, URLs, initials, and numbers differently. The browser’s word segmentation follows language conventions rather than simply treating every space as a boundary. A small disagreement does not necessarily mean either application is broken.
+
+## Choose the right character measurement
+
+The tool displays characters, characters without whitespace, and UTF-16 code units separately. Those numbers answer different questions. Whitespace includes more than the ordinary space between two words: tabs and line breaks also disappear from the without-whitespace count.
+
+Where the browser supports grapheme segmentation, the character total follows user-perceived characters. A combined emoji can therefore count as one displayed character while occupying multiple UTF-16 code units. Accented letters can also have more than one underlying representation. Do not assume the visible character count equals a website’s technical storage limit.
+
+For a short author bio, start with the normal character total. If the destination rejects it, check the destination’s own counter and reduce the text there. For a developer-facing field limit, use the measurement specified by the system. The counter does not calculate a social network’s proprietary weighting rules or promise that every destination will accept the same length.
+
+## Turn reading time into a planning assumption
+
+Move the **Reading speed** slider to choose a rate between 80 and 500 words per minute. The estimate is calculated from word count and the selected rate, then rounded up to whole seconds. It is a scenario you control, not a measurement of your readers.
+
+For example, a 900-word onboarding note at 200 words per minute gives four minutes and thirty seconds. At 150, it gives six minutes. If a new employee must also inspect a diagram or complete a task, add that time separately. The tool sees the pasted words; it cannot see the work surrounding them.
+
+For a spoken presentation, use the estimate as a first budget and then rehearse aloud. Pauses, audience questions, emphasis, and slide changes do not appear in a word count. A five-minute rehearsal is stronger evidence than a five-minute calculator result. A caption-based script can first be prepared with the [SRT cleanup workflow](/blog/youtube-thumbnails-and-srt-cleanup-guide/).
+
+## Readability formulas describe text structure
+
+Flesch Reading Ease and Flesch-Kincaid Grade Level use average sentence length and average syllables per word. A higher Reading Ease result generally indicates simpler sentence and word structure. The grade-level result uses a US school-grade scale; it is not an assessment of a particular reader. Microsoft’s [explanation of the two formulas](https://support.microsoft.com/en-us/word/get-your-document-s-readability-and-level-statistics-in-microsoft-word?ad=us&rs=en-us&ui=en-us) documents their inputs and calculation.
+
+Localtools estimates English syllables with a spelling-based heuristic. Names, abbreviations, technical vocabulary, and unusual pronunciations can distort the estimate. Sentence detection can also mistake a period in an abbreviation for a sentence boundary. These limitations matter especially in a short sample, where one classification changes a large share of the input.
+
+Use a score to locate something worth inspecting. Suppose a paragraph contains one long sentence with three instructions. Split it where the reader needs to make a decision, then read both versions aloud. If the revised version is easier to follow and preserves the meaning, the edit helped. A lower grade number alone does not establish that.
+
+## Edit for a US audience without excluding other readers
+
+Keep familiar US spelling when that is your house style, but explain local references when the document may travel. Write “November 19, 2026” instead of an ambiguous numeric date. Label a dollar amount “USD” if readers may also use Canadian or Australian dollars. Define an acronym on first use when the audience may not know it.
+
+Do not remove a necessary technical term merely because it has several syllables. Explain the term in plain language and use it consistently. Conversely, a string of short words can still produce an unclear instruction if the actor, deadline, or expected result is missing. Readability formulas cannot check those omissions.
+
+## Save evidence of the draft you actually checked
+
+Use **Copy statistics** for a brief handoff note or **Download statistics** for a text record. **Download text** saves the current draft separately. The statistics report does not contain a revision history, so give downloaded files useful names when comparing versions.
+
+If clipboard access fails, download the statistics instead. If analysis stops because the draft exceeds one million characters, split it at natural section boundaries and inspect each part. English readability scores should not be applied to non-English or mixed-language passages as if they were equivalent measurements.
+
+Before closing the tab, save the draft you intend to keep. Then review the final destination’s count, reread the opening and instructions, and verify any names, dates, and claims. Those checks make the measurements useful.

@@ -1,0 +1,2 @@
+import type { GuideSection as Section } from "@/lib/guides";
+export function GuideSection({ sections, title }: { sections: Section[]; title: string }) { return <section id="guide" className="tool-guide"><p className="eyebrow">A PRACTICAL WALKTHROUGH</p><h2>{title}</h2>{sections.map(section => <div key={section.heading}><h3>{section.heading}</h3>{section.paragraphs.map((paragraph,index) => <p key={index}>{paragraph}</p>)}</div>)}</section>; }

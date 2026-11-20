@@ -1,0 +1,62 @@
+---
+title: "How to merge PDFs privately in your browser"
+description: "Combine documents, put individual pages in order, and check the result without uploading your PDFs to a processing service."
+publishedAt: "2026-11-18"
+category: "PDF & Documents"
+relatedToolSlug: "pdf-merger"
+readingTime: "5 min read"
+---
+
+Putting several PDFs into one file sounds simple until the pages arrive in the wrong order, an appendix is missing, or a signed document behaves differently after export. A dependable merge is a small document-preparation workflow: select the right sources, arrange their pages, create a new file, and inspect what you made. Localtools performs the processing in your browser, so your documents do not need to be uploaded to a conversion server.
+
+## Start with a plan and keep the originals
+
+Make a short outline before selecting files. For a project handover, the final document might contain a cover letter, a scope summary, the main report, and supporting receipts. Give each source a descriptive filename. When several sources are called `document.pdf`, it becomes harder to recognize the correct page in the organizer.
+
+Keep the originals unchanged in a separate folder. Merging creates a new PDF; it is not a replacement for your source archive. If you later discover an omitted page or need to change the order, having the originals means you can repeat the process without extracting pages from an already modified copy.
+
+## Select documents within the browser limits
+
+Open the PDF Merger & Page Reorder tool and choose your source PDFs. You can select several at once or add more after the first selection. The current workspace accepts up to 25 PDFs, 50 MB per file, 100 MB combined, and 500 source pages. These limits reduce the chance that a large task exhausts browser memory. They do not guarantee that every device can handle the maximum.
+
+If an input cannot be read, the tool reports an error rather than sending it to a server fallback. Encrypted and damaged PDFs are not supported. Obtain a permitted, unencrypted copy from the document owner when necessary. Do not assume that changing a filename or extension will remove encryption or repair a broken file.
+
+## Organize pages, not just files
+
+The workspace lists individual pages with their source filename and original page number. These cards identify pages; they are not rendered page thumbnails. Keep the source documents open in your usual PDF viewer if you need visual reference while organizing them.
+
+Drag a page into position or enter its destination in the numeric position field and press Enter for keyboard-accessible ordering. The sequence in the workspace determines the output sequence. Removing a card excludes that page from the new PDF without deleting it from the original file. Restore all pages returns the full source sequence, including pages you removed.
+
+Consider a two-page letter and a three-page attachment. If the attachment's final page is a summary that belongs near the front, the order could be letter page 1, attachment page 3, letter page 2, then attachment pages 1 and 2. Read that sequence carefully before exporting. A page count alone would not reveal a misplaced summary.
+
+## Download and inspect the actual result
+
+Choose Merge & download when the order looks right. The browser worker reads the source documents, copies the selected pages, and creates `merged.pdf`. The work remains on your device. Large documents can take time; leave the tab open and avoid starting a second operation while the first is busy.
+
+Open the downloaded PDF in a separate viewer. Check its total page count, the first and last page, every transition between sources, and any page you moved or removed. For a document you will print, also inspect mixed page sizes, orientation, margins, and blank backs. A technically valid PDF can still be arranged incorrectly for its intended reader.
+
+Search for a short phrase in the output if searchable text matters to your workflow. The merger does not perform optical character recognition. A scanned page that started as an image does not become searchable merely because it was merged with a text-based PDF.
+
+## Understand document-level limitations
+
+Copying visible page content does not guarantee preservation of every feature associated with a PDF. Forms, bookmarks, embedded files, annotations, and document metadata deserve separate review. If a particular interactive feature is essential, test it in the output rather than assuming it survived unchanged.
+
+Digital signatures are especially important. A cryptographic signature attests to a particular document state. Creating a merged document does not carry forward the original signature's validity as if the new file were identical. Preserve signed originals and follow the recipient's process for combining or referencing them. A visible signature image is different from a verifiable digital signature.
+
+This tool is also not a redaction service. Deleting a page from the output can remove that page, but covering words with a visible shape in some other editor may leave the underlying text accessible. Use a purpose-built, verified redaction workflow when information must be permanently removed.
+
+## What “local” protects, and what it does not
+
+Local processing avoids sending document contents to an application processing backend. It does not make your computer immune to malicious browser extensions, screen capture, malware, or someone else using the same device. Your downloaded file is still a normal file on disk, and your browser may remember where you saved it.
+
+The workspace has no account-based history or automatic document backup. Download what you need before leaving the page. Clear the workspace or close the tab when finished, and manage the downloaded files according to your own storage and sharing needs. For a private handover, check the recipient and attachment once more before sending the final document.
+
+## A short final checklist
+
+- The expected number of pages is present and the reading order is correct.
+- Moved pages and transitions between documents have been checked visually.
+- Required forms, annotations, and other interactive features have been tested.
+- Signed originals are preserved separately when signature validity matters.
+- The downloaded file has a useful name and is saved in the intended location.
+
+With those checks complete, the merge is more than a successful download: it is a document you have actually reviewed. Use the companion tool below to assemble your next bundle locally.

@@ -1,0 +1,66 @@
+---
+title: "Prepare YouTube thumbnails and clean SRT transcripts in your browser"
+description: "Find available YouTube thumbnail resolutions, handle blocked downloads, and turn your own SRT or VTT captions into usable plain text."
+publishedAt: "2026-11-19"
+category: "YouTube & Creator"
+relatedToolSlug: "youtube-toolkit"
+readingTime: "5 min read"
+---
+
+A thumbnail and a transcript are different assets with different failure modes. A thumbnail may exist only at a smaller resolution than you expected. A transcript may contain timecodes, repeated cues, and speaker formatting that belong in captions but interrupt a newsletter draft. The [YouTube Thumbnail & SRT Toolkit](/tools/youtube/youtube-toolkit/) handles both jobs without a processing backend.
+
+Start with a video you own or material you have permission to use. Saving an image does not create permission to reuse its artwork. Similarly, a cleaned transcript still needs editorial review before you publish it as an article, description, or handout.
+
+## Load the video’s available thumbnail sizes
+
+Choose **Thumbnail downloader** and paste a complete YouTube video URL or its eleven-character video ID. The parser accepts standard watch links and supported short, Shorts, live, and embed forms. A channel page or playlist address is not a video and will produce an error.
+
+Click **Load thumbnails**. This is the point when the browser requests images from `i.ytimg.com`. The toolkit does not upload a local image, ask for a YouTube login, or fetch the video itself. However, this part of the workflow is not offline: the image server receives ordinary requests containing the chosen video ID.
+
+Five cards check maximum resolution, standard definition, high quality, medium quality, and default images. The requested dimensions range from 1280 by 720 pixels down to 120 by 90 pixels. Read the dimensions shown on the actual card instead of assuming that a larger requested name guarantees a larger available image.
+
+## Pick the asset based on its actual dimensions
+
+Suppose you are preparing a 640-pixel-wide newsletter illustration. A genuine 1280-pixel-wide thumbnail gives you room to reduce its size. Enlarging a 320-pixel-wide image to the same destination cannot recreate detail that was never present. Use the largest suitable image that is actually available, then inspect its text and subject at the final display size.
+
+The toolkit compares the loaded image dimensions with the dimensions expected for each resolution. A card labeled as a fallback is not the requested size. A missing image or disabled download button can be a normal availability result rather than a problem with your browser.
+
+Also check the shape of the image. The listed sizes do not all share the same aspect ratio. Letterboxing, cropping, and composition may differ. A creator’s useful frame can become awkward in a square email card, even when the file has enough pixels. Make the crop deliberately in your image editor rather than stretching the image.
+
+## When a visible image will not download directly
+
+Click **Download JPG** on an available card. The tool attempts to fetch the image in the browser and save the resulting file. If that fails because of the image server’s cross-origin policy, the interface explains the fallback: choose **Open original**, then use the browser’s Save image action.
+
+A browser can display a remote image while restricting a script’s access to its bytes. Cross-origin access depends on permissions returned by the remote server; a frontend utility cannot safely override them. MDN’s [CORS documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS) explains that browser boundary.
+
+Do not keep changing the same link to random domains when a download fails. First confirm that the video ID is correct, the card reports a real available size, and the original opens. A network blocker, unavailable video image, or remote server response may prevent access. This toolkit deliberately has no proxy to route around those restrictions.
+
+## Bring your own captions to the cleaner
+
+Switch to **SRT / VTT cleaner**. Select your own subtitle file or paste its contents into **Subtitle source**. The file picker accepts a subtitle file up to one megabyte; the text workflow has a one-million-character limit. Keep the original file, including its timestamps, in your project archive.
+
+The tool does not turn a YouTube URL into a transcript. Obtain captions from your editing workflow or an authorized export first. Caption files combine spoken text with timing information and may include positioning or style information; YouTube describes this structure in its [caption-file guidance](https://support.google.com/youtube/answer/2734796?hl=en).
+
+The cleaner creates plain text, not a replacement subtitle file. Once timecodes are removed, that output cannot preserve the original synchronization. Use it for writing and reference while keeping the timed source for caption editing.
+
+## Work through one cue before cleaning a long file
+
+A simple SRT cue might look like this:
+
+```text
+12
+00:00:24,000 --> 00:00:27,500
+We shipped 250 orders in October.
+```
+
+After cleaning, the useful sentence remains: “We shipped 250 orders in October.” The cue identifier and time range are removed. The spoken number 250 is retained because it is content inside the cue rather than a numbered cue label.
+
+Click **Clean transcript** after setting the options. **Remove adjacent duplicate cues** removes repeated complete neighboring cues. It does not promise to reconstruct every rolling-caption overlap. **Group into paragraphs** combines the extracted text into longer blocks; turn it off when one line per cue makes comparison easier.
+
+## Review the words, not just the formatting
+
+Cleaning removes structural clutter. It does not correct speech recognition mistakes, restore missing punctuation, identify speakers reliably, or verify a quoted number. Check names, dates, amounts, and product terms against the recording before publishing. For a US business example, confirm whether “fifteen” or “fifty” was spoken rather than trusting either spelling in an automatic caption.
+
+Compare a sample near the beginning, middle, and end of a longer file. If the output is empty, check that the source contains supported timecoded cues and actual caption lines. If repeated phrases remain, inspect overlapping cues manually. If paragraph breaks feel arbitrary, disable grouping and edit the line-based output in your writing application.
+
+Use **Download TXT** to save the result or **Copy text** to move it into an editor. The [word and readability counter](/tools/text/word-counter/) can then estimate its length and reading time. Finish by naming the thumbnail and transcript clearly, preserving the original captions, and reviewing the exact assets you plan to publish.

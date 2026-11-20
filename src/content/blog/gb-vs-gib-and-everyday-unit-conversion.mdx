@@ -1,0 +1,60 @@
+---
+title: "GB versus GiB, US gallons, and everyday unit conversions"
+description: "Convert storage and everyday measurements with clear decimal, binary, US customary, and Imperial labels, worked examples, and precision checks."
+publishedAt: "2026-11-19"
+category: "Units & Data"
+relatedToolSlug: "unit-converter"
+readingTime: "5 min read"
+---
+
+One gigabyte and one gibibyte are different amounts. A value of 1 GB equals approximately 0.931322575 GiB, so changing the label without converting the number changes the meaning. The same naming problem appears outside computing: a US gallon is not an Imperial gallon, and an ounce of mass is not a fluid ounce.
+
+The [Unit & Data Storage Converter](/tools/calculator/unit-converter/) keeps these choices explicit. Select a measurement family, enter a value, and choose the source and destination units. The result updates locally in the browser. Before copying it into a worksheet, confirm that the source unit describes what was actually measured.
+
+## Begin with the family and the original label
+
+Use **Measurement family** to choose length, mass, temperature, area, volume, speed, time, or data storage. Enter a plain number in **Value**, then set **From** and **To**. The available units change with the family, preventing a conversion such as meters directly into kilograms.
+
+Changing the family preserves the numeric input but resets the unit choices. Recheck both selectors after switching. **Swap units** exchanges the source and destination units while leaving the entered value unchanged. It is useful for a comparison such as one meter in feet versus one foot in meters; it does not automatically replace the input with the previous output.
+
+The converter accepts finite numbers. Non-temperature measurements must be nonnegative. An empty field produces an explanatory message rather than an assumed zero. These checks catch some entry mistakes, but they cannot detect a valid number copied from the wrong line of a specification.
+
+## Separate decimal storage from binary storage
+
+Decimal storage units use powers of 1,000. Binary units use powers of 1,024 and include an “i” in their symbols. One GB contains 1,000,000,000 bytes; one GiB contains 1,073,741,824 bytes. A byte contains eight bits. NIST’s [binary-prefix reference](https://physics.nist.gov/cuu/Units/binary.html) defines these units and distinguishes them from decimal prefixes.
+
+Choose **Data storage**, enter `500`, select **Gigabytes (GB)**, and convert to **Gibibytes (GiB)**. The result is approximately 465.661287308 GiB. The underlying byte count has not shrunk. You have expressed the same amount using a larger unit.
+
+That arithmetic alone does not explain every difference between a product label and a device’s available space. This tool converts units; it does not inspect a drive, measure allocated files, or account for system partitions. When comparing two reported capacities, establish both unit conventions and what each report includes before drawing a conclusion.
+
+## Keep bits separate from bytes
+
+The data selector labels bits and bytes explicitly. Converting 8 bits gives 1 byte. Converting 1,000,000 bits gives 125,000 bytes, or 125 decimal kilobytes. A capital B and a lowercase b can therefore make an eightfold difference in a technical description.
+
+Be careful when reading a transfer rate. The converter handles amounts of data, not a complete bandwidth or download-time calculation. If a hypothetical connection transfers 80 million bits each second, the corresponding raw rate is 10 million bytes each second. Real elapsed time would require additional assumptions that this storage conversion does not measure.
+
+For a file-size limit, use the receiving service’s definition when available. A label saying “10 MB” may be interpreted differently by an application than by a person. Convert the actual byte limit if it is documented. If you are preparing images near a limit, the [local image conversion guide](/blog/browser-image-conversion-and-background-removal/) explains why an export setting does not guarantee a particular file size.
+
+## Choose US or Imperial volume deliberately
+
+In **Volume**, the dropdown separates **US gallons** from **Imperial gallons**. The former converts to 3.785411784 liters per gallon; the latter converts to 4.54609 liters. NIST’s [conversion-factor tables](https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors) provide the reference framework for converting customary units to SI units.
+
+For a US product specification calling for two US gallons, enter `2`, select **US gallons**, and convert to liters. The result is 7.570823568 liters. Choosing Imperial gallons with the same input gives 9.09218 liters, which is a materially different quantity.
+
+The tool also includes explicitly labeled US cups and US fluid ounces. Do not use a mass-ounce conversion for a fluid-ounce measurement. Converting a volume into a mass would require the material’s density and relevant conditions, so it is outside this converter’s direct unit families. A recipe’s cup of flour and cup of water do not imply the same mass.
+
+## Temperature uses an offset as well as a multiplier
+
+Choose **Temperature** to convert Celsius, Fahrenheit, or kelvin. An absolute reading of 68 degrees Fahrenheit becomes 20 degrees Celsius. Multiplying Fahrenheit by a scale factor alone would miss the offset and produce the wrong answer.
+
+Absolute temperature and a temperature change are different questions. An increase of 10 degrees Celsius corresponds to an increase of 18 degrees Fahrenheit, but entering 10 Celsius in this tool converts the absolute reading to 50 Fahrenheit. Use this workspace for temperature readings, not interval calculations disguised as readings.
+
+The tool rejects temperatures below absolute zero: 0 K, negative 273.15 degrees Celsius, or negative 459.67 degrees Fahrenheit. If that error appears unexpectedly, confirm the selected source unit and the sign of the input rather than deleting the minus sign without checking the original.
+
+## Preserve appropriate precision
+
+One inch converts to 2.54 centimeters, and twelve inches convert to 30.48 centimeters. For a board measured only approximately, reporting a long string of converted decimals does not make the original measurement more precise. Keep a reasonable number of digits for the source and the intended use.
+
+The interface rounds displayed results to twelve significant digits. Avoid repeated back-and-forth conversions using rounded outputs; return to the original value when possible. For a final handoff, write the number and full unit together, such as “7.57 liters, converted from 2 US gallons,” so the assumption remains visible.
+
+If the answer looks surprising, check the family, the exact source label, decimal versus binary prefixes, and US versus Imperial volume before blaming the arithmetic. Those four checks resolve many ordinary conversion mistakes without changing the underlying data.

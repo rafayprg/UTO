@@ -1,0 +1,60 @@
+---
+title: "Profit margin, markup, and percentage changes: worked USD examples"
+description: "Use clear denominator choices to calculate margin, markup, percentages, and price changes with practical examples and zero-value edge cases."
+publishedAt: "2026-11-19"
+category: "Finance & Math"
+relatedToolSlug: "percentage-calculator"
+readingTime: "5 min read"
+---
+
+An item costs USD 60 and sells for USD 100. The difference is USD 40. Its margin is 40 percent, but its markup is approximately 66.67 percent. Both percentages are correct because they divide the same USD 40 by different starting amounts.
+
+The [Percentage & Profit Margin Calculator](/tools/calculator/percentage-calculator/) shows the denominator in the displayed formula. That makes it useful for checking a pricing worksheet, comparing two periods, or answering a quick “what percentage?” question. It performs arithmetic on the values you enter; it does not fetch exchange rates, estimate tax obligations, or decide which expenses belong in your accounts.
+
+## Match the mode to the question
+
+The workspace has four modes: **Percentage of**, **What percentage?**, **Percentage change**, and **Profit margin**. Choose the question first, then check the labels on the two input fields. Results update as you type, so you do not need to submit a separate calculation.
+
+Enter plain numeric amounts without currency symbols or thousands separators. For USD 1,250.50, enter `1250.50`. Use one currency and one consistent unit throughout a calculation. The tool does not know whether a value represents dollars, visitors, units sold, or hours.
+
+When you switch modes, the two values remain in the fields. Recheck their meaning before using the new answer. A number that represented a percentage in the first mode could represent a cost in another. **Clear values** empties both fields when you want to start over.
+
+## Calculate a percentage of an amount
+
+Choose **Percentage of**, enter `20` in **Percentage (%)**, and enter `150` in **Of this number**. The result is 30 because 20 divided by 100, multiplied by 150, equals 30.
+
+If a product has a hypothetical USD 150 listed price and a 20 percent discount, USD 30 is the discount amount. The discounted price is USD 120, found by subtracting 30 from 150. The calculator’s output in this mode is the percentage amount itself; it is not automatically the final price after subtraction.
+
+For a surcharge example, 8 percent of USD 250 is USD 20, making the combined amount USD 270 if that surcharge is added. These are arbitrary examples of arithmetic, not actual tax rates. Confirm the rule and applicable amount separately whenever a real fee or tax is involved.
+
+## Find the percentage represented by a part
+
+Choose **What percentage?** to answer a different question: what share of a whole does a known amount represent? Enter `45` as **Part** and `180` as **Whole**. The result is 25 percent.
+
+This is useful when checking a sample such as 45 completed responses out of 180 invitations. Keep the denominator explicit in your notes. Forty-five responses out of 180 invitations is a different measure from 45 responses out of 120 opened messages, which would be 37.5 percent.
+
+A part can be larger than the whole. If the part is 240 and the comparison whole is 200, the result is 120 percent. That can be meaningful for target attainment. It would require explanation if you were claiming it described mutually exclusive portions of the same whole.
+
+## Compare changes from a defined starting value
+
+Choose **Percentage change**, enter `80` as **Starting value**, and `100` as **New value**. The increase is 25 percent: the difference of 20 is divided by the starting 80.
+
+Reverse those values and the result is a 20 percent decrease. This is why a 25 percent increase followed by a 25 percent decrease does not return you to the original amount. Starting with 80, increasing by 25 percent gives 100; decreasing 100 by 25 percent gives 75.
+
+Distinguish percentage changes from percentage points. A conversion rate moving from 4 percent to 5 percent rises by one percentage point. Its relative percentage increase is 25 percent. You can enter 4 and 5 in the change calculator to obtain the relative figure, but label it correctly when reporting it.
+
+## Read margin and markup together
+
+Choose **Profit margin**, enter `60` as **Total cost**, and `100` as **Selling price**. The tool displays the margin, the difference between selling price and cost, and the markup. Margin uses the selling price as its denominator. Markup uses cost.
+
+Now consider a hypothetical order with USD 60 of goods and USD 8 of additional costs that you have decided belong in this particular comparison. Entering 68 as cost and 100 as selling price gives USD 32 of profit, a 32 percent margin, and approximately 47.06 percent markup. The calculator does not discover those extra costs for you.
+
+For a target-margin check, suppose cost is USD 60 and your intended margin is 25 percent. Dividing 60 by `1 − 0.25` gives a selling price of USD 80. Enter cost 60 and selling price 80 in the tool to verify the 25 percent result. Merely increasing 60 by 25 percent gives 75, whose margin is only 20 percent.
+
+## Treat zero and negative values deliberately
+
+A percentage with a zero denominator is undefined. The tool explains this rather than displaying an infinite result. Percentage change requires a positive starting value, because a zero or negative base needs a different interpretation than the conventional comparison implemented here.
+
+In margin mode, cost and selling price must be nonnegative, and selling price must be greater than zero. Zero cost with a positive price produces a margin of 100 percent, but markup remains undefined. Selling below cost is allowed: cost 100 and price 80 produce a loss of 20, a margin of negative 25 percent, and markup of negative 20 percent.
+
+Results use browser floating-point numbers and display up to twelve significant digits. Keep appropriate precision for the task rather than treating every shown digit as meaningful. For a handoff, record the chosen mode, inputs, currency, included costs, and rounding rule alongside the result. If your source worksheet mixes measurements, resolve those first with the [unit conversion guide](/blog/gb-vs-gib-and-everyday-unit-conversion/).

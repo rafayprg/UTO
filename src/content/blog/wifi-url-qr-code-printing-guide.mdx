@@ -1,0 +1,64 @@
+---
+title: "Create WiFi and URL QR codes that still work after printing"
+description: "Generate local PNG or SVG QR codes, protect WiFi credentials, choose size and error correction, and test the final printed version."
+publishedAt: "2026-11-19"
+category: "Encoding & Network"
+relatedToolSlug: "qr-generator"
+readingTime: "5 min read"
+---
+
+A QR code is useful only if a person can scan it and reach the intended destination. A clean preview is the beginning of that check, not the end. A code placed on a small table card, enlarged in a document, or printed with a cropped border may behave differently from the image displayed on your monitor.
+
+The [WiFi & URL QR Generator](/tools/crypto/qr-generator/) creates static PNG and SVG codes locally. It supports a website address or WiFi connection details. It does not require an account, create a tracking redirect, or store a hosted destination that you can edit after printing.
+
+## Decide what scanning should do
+
+Choose **Website URL** for a web page. Enter the complete address, including `https://` or `http://`. The generator rejects other schemes and URLs containing embedded usernames or passwords. Open the address yourself and confirm the page before making the code.
+
+For example, a printed card for a workshop might link directly to `https://example.com/workshop/checklist`. Use an address controlled by the organizer and confirm that visitors can reach it without unexpected authentication. A valid URL can still point to the wrong page, a broken page, or a page that only works for you while signed in.
+
+Choose **WiFi network** when you want a compatible phone to recognize connection details. Enter **Network name (SSID)** exactly, select **Network security**, and enter the password when the network requires one. The security options are WPA/WPA2/WPA3 Personal, WEP, or an open network with no password. Match the actual network; this setting does not reconfigure your router.
+
+## Keep WiFi credentials in the right hands
+
+A WiFi QR code contains readable network credentials. It does not encrypt the password into a secret that only authorized phones can recover. Anyone who can photograph or decode the code may obtain the information inside it.
+
+For a reception area, consider whether the intended code should use a guest network rather than the network used for internal work. Follow the network owner's access rules. A printed code is a distribution mechanism, so where you place it matters as much as how you generate it.
+
+Select **Hidden network** only when that matches the network configuration. It does not conceal the credentials embedded in the QR image. The generator limits SSIDs to 32 UTF-8 bytes, which is not necessarily the same as 32 visible characters. Password input is capped at 256 characters, and the combined encoded payload must fit the tool's 1,800-byte limit.
+
+Punctuation such as semicolons and backslashes is escaped by the generator for the WiFi payload. Enter the real network details normally rather than manually inserting extra escape characters. Then test the code on a compatible device because scanner support can vary.
+
+## Choose an export size and format
+
+The **PNG size** menu offers 256, 512, 1024, and 2048 pixels per side. PNG is convenient when placing the image in a document, email, or simple design tool. SVG is useful when the receiving design or print application supports vector artwork and you need to resize without turning the pattern into a blurry bitmap.
+
+Pixels and printed inches are different measurements. As a planning example, a 1,024-pixel image placed four inches wide has 256 source pixels per printed inch. That calculation does not prove it will scan: the density of the pattern, print quality, viewing distance, and final physical size still matter.
+
+Do not stretch the image into a rectangle. Keep its proportions and preserve the white border. This generator uses a four-module quiet zone around the pattern. Cropping that space or placing nearby graphics over it can make detection harder even when the central pattern looks intact.
+
+## Use error correction without treating it as a guarantee
+
+The **Error correction** menu provides Low, Medium, Quartile, and High settings, with approximate percentages shown in the interface. These settings introduce different amounts of redundancy. They are not a promise that any arbitrary section of that percentage can be covered while every scanner still succeeds.
+
+Increasing error correction can also make a code denser for the same payload. A long URL already requires more pattern information than a short one. At a fixed physical size, a denser pattern leaves smaller individual modules, which can be difficult to print or scan cleanly.
+
+Start with the default Medium setting and a clear black-on-white code. The current tool intentionally avoids decorative gradients, colored backgrounds, or logo overlays. If you later modify the export in another application, treat it as a new artifact that needs another scan test.
+
+## Generate, download, and test the actual layout
+
+Click **Generate QR code**, inspect the preview, and use **Download PNG** or **Download SVG**. Changing a field, size, security option, or correction setting clears the old result. Generate again to ensure that the export represents your current choices.
+
+Scan the downloaded image with a second device. For a website code, inspect the full destination before opening it. For WiFi, confirm both recognition of the network details and a successful connection under the owner's intended conditions.
+
+Next, place the code in the final layout and print one sample at its intended size. Test that sample in realistic lighting and at the distance people will use. Add nearby text such as “Open the workshop checklist” or “Join guest WiFi” so people know what to expect. Include a readable alternative URL or appropriate instructions when practical.
+
+The [Word & Readability Counter](/tools/text/word-counter/) can help keep those instructions concise, but readability measurements do not replace checking that the wording describes the real action.
+
+## Plan for changes before distributing copies
+
+A static QR code does not expire by itself, but its contents do not update themselves. If a password changes, generate a new WiFi code and replace the old copies. If a destination page moves, maintain the address you printed or distribute a replacement code.
+
+Keep a record of the intended destination and the version used in each design. Before reprinting an old file, scan it again rather than assuming it still points where you expect. Handle downloaded WiFi images like the credentials they contain, including copies stored in shared folders or design documents.
+
+For broader distinctions between encoding and security, the [Crypto, Encoding & Network hub](/tools/crypto/) explains what the current tools do and which capabilities are outside this release. A scannable representation makes information convenient to use; it does not decide who should be allowed to use it.

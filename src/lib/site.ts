@@ -1,0 +1,2 @@
+export const site = { name: "Localtools", url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000", description: "Free browser tools for PDFs, images, code, writing, and everyday calculations. Work locally with practical, example-led guides.", operatorName: process.env.NEXT_PUBLIC_OPERATOR_NAME || "", supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "" };
+export function absolute(path: string) { return new URL(path, site.url).toString(); }

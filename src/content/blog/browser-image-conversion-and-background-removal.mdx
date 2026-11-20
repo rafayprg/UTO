@@ -1,0 +1,60 @@
+---
+title: "A practical guide to local image conversion and background removal"
+description: "Choose JPG or WebP for HEIC photos, create transparent cutouts, and inspect exports while keeping selected images in your browser."
+publishedAt: "2026-11-18"
+category: "Images & Design"
+relatedToolSlug: "background-remover"
+readingTime: "5 min read"
+---
+
+A phone photo can look perfect on your device and still be inconvenient elsewhere. A form might reject HEIC, a web design might need a transparent background, or a product listing might require a white canvas. These are separate jobs. Conversion changes how image pixels are stored; background removal changes which pixels remain visible. Choosing the right order helps you avoid unnecessary quality loss and surprising results.
+
+## Decide what the destination needs
+
+Before changing the image, check the destination's requirements. An email recipient may need a broadly compatible JPG. A website may accept WebP. A layered design may need a transparent PNG. These choices affect file size, appearance, and the features that survive export.
+
+JPG does not support transparency, so an image that needs transparent edges should not end its workflow as JPG. WebP can support transparency, but the receiving application must accept that format. PNG is a practical output for the background remover because it preserves an alpha channel and opens in many design tools.
+
+Keep the original HEIC or camera file in your archive. The files produced here are derivatives for sharing and design. They should not be your only copies if original metadata, editing history, or special camera features matter.
+
+## Convert HEIC photos without changing the original
+
+Open the HEIC converter and select a supported `.heic` or `.heif` file. The current limit is 25 MB per input. The tool decodes the image locally and exports JPG or WebP through Canvas, with a 32-megapixel check on decoded frames. Some HEIF codec variants are not supported by the bundled decoder, even when a phone can display them.
+
+Choose an output format and quality level, then convert. A higher quality setting generally retains more detail, but the relationship between the setting and file size is not linear. A quality value of 50 percent does not promise a file exactly half the size. Image complexity, source encoding, and browser behavior also affect the result.
+
+For a product photo, compare small label text and diagonal edges. For a portrait, inspect hair and smooth skin gradients. Judge the export at the size where it will be used. Looking only at a tiny preview can hide artifacts that become obvious in a full-width banner.
+
+<ToolEmbed slug="heic-converter" />
+
+## Know what conversion leaves behind
+
+This pipeline exports image pixels and does not preserve EXIF camera metadata, location tags, depth maps, or the complete behavior of Live Photos. Multi-image HEIC files can produce separate supported frames, but a set of still downloads is not the same thing as preserving animation or every embedded image resource.
+
+Open a downloaded image separately to verify orientation, dimensions, and appearance. Color handling can differ between a phone's photo viewer, a browser decoder, and another application. If precise color is essential, use a color-managed workflow and test the final destination rather than relying on a single preview.
+
+Avoid repeatedly converting a lossy export into another lossy format. Each new encoding can add artifacts. Return to the original when preparing a new version. If the converter rejects a file, export a compatible copy from the device or application that created it rather than changing its extension manually.
+
+## Remove a background as a separate step
+
+The background remover accepts PNG, JPG, and WebP images up to 20 MB, subject to a 32-megapixel limit. If your source is HEIC, first create a compatible image using the converter. Choose a photo with a distinct subject and a reasonably clear boundary. A plain background and good contrast make the automatic task easier.
+
+On the first removal, the tool downloads an AI model and its runtime from IMG.LY. This is an asset download, not an upload of your photo. The selected image is processed on your device. A slow first run can reflect model transfer time as well as computation. Browser caching may make later runs faster, but private browsing or cache cleanup can require another download.
+
+Keep the tab open while processing. Low-memory devices may struggle with large images, and an interrupted connection can prevent the initial assets from loading. If an operation fails, read the message, try a smaller image, and check the connection needed for model downloads. There is no hidden server-processing fallback.
+
+## Check transparency against more than one background
+
+The checkerboard preview represents transparent pixels. It is not part of the downloaded PNG. Choose transparent output when you want to place the subject over another design. Choose white for a simple solid backdrop, or select a custom color to preview a specific setting.
+
+Inspect the cutout on both light and dark colors. A pale edge fringe can disappear on white and become obvious on dark blue. Missing hair, transparent glass, thin wires, fur, smoke, shadows, and busy backgrounds are common difficult cases. Automatic segmentation cannot reliably invent missing subject detail or reproduce a studio lighting setup.
+
+For an important design, compare the output against the original around the entire boundary. If the mask is unsuitable, use a dedicated editor with manual masking or choose a clearer source photograph. A fast automated result is a starting point, not proof that every pixel has been classified correctly.
+
+## Save the version you actually reviewed
+
+After selecting the export background, download the PNG and open it in the application where you intend to use it. Confirm that transparency behaves as expected, the subject is complete, and the dimensions are suitable. If you later convert that PNG to JPG elsewhere, transparency will need to be flattened onto a solid color.
+
+The tool workspace is temporary. It does not provide account history, permanent storage, or an automatic backup. Download successful results before reloading or leaving the page. Closing the tab does not delete files you already saved or clear images copied into another application.
+
+Finally, local processing does not change copyright or permission requirements. Use images you own or have permission to edit and publish. Keep your originals, compare the actual downloads, and choose the format that fits the destination. Those small decisions are what turn an automated conversion into a dependable image workflow.

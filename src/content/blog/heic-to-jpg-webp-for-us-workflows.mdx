@@ -1,0 +1,62 @@
+---
+title: "HEIC to JPG or WebP: a practical workflow for forms, email, and websites"
+description: "Convert iPhone HEIC photos locally, choose the right output format, and check quality, orientation, and metadata before sharing."
+publishedAt: "2026-11-19"
+category: "Images & Design"
+relatedToolSlug: "heic-converter"
+readingTime: "5 min read"
+---
+
+An online form asks for a JPG, but the photograph on your iPhone ends in `.heic`. Changing the filename will not help: the file still contains HEIC image data. You need to decode the image and create a new file in a format the destination accepts. The [HEIC to JPG / WebP converter](/tools/image/heic-converter/) performs that conversion in your browser and leaves the original untouched.
+
+Start with the destination's actual requirements. A form may restrict file type, file size, and image dimensions independently. Satisfying one requirement does not satisfy the others. This converter changes format and offers a quality control; it does not promise to meet a particular upload limit or resize a photo to a specified number of pixels.
+
+## Choose JPG for compatibility, WebP for a supported web destination
+
+JPG is usually a sensible first choice when a form, document editor, or recipient explicitly asks for JPEG. The `.jpg` and `.jpeg` extensions refer to the same image format. A newly exported JPG is different from a HEIC that has simply been renamed.
+
+Choose WebP when the receiving website or application states that it supports WebP. Do not assume that a service accepts it just because your browser can display it. A content management system may display WebP images on its public pages while imposing different requirements on its upload form.
+
+For example, imagine that you need one photograph for a service-request form and another copy for a website article. Export a JPG for the form if that is its accepted format. Return to the HEIC original to create a WebP for the website, rather than converting the JPG again. Each derivative can be prepared for its own destination without using an already compressed intermediate as the source.
+
+## Convert one image before committing to a larger workflow
+
+Open the converter and choose your HEIC or HEIF file. The interface accepts one source file at a time, up to the displayed 25 MB limit. It also checks decoded images against a 32-megapixel limit per frame. That check happens after decoding, so it does not prevent a large source from consuming memory during decoding. A small compressed file can still represent a demanding image.
+
+Select **Output format**, then adjust **Quality**. The default is 90%, and the slider ranges from 10% to 100% in five-point increments. Click **Convert image** and wait for decoding and encoding to finish. A successful result has a preview, a filename, its resulting size, and a **Download image** button.
+
+Changing the format or quality clears the previous output. Run the conversion again to produce a result with the new settings. This behavior prevents a download created at an old setting from being mistaken for the current choice.
+
+The interface uses MB labels for limits calculated in multiples of 1,024 bytes. A receiving service may measure its own limit differently. If a form rejects a file near its threshold, leave some headroom rather than assuming two matching size labels use identical definitions.
+
+## Treat the quality slider as an experiment
+
+A quality setting is an instruction to an encoder, not a percentage of the original file size. Moving from 90% to 70% does not guarantee a file that is exactly twenty percent smaller. Different images contain different amounts of detail, and JPG and WebP use different compression methods.
+
+Try a controlled comparison. Export the same source at 90% and 75%, then compare the two downloads at the size people will actually view them. Inspect small printed text, hair, grass, patterned fabric, and smooth gradients. Those areas can reveal compression artifacts more readily than a large flat wall.
+
+For a photograph documenting damage or a product defect, preserve enough detail to communicate the issue clearly. If a destination imposes a size limit that cannot be reached without losing important detail, use an appropriate image editor to adjust dimensions or ask the recipient about an alternative submission method. Repeatedly lowering quality is not always the best solution.
+
+## Know what does not survive conversion
+
+The converter decodes image pixels and exports them through Canvas. It does not preserve the original EXIF metadata, location tags, camera settings, editing history, or Live Photo animation. Keep the HEIC original if those details matter to your records.
+
+Metadata removal should not be confused with removing information visible in the picture. A street address on a sign, a reflection, or a document number remains part of the image pixels. Review the image itself before sharing it, especially when it was taken in a private space.
+
+Some HEIC containers hold multiple images. When supported frames are decoded, the tool creates separate numbered downloads. It checks the 30-frame maximum after the decoder returns; the limit is not a preflight guarantee about decoding memory use. It does not reconstruct an animated photo. Review each output rather than assuming the first preview represents every image in the source container.
+
+## Check the downloaded file, not only the preview
+
+Open the actual download in another image viewer. Confirm that it opens, has the expected orientation, and shows the intended frame. Check its dimensions and file size using your operating system or image application. Then try it in the destination form or editor.
+
+The preview is useful for judging appearance, but the saved artifact is what the recipient receives. Browser downloads may also rename a file when a file with the same name already exists. Verify that you selected the latest export rather than an earlier attempt in your Downloads folder.
+
+If your next task is to remove the background, use a supported converted image with the [AI Background Remover](/tools/image/background-remover/). A transparent cutout is a separate operation from format conversion. The [local image workflow guide](/blog/browser-image-conversion-and-background-removal/) explains how to choose between a transparent PNG and a solid background.
+
+## Recover from unsupported or oversized files
+
+A HEIF extension does not guarantee that every codec variant inside the container is supported. A damaged file, an unsupported variant, a missing browser encoding capability, or limited device memory can cause conversion to fail. Read the error before retrying.
+
+Try a smaller supported source or export a JPEG from the phone or photo application that created the image. Avoid renaming extensions or repeatedly uploading the same failing file to unrelated services as a troubleshooting habit. This tool has no remote fallback: if local conversion fails, your image is not silently sent to a server for another attempt.
+
+Download successful results before clearing the workspace or closing the page. Keep the original until you have verified the derivative and completed the intended submission. That gives you a reliable starting point if a recipient later requests different dimensions, a different format, or a higher-quality version.

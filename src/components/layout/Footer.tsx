@@ -1,0 +1,2 @@
+import Link from "next/link";
+export function Footer() { return <footer className="site-footer"><div><Link href="/" className="brand">localtools.</Link><p>One workspace. Less friction. More done.</p></div><nav aria-label="Footer navigation"><Link href="/about/">About</Link><Link href="/contact/">Contact</Link><Link href="/privacy-policy/">Privacy policy</Link><Link href="/terms/">Terms</Link><Link href="/editorial-policy/">Editorial standards</Link><Link href="/disclaimer/">Disclaimer</Link></nav><span>Built for your browser.</span></footer>; }

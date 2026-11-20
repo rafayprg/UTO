@@ -1,0 +1,66 @@
+---
+title: "Extract and create ZIP files in your browser with clear limits"
+description: "Inspect ZIP entries, download individual files, create organized archives, and understand size, expansion, filename, and format restrictions."
+publishedAt: "2026-11-19"
+category: "Developer Tools"
+relatedToolSlug: "zip-tool"
+readingTime: "5 min read"
+---
+
+A ZIP can turn a set of related files into one convenient download. It can also hide more complexity than its small filename suggests: nested folders, duplicate names, unsupported encryption, or data that expands dramatically when decompressed. Start by deciding whether you need to extract an existing archive or create a new one.
+
+The [ZIP Extractor & Creator](/tools/dev/zip-tool/) performs those operations in browser workers. It does not upload files to an archive-processing service. Its limits are deliberately modest so a typical file bundle can be handled without treating a browser tab as an unlimited desktop archiver.
+
+## Check the format before choosing a file
+
+This tool supports ZIP, not RAR, 7z, or every other archive format. Renaming `project.7z` to `project.zip` does not convert its internal structure. Password-protected archives, split multi-volume ZIPs, and ZIP64 archives are not supported by this implementation.
+
+If an archive came from another person, ask which format and features they used when you are unsure. A request for a standard unencrypted ZIP may be easier than trying repeated conversions. Do not remove protection from a file unless you have permission and an appropriate way to handle the unprotected copy.
+
+A browser extractor is not a malware scanner. Successfully listing an archive says something about its supported structure, not whether every file inside is safe to open. Consider the source and purpose of the bundle before downloading its contents.
+
+## Inspect an archive and extract only what you need
+
+Select **Extract a ZIP**, then choose or drop a ZIP file. The input limit is 50 MB as displayed by the interface. The tool checks the archive directory before listing its non-directory entries.
+
+The list shows file paths and a **Download** control for each file. For example, an archive might contain `reports/summary.pdf`, `reports/data.csv`, and `assets/logo.png`. Use the path to identify the correct entry rather than assuming every similarly named file is a duplicate.
+
+Click **Download** beside the file you want. The extractor downloads that file individually; it does not automatically run it or rebuild the entire folder tree on your disk. The download uses the final filename component, with unsupported filename characters replaced. A nested entry such as `reports/summary.pdf` is saved as a download named `summary.pdf`.
+
+If different folders contain the same final filename, your browser may add a suffix or ask how to handle the existing file. Check the saved names and contents before combining them in another folder. The archive's internal paths and your Downloads folder are different organizational structures.
+
+## Understand the extraction limits
+
+The extractor allows up to 500 directory entries, including directory records, and checks declared expanded sizes. An individual file must not exceed 25 MB, and the declared expanded total must not exceed 100 MB. These are separate from the 50 MB compressed-input limit.
+
+The interface labels these limits as MB, while the implementation calculates them using multiples of 1,024 bytes. When planning a handoff, leave room below the limits rather than targeting an exact boundary reported by a different application.
+
+Compression ratio alone does not determine whether an archive is accepted. Repetitive CSV or text can legitimately compress into a very small file. What matters here is the expanded size: a compact archive can still exceed the per-file or combined output limits. Check the expected uncompressed sizes when preparing a bundle, especially if it contains large generated datasets or long repetitive logs.
+
+Unsafe paths, duplicate entry names, and damaged or inconsistent directory structures are also rejected. During extraction, the worker checks actual emitted data against the per-file limit rather than trusting only the directory's declared size. These safeguards reduce specific risks; they are not a certification that an unfamiliar archive is harmless.
+
+## Create a useful bundle from local files
+
+Choose **Create a ZIP**, use **Choose files**, and review the selected list. You can add files in multiple selections. The creation limit is 500 files and 100 MB combined input. Use **Remove** to exclude an accidental selection or **Clear files** to start over.
+
+Files are placed at the root of the new archive. The current picker does not preserve an uploaded folder hierarchy. If two selected files would share a name, the tool numbers later names rather than silently replacing an earlier file. Review the displayed archive names so the recipient can identify the intended versions.
+
+For a small project handoff, you might include `readme.txt`, `logo.png`, and `settings.json`. Check the JSON with the [Privacy-First JSON Formatter](/tools/dev/json-formatter/) before packaging it if syntax is part of the handoff requirements. The archive tool bundles bytes; it does not validate each file's meaning.
+
+Click **Create & download ZIP** when the list is correct. The result downloads as `archive.zip`. Rename it locally to describe its contents before sending it to someone else.
+
+## Decide whether compression helps
+
+The **Compress files (DEFLATE)** checkbox controls whether the new archive uses compression. Plain text and other repetitive data often compress well. JPEG photos, existing ZIPs, and many media formats may shrink very little because their contents are already compressed.
+
+A ZIP can still be useful when its size barely changes: it keeps related files together and provides a single artifact to download. Turning compression off can also be appropriate when you only need packaging. Compare the output with your actual goal rather than treating a smaller number as the only measure of success.
+
+Creation and extraction have different limits. A ZIP created here can contain a file larger than the extractor's 25 MB per-entry ceiling even when the combined creation input is within 100 MB. Do not assume every archive you can create will be accepted back by the lightweight extractor. Use a suitable desktop archiver for larger round-trip workflows.
+
+## Verify the handoff before deleting sources
+
+Open the downloaded ZIP with a trusted archive viewer and confirm its expected filenames and file count. Check representative files, especially those renamed because of collisions. Keep the originals until the recipient or downstream application has accepted the bundle.
+
+If the goal is one continuous document rather than a collection of files, the [PDF Merger & Page Reorder](/tools/pdf/pdf-merger/) may be a better fit for PDF sources. A ZIP containing three PDFs remains three separate documents after extraction.
+
+Closing the browser discards the temporary workspace, but it does not erase files already saved in your Downloads folder. Handle those downloads according to their contents, and remember that archiving is organization and compression, not encryption or access control.
