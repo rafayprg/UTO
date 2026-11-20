@@ -30,17 +30,40 @@ export async function generateMetadata({ params }: Props) {
   const tool = await resolve(params);
   const title = tool.seoTitle || tool.title;
   const description = tool.metaDescription || tool.shortDesc;
+  const canonicalUrl = absolute(toolPath(tool));
+
   return {
-    robots: { index: tool.indexable, follow: true },
-    title,
+    title: {
+      absolute: `${title} | Localtools`,
+    },
     description,
     keywords: tool.keywords,
-    alternates: { canonical: toolPath(tool) },
+    robots: {
+      index: tool.indexable,
+      follow: true,
+      googleBot: {
+        index: tool.indexable,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
-      title,
+      title: `${title} | Localtools`,
       description,
-      url: absolute(toolPath(tool)),
+      url: canonicalUrl,
       type: "website",
+      siteName: "Localtools",
+      locale: "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | Localtools`,
+      description,
     },
   };
 }
@@ -77,13 +100,7 @@ export default async function ToolPage({ params }: Props) {
         </span>
         <div>
           <p className="eyebrow">
-            {tool.status === "planned"
-              ? "COMING SOON"
-              : tool.cpcTier === "high"
-                ? "HIGH-CPC AUDIENCE TOOL · 100% PRIVATE"
-                : tool.indexable
-                  ? "WAVE 1 · FREE BROWSER TOOL"
-                  : "FREE BROWSER TOOL"} · {tool.group}
+            <span className="green-dot" /> 100% FREE ONLINE TOOL · ZERO SERVER UPLOADS · {categories[tool.category]?.toUpperCase()}
           </p>
           <h1>{tool.title}</h1>
           <p>{tool.shortDesc}</p>
@@ -133,7 +150,7 @@ export default async function ToolPage({ params }: Props) {
               </tr>
               <tr>
                 <th>Processing Engine</th>
-                <td>{tool.engineType === "wasm" ? "WebAssembly (WASM) / Web Workers" : tool.engineType === "client" ? "HTML5 Canvas & Web API Sandbox" : "High-Precision Mathematical Engine"}</td>
+                <td>{tool.isWasm ? "WebAssembly (WASM) Sandbox" : tool.engineType === "worker" ? "Web Worker Sandbox" : "High-Precision Mathematical Engine"}</td>
               </tr>
               <tr>
                 <th>Category Suite</th>

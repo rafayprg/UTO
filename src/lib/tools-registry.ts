@@ -66,13 +66,74 @@ type DefinitionInput = Partial<ToolDefinition> & {
   trending?: boolean;
 };
 
+/**
+ * Generates an SEO title optimized for maximum organic Google CTR.
+ * Ensures high-intent modifiers like "100% Free", "Online", "No Sign Up", and "Private"
+ * are included while respecting search snippet width limits.
+ */
+export function generateSeoTitle(title: string, customSeoTitle?: string): string {
+  if (customSeoTitle && /(?:100%\s*free|free\s*online).*(?:no\s*sign\s*up|private)/i.test(customSeoTitle)) {
+    return customSeoTitle;
+  }
+  
+  const base = (customSeoTitle || title)
+    .replace(/\s*[-–:]\s*Free Online Tool$/i, "")
+    .replace(/\s*[-–:]\s*Online$/i, "")
+    .trim();
+
+  // Tier 1: Very concise (<= 22 chars): fits all 4 intent modifiers within Google SERP snippet limit (~60 chars)
+  if (base.length <= 22) {
+    return `${base} – 100% Free Online, Private & No Sign Up`;
+  }
+  // Tier 2: Short (23 - 32 chars): fits in ~60-64 chars
+  if (base.length <= 32) {
+    return `${base} – 100% Free Online (Private, No Sign Up)`;
+  }
+  // Tier 3: Medium (33 - 42 chars): fits in ~62-66 chars
+  if (base.length <= 42) {
+    return `${base} – 100% Free Online, No Sign Up`;
+  }
+  // Tier 4: Long (> 42 chars)
+  return `${base} – 100% Free Online (Private)`;
+}
+
+/**
+ * Generates an SEO meta description with exact character budgeting (145-155 characters).
+ * Front-loads user benefit and guarantees high-converting intent modifiers.
+ */
+export function generateMetaDescription(shortDesc: string, customDesc?: string): string {
+  if (customDesc && customDesc.length >= 130 && /(?:100%\s*free|free|no\s*sign\s*up|private)/i.test(customDesc)) {
+    return customDesc;
+  }
+  const clean = (customDesc || shortDesc).trim().replace(/[.,;:\s]+$/, "");
+  const suffix = ". 100% free, private online tool with zero server uploads and no sign up required.";
+  
+  if (clean.length + suffix.length <= 158) {
+    return `${clean}${suffix}`;
+  }
+  const maxBase = 155 - suffix.length;
+  const truncated = clean.slice(0, maxBase).replace(/\s+\S*$/, "");
+  return `${truncated}${suffix}`;
+}
+
+/**
+ * Enriches tool keywords with organic high-conversion search queries.
+ */
+export function enrichToolKeywords(keywords: string[]): string[] {
+  const defaults = ["100% free online", "no sign up", "private browser tool", "client side"];
+  const set = new Set(keywords);
+  for (const d of defaults) {
+    set.add(d);
+  }
+  return Array.from(set);
+}
+
 function define(input: DefinitionInput): ToolDefinition {
   const faqs = input.faqs ?? (input.faq ? input.faq.map(f => ({ question: f.q, answer: f.a })) : []);
   const faq = input.faq ?? (input.faqs ? input.faqs.map(f => ({ q: f.question, a: f.answer })) : []);
-  const seoTitle = input.seoTitle || `${input.title} - Free Online Tool`;
-  const metaDescription =
-    input.metaDescription ||
-    `${input.shortDesc.slice(0, 130)} Free, zero server uploads, no signup required.`;
+  const seoTitle = generateSeoTitle(input.title, input.seoTitle);
+  const metaDescription = generateMetaDescription(input.shortDesc, input.metaDescription);
+  const keywords = enrichToolKeywords(input.keywords);
 
   return {
     ...input,
@@ -87,6 +148,7 @@ function define(input: DefinitionInput): ToolDefinition {
     region: input.region || "GLOBAL",
     seoTitle,
     metaDescription,
+    keywords,
     formulaExplanation:
       input.formulaExplanation ||
       `This tool calculates results 100% inside your browser using client-side JavaScript. Enter your values to inspect exact calculations.`,
@@ -1034,6 +1096,9 @@ const ENGINE_KEYS: Record<CatalogEntry["engine"], string> = {
 };
 
 function fromCatalog(category: ToolCategory, entry: CatalogEntry): ToolDefinition {
+  const seoTitle = generateSeoTitle(entry.title);
+  const metaDescription = generateMetaDescription(entry.shortDesc);
+  const keywords = enrichToolKeywords(entry.keywords);
   const base = {
     id: entry.slug,
     slug: entry.slug,
@@ -1042,14 +1107,14 @@ function fromCatalog(category: ToolCategory, entry: CatalogEntry): ToolDefinitio
     shortDesc: entry.shortDesc,
     category,
     group: entry.group,
-    keywords: entry.keywords,
+    keywords,
     componentKey: ENGINE_KEYS[entry.engine],
     trending: false,
     indexable: true,
     cpcTier: "medium" as const,
     region: "GLOBAL" as const,
-    seoTitle: `${entry.title} - Free Online Tool`,
-    metaDescription: `${entry.shortDesc.slice(0, 130)} Free, zero server uploads, no signup required.`,
+    seoTitle,
+    metaDescription,
     formulaExplanation: `Calculates ${entry.title.toLowerCase()} operations locally inside your web browser.`,
     workedExamples: [
       {

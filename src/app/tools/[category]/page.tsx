@@ -9,7 +9,40 @@ import { CategoryIcon } from "@/components/ToolIcon";
 import { categoryGuides, categoryFaqs } from "@/lib/guides";
 export const dynamicParams = false;
 export function generateStaticParams() { return Object.keys(categories).map(category => ({ category })); }
-export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) { const { category } = await params; if (!isCategory(category)) notFound(); return { robots: { index: tools.some(tool => tool.category === category && tool.indexable), follow: true }, title: categories[category], description: `Explore browser-only tools and practical guides in the ${categories[category]} suite.`, alternates: { canonical: `/tools/${category}/` }, openGraph: { title:categories[category], url:absolute(`/tools/${category}/`) } }; }
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
+  const { category } = await params;
+  if (!isCategory(category)) notFound();
+  const name = categories[category];
+  const title = `100% Free Online ${name} Tools (Private & No Sign Up)`;
+  const description = `Explore ${name} tools running 100% inside your browser. Free, private, zero server uploads, and no sign up required.`;
+  const canonicalUrl = absolute(`/tools/${category}/`);
+  return {
+    robots: {
+      index: tools.some(tool => tool.category === category && tool.indexable),
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    title,
+    description,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params; if (!isCategory(category)) notFound();
   const available = tools.filter(tool => tool.category === category);

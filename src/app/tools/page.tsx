@@ -6,9 +6,17 @@ import { tools, liveTools, categories } from "@/lib/tools-registry";
 import { Shapes, Sparkles } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "All Tools & Web Apps Directory (1,034+ Free Apps) — Localtools",
-  description: "Browse our complete directory of 1,034+ client-side tools and calculators across 20 suites. Zero server uploads, completely free, and works privately in your browser.",
+  title: {
+    absolute: "1,034+ Free Online Tools & Web Apps Directory (Private, No Sign Up) | Localtools",
+  },
+  description: "Browse our complete directory of 1,034+ client-side tools and calculators. 100% free, private in-browser execution with zero server uploads and no sign up required.",
   alternates: { canonical: "/tools/" },
+  openGraph: {
+    title: "1,034+ Free Online Tools & Web Apps Directory (Private, No Sign Up) | Localtools",
+    description: "Browse 1,034+ free browser-based tools. 100% private, zero uploads, no sign up required.",
+    url: "/tools/",
+    type: "website",
+  },
 };
 
 export default function ToolsDirectoryPage() {

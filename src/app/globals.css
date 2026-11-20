@@ -566,3 +566,34 @@
     width: 35%;
   }
 }
+
+/* AdSense Non-Intrusive Layout-Shift Resistant Slot Containers (CLS = 0) */
+.ad-slot-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 32px auto;
+  max-width: 100%;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 12px;
+  contain: layout style;
+  overflow: hidden;
+  text-align: center;
+}
+.ad-slot-container.min-h-\[280px\] {
+  min-height: 280px;
+}
+.ad-slot-container.min-h-\[90px\] {
+  min-height: 90px;
+}
+.ad-slot-container .ad-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  margin-bottom: 6px;
+  display: block;
+}

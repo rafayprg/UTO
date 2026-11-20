@@ -2,35 +2,87 @@ import type { MetadataRoute } from "next";
 import { tools, categories, toolPath } from "@/lib/tools-registry";
 import { getPosts } from "@/lib/mdx";
 import { absolute } from "@/lib/site";
+
 export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPages = [
-    "/",
-    "/blog/",
+  const buildDate = new Date();
+
+  const corePages: MetadataRoute.Sitemap = [
+    {
+      url: absolute("/"),
+      lastModified: buildDate,
+      changeFrequency: "daily",
+      priority: 1.0,
+    },
+    {
+      url: absolute("/tools/"),
+      lastModified: buildDate,
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
+      url: absolute("/blog/"),
+      lastModified: buildDate,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+  ];
+
+  const infoPages: MetadataRoute.Sitemap = [
     "/about/",
     "/contact/",
     "/privacy-policy/",
     "/terms/",
     "/disclaimer/",
     "/editorial-policy/",
-  ].map((path) => ({ url: absolute(path) }));
-
-  const categoryHubs = Object.keys(categories)
-    .filter((category) => tools.some((tool) => tool.category === category && tool.indexable))
-    .map((category) => ({ url: absolute(`/tools/${category}/`) }));
-
-  const toolPages = tools
-    .filter((tool) => tool.indexable)
-    .map((tool) => ({ url: absolute(toolPath(tool)) }));
-
-  const toolGuidePages = tools
-    .filter((tool) => tool.indexable)
-    .map((tool) => ({ url: absolute(`${toolPath(tool)}guide/`) }));
-
-  const blogPages = getPosts().map((post) => ({
-    url: absolute(`/blog/${post.slug}/`),
-    lastModified: post.frontmatter.publishedAt,
+  ].map((path) => ({
+    url: absolute(path),
+    lastModified: buildDate,
+    changeFrequency: "monthly",
+    priority: 0.3,
   }));
 
-  return [...staticPages, ...categoryHubs, ...toolPages, ...toolGuidePages, ...blogPages];
+  const categoryHubs: MetadataRoute.Sitemap = Object.keys(categories)
+    .filter((category) => tools.some((tool) => tool.category === category && tool.indexable))
+    .map((category) => ({
+      url: absolute(`/tools/${category}/`),
+      lastModified: buildDate,
+      changeFrequency: "daily",
+      priority: 0.9,
+    }));
+
+  const toolPages: MetadataRoute.Sitemap = tools
+    .filter((tool) => tool.indexable)
+    .map((tool) => ({
+      url: absolute(toolPath(tool)),
+      lastModified: buildDate,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    }));
+
+  const toolGuidePages: MetadataRoute.Sitemap = tools
+    .filter((tool) => tool.indexable)
+    .map((tool) => ({
+      url: absolute(`${toolPath(tool)}guide/`),
+      lastModified: buildDate,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    }));
+
+  const blogPages: MetadataRoute.Sitemap = getPosts().map((post) => ({
+    url: absolute(`/blog/${post.slug}/`),
+    lastModified: post.frontmatter.publishedAt ? new Date(post.frontmatter.publishedAt) : buildDate,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [
+    ...corePages,
+    ...categoryHubs,
+    ...toolPages,
+    ...toolGuidePages,
+    ...blogPages,
+    ...infoPages,
+  ];
 }

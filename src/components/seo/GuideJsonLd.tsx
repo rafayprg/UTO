@@ -22,11 +22,16 @@ export function GuideJsonLd({ tool, guide, canonicalUrl, toolUrl, categoryName }
         url: absolute(canonicalUrl),
         inLanguage: "en-US",
         about: {
-          "@type": "SoftwareApplication",
+          "@type": ["SoftwareApplication", "WebApplication"],
           name: tool.title,
           url: absolute(toolUrl),
-          applicationCategory: "UtilitiesApplication",
-          operatingSystem: "Web browser",
+          operatingSystem: "All (Web Browser)",
+          isAccessibleForFree: true,
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+          },
         },
         author: {
           "@type": "Organization",

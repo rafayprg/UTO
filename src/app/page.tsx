@@ -13,17 +13,17 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { ToolCard } from "@/components/ToolDirectory";
-import { tools, liveTools, categories } from "@/lib/tools-registry";
+import { tools, type ToolCategory } from "@/lib/tools-registry";
 import { CategoryIcon } from "@/components/ToolIcon";
 
 export const metadata = {
   alternates: { canonical: "/" },
-  title: "Localtools — 1,034+ Private Browser Tools for Work, Code & Everyday Math",
-  description: "One unified workspace of 1,034+ professional tools for PDFs, finance, code, media, and calculations. Zero server uploads. 100% private in-browser execution.",
+  title: "Localtools — 1,034+ 100% Free Private Browser Tools for Work, Code & Everyday Math",
+  description: "One unified workspace of 1,034+ 100% free professional tools for PDFs, finance, code, media, and calculations. Zero server uploads. 100% private in-browser execution.",
 };
 
 const SUITE_HIGHLIGHTS: Array<{
-  key: string;
+  key: ToolCategory;
   name: string;
   desc: string;
   iconType: string;
