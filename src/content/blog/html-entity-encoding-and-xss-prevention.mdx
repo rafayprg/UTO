@@ -1,0 +1,100 @@
+---
+title: "HTML Entity Encoding Guide: Named Entities, Unicode Code Points, and XSS Defense"
+description: "Master HTML character escaping, understand named entities versus decimal and hex references, and implement robust defenses against Cross-Site Scripting (XSS)."
+publishedAt: "2026-11-19"
+updatedAt: "2026-11-21"
+author: "sarah"
+category: "Developer Tools"
+keywords:
+  - "html entity encoding guide"
+  - "named html character entities"
+  - "xss prevention character escaping"
+  - "html decimal vs hex code points"
+  - "sanitize untrusted user input"
+  - "client side html encoder"
+keyTakeaways:
+  - "HTML entity encoding converts reserved markup delimiter characters into safe character reference strings, preventing browsers from misinterpreting text as executable code."
+  - "The five essential XML/HTML reserved characters are & (ampersand), < (less-than), > (greater-than), \" (double quote), and ' (single quote)."
+  - "Entity references exist as named entities (&amp;), numeric decimal references (&#38;), and hexadecimal references (&#x26;)."
+  - "Context-aware escaping is essential: encoding that protects against body text injection will not protect against raw attribute or JavaScript context injection."
+companionTool:
+  name: "HTML Entity Encoder"
+  url: "/tools/dev/html-entity"
+  description: "Encode or decode HTML character entities and special Unicode symbols in your browser."
+faqs:
+  - question: "Why is the ampersand (&) the first character that must be escaped?"
+    answer: "Because all HTML entities begin with an ampersand, failing to escape ampersands first can cause double-encoding bugs, turning '&lt;' into '&amp;lt;' rather than preserving the intended entity syntax."
+  - question: "What is the difference between &#38; and &amp;?"
+    answer: "Both represent the exact same ampersand character. '&amp;' is a named character reference, while '&#38;' is a numeric decimal entity corresponding to Unicode code point 38."
+  - question: "Does HTML entity encoding protect against XSS inside JavaScript script tags?"
+    answer: "No. HTML entity encoding only protects HTML parser contexts (between HTML tags or in safe attributes). Inside an inline '<script>' tag or 'onclick' handler, the JavaScript engine executes code directly, requiring JavaScript string escaping or JSON serialization."
+---
+
+HTML is a markup language built on specific syntactic delimiter symbols. When a web browser encounters a less-than sign (`<`), it immediately switches its internal parser state from raw text rendering to DOM element parsing, expecting a tag name like `<div>` or `<script>`.
+
+If an application displays untrusted user input (such as comments, profile names, or form submissions) without properly encoding these reserved characters, malicious actors can inject rogue markup—leading directly to **Stored Cross-Site Scripting (XSS)** vulnerabilities that compromise user sessions, steal cookies, and deface websites.
+
+## The Five Essential Reserved HTML Entities
+
+The HTML5 and XML standards identify five core characters that carry reserved syntactic meaning. Whenever these characters appear in dynamic web content, they must be converted into their respective entity references:
+
+| Character | Literal Meaning | Named Entity | Decimal Entity | Hex Entity |
+| :--- | :--- | :--- | :--- | :--- |
+| `&` | Ampersand / Entity starter | `&amp;` | `&#38;` | `&#x26;` |
+| `<` | Left Angle Bracket / Tag opener | `&lt;` | `&#60;` | `&#x3C;` |
+| `>` | Right Angle Bracket / Tag closer | `&gt;` | `&#62;` | `&#x3E;` |
+| `"` | Double Quote / Attribute delimiter | `&quot;` | `&#34;` | `&#x22;` |
+| `'` | Single Quote / Attribute delimiter | `&#39;` / `&apos;` | `&#39;` | `&#x27;` |
+
+*Note on Single Quotes:* While `&apos;` was introduced in XML and standardized in HTML5, older legacy browsers sometimes struggled to parse it. Using the decimal entity `&#39;` remains the safest universal cross-browser pattern for single quotation marks.
+
+## Anatomizing an XSS Attack Vector
+
+Consider an unescaped comment board that directly concatenates user input into an HTML template:
+
+```html
+<!-- Vulnerable Code Pattern -->
+<div class="user-comment">
+  Hello, Welcome back! <script>stealCookies()</script>
+</div>
+```
+
+The browser parser encounters `<script>`, stops rendering text, and executes the script in the user's active session context.
+
+### Safe Rendered Output with Entity Encoding:
+When properly escaped, the input is converted before DOM insertion:
+
+```html
+<!-- Secure Encoded Pattern -->
+<div class="user-comment">
+  Hello, Welcome back! &lt;script&gt;stealCookies()&lt;/script&gt;
+</div>
+```
+
+The browser renders the exact visual text `Hello, Welcome back! <script>stealCookies()</script>` on the screen without ever executing the script code.
+
+## Context-Aware Escaping Rules
+
+One of the most dangerous misconceptions in web development is assuming that a single `escapeHTML()` function protects against XSS in every location on a web page:
+
+### 1. HTML Body Context (Safe with standard entity encoding)
+```html
+<p>{{userInput}}</p>
+```
+Encoding `<`, `>`, `&`, `"`, and `'` completely neutralizes injection here.
+
+### 2. HTML Attribute Context (Requires quote boundary protection)
+```html
+<input type="text" name="city" value="{{userInput}}" />
+```
+If attributes are properly enclosed in double quotes, converting `"` to `&quot;` prevents attackers from breaking out of the attribute. However, if attributes are unquoted (`value={{userInput}}`), an attacker can inject spaces to introduce event handlers like `onfocus=alert(1)`.
+
+### 3. JavaScript Context (Entity encoding FAILS here)
+```html
+<script>
+  const username = "{{userInput}}";
+</script>
+```
+In this context, HTML entities are completely ignored by the JavaScript engine. If the input contains a quote (`" ; maliciousCode(); //`), execution occurs immediately. Values in JavaScript contexts must be escaped using JSON serialization (`JSON.stringify()`) rather than HTML entity replacement.
+
+Use our companion tool below to encode, decode, and inspect HTML entities client-side in your browser with zero data retention.

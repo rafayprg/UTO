@@ -1,0 +1,106 @@
+---
+title: "URL Encoding Guide: Percent-Encoding, Query Parameters, and Reserved Characters"
+description: "Understand RFC 3986 percent-encoding standards, reserved versus unreserved character sets, query string parameter escaping, and decode safety."
+publishedAt: "2026-11-19"
+updatedAt: "2026-11-21"
+author: "alex"
+category: "Developer Tools"
+keywords:
+  - "url encoding explained"
+  - "percent encoding rfc 3986"
+  - "encodeuricomponent vs encodeuri"
+  - "url query parameter escaping"
+  - "reserved characters in url"
+  - "safe url decode browser"
+keyTakeaways:
+  - "URL encoding (percent-encoding) converts non-ASCII characters and reserved delimiter symbols into a percent sign followed by two hexadecimal digits."
+  - "RFC 3986 classifies characters into unreserved characters (which must never be encoded) and reserved characters (which act as syntactic delimiters)."
+  - "In JavaScript and web frameworks, encodeURIComponent must be used for parameter values, while encodeURI is reserved for complete URLs."
+  - "Failing to properly encode query values can lead to severe parsing breaks, truncated data payloads, and HTTP parameter pollution."
+companionTool:
+  name: "URL Encoder & Decoder"
+  url: "/tools/dev/url-encode"
+  description: "Encode and decode URLs, query strings, and URI components in your browser."
+faqs:
+  - question: "What is the difference between encodeURI and encodeURIComponent in JavaScript?"
+    answer: "encodeURI is meant for complete URL paths and does not encode reserved protocol characters like ':', '/', '?', and '&'. In contrast, encodeURIComponent encodes all reserved punctuation, making it safe for key-value query parameters."
+  - question: "Why is a space sometimes encoded as '%20' and other times as '+'?"
+    answer: "'%20' is the strict RFC 3986 percent-encoding standard across all URL paths and parameters. The '+' symbol was historically defined in the application/x-www-form-urlencoded MIME standard for HTML form submission query strings."
+  - question: "Which characters are considered 'unreserved' in RFC 3986?"
+    answer: "The unreserved characters that should never be percent-encoded are uppercase letters (A-Z), lowercase letters (a-z), decimal digits (0-9), hyphen (-), underscore (_), period (.), and tilde (~)."
+---
+
+Uniform Resource Identifiers (URIs) and URLs are the addressing protocol of the World Wide Web. However, because URLs must travel through different operating systems, email clients, routing proxies, and network hardware, they are restricted to a narrow set of safe ASCII characters.
+
+When a URL contains international Unicode characters (like `café` or `北京`), spaces, or punctuation symbols that conflict with URL delimiter syntax (like `?`, `&`, `=`, or `#`), those characters must be translated into a standardized format known as **percent-encoding** or **URL encoding**.
+
+## The Architecture of RFC 3986 Percent-Encoding
+
+The Uniform Resource Identifier standard (RFC 3986) establishes strict guidelines for character classification within web addresses:
+
+### 1. Unreserved Characters (Never Encoded)
+These characters have no syntactic delimiter role in a URL and must never be altered:
+- Letters: `A-Z`, `a-z`
+- Digits: `0-9`
+- Safe symbols: `-` (hyphen), `_` (underscore), `.` (period), and `~` (tilde)
+
+### 2. Reserved Characters (Syntactic Delimiters)
+These characters define the boundaries of different parts of a URI (schemes, hostnames, ports, paths, queries, and fragments):
+- Delimiters: `:`, `/`, `?`, `#`, `[`, `]`, `@`
+- Sub-delimiters: `!`, `$`, `&`, `'`, `(`, `)`, `*`, `+`, `,`, `;`, `=`
+
+If a reserved character is used for its literal data value rather than as a URL delimiter—such as passing a user password containing `&` or an address containing `/` inside a query parameter—it must be percent-encoded.
+
+## How Percent-Encoding Works
+
+To encode a character:
+1. Determine the byte representation of the character in UTF-8 encoding.
+2. Express each byte as a pair of hexadecimal digits (values from `00` to `FF`).
+3. Prepend a percent sign (`%`) before each hexadecimal pair.
+
+```text
+Character: Space (ASCII 32 / Hex 20)
+Result: %20
+
+Character: Ampersand '&' (ASCII 38 / Hex 26)
+Result: %26
+
+Character: Forward Slash '/' (ASCII 47 / Hex 2F)
+Result: %2F
+
+Character: Euro Symbol '€' (UTF-8 Bytes: E2 82 AC)
+Result: %E2%82%AC
+```
+
+## `encodeURI` vs `encodeURIComponent`: Critical Differences
+
+One of the most common web engineering bugs occurs when developers use the wrong JavaScript URL encoding method:
+
+```javascript
+const base = "https://example.com/search";
+const param = "Rock & Roll / 100%";
+
+// WRONG: encodeURI preserves '&', '/', and '%'
+const badUrl = `${base}?query=${encodeURI(param)}`;
+// Output: https://example.com/search?query=Rock%20&%20Roll%20/%20100%25
+// Result: Server sees two parameters: 'query=Rock' and 'Roll / 100%'!
+
+// CORRECT: encodeURIComponent encodes '&', '/', and '%'
+const goodUrl = `${base}?query=${encodeURIComponent(param)}`;
+// Output: https://example.com/search?query=Rock%20%26%20Roll%20%2F%20100%25
+// Result: Server cleanly decodes param as "Rock & Roll / 100%"
+```
+
+| Character | `encodeURI` | `encodeURIComponent` |
+| :--- | :--- | :--- |
+| `:` (colon) | `:` (preserved) | `%3A` (encoded) |
+| `/` (slash) | `/` (preserved) | `%2F` (encoded) |
+| `?` (question mark) | `?` (preserved) | `%3F` (encoded) |
+| `&` (ampersand) | `&` (preserved) | `%26` (encoded) |
+| `=` (equals) | `=` (preserved) | `%3D` (encoded) |
+| `+` (plus) | `+` (preserved) | `%2B` (encoded) |
+| ` ` (space) | `%20` | `%20` |
+
+Use `encodeURI()` only when you have a complete, fully formed URL path and want to ensure foreign accents or spaces are valid. Use `encodeURIComponent()` whenever you are encoding individual query values or dynamic path segments.
+
+Use our companion tool below to safely encode or decode URLs and parameter payloads directly in your browser.

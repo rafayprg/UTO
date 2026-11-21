@@ -1,0 +1,112 @@
+---
+title: "Color Space Conversion Guide: HEX, RGB, HSL, and Modern CSS Color Formats"
+description: "Master color theory in web development, understand the math behind HEX, RGB, and HSL conversions, and explore modern wide-gamut OKLCH standards."
+publishedAt: "2026-11-19"
+updatedAt: "2026-11-21"
+author: "sarah"
+category: "Design & Media"
+keywords:
+  - "color space conversion hex rgb hsl"
+  - "hex to rgb conversion formula"
+  - "hsl color model explained"
+  - "oklch modern css color"
+  - "perceptually uniform color spaces"
+  - "online color converter browser"
+keyTakeaways:
+  - "HEX and RGB represent colors using additive red, green, and blue light channels across values ranging from 0 to 255."
+  - "HSL models human perceptual color attributes: Hue (0° to 360° on the color wheel), Saturation (0% to 100%), and Lightness (0% to 100%)."
+  - "HSL makes dynamic design systems and programmatic theme palettes (dark mode, state hover shades) significantly simpler to calculate in CSS."
+  - "Modern CSS Color Level 4 introduces wide-gamut color spaces like OKLCH, ensuring perceptually uniform lightness transitions across all hues."
+companionTool:
+  name: "Color Code Converter"
+  url: "/tools/dev/color-converter"
+  description: "Convert color codes between HEX, RGB, HSL, and OKLCH formats with real-time preview."
+faqs:
+  - question: "How do you manually convert a 6-digit HEX color to RGB values?"
+    answer: "Group the 6 hex characters into three 2-digit pairs representing Red, Green, and Blue. Convert each pair from base-16 to base-10 using the formula: Value = (First Digit * 16) + Second Digit."
+  - question: "Why is HSL preferred over HEX for generating design system color scales?"
+    answer: "In HSL, you can alter the Lightness percentage while holding Hue and Saturation constant, allowing engineers to programmatically generate 10-step accessible tint-and-shade scales with predictable contrast ratios."
+  - question: "What problem does OKLCH solve that HSL fails to address?"
+    answer: "HSL is not perceptually uniform: a pure yellow hue at 50% lightness appears dramatically brighter to human eyes than a pure blue hue at 50% lightness. OKLCH guarantees that 50% lightness maintains identical perceived luminance across every hue."
+---
+
+Color representation is at the heart of user interface engineering, graphic design, and web accessibility. Front-end developers frequently encounter different color notations across design specifications, CSS style sheets, canvas rendering APIs, and design tokens.
+
+Understanding the mathematical models behind **HEX**, **RGB**, and **HSL**—as well as next-generation CSS formats like **OKLCH**—allows developers to construct dynamic themes, ensure WCAG contrast compliance, and build intuitive color systems.
+
+## The Additive Light Model: RGB and HEX
+
+Monitors and mobile screens emit light using cathode or LED subpixels in three primary channels: **Red**, **Green**, and **Blue** (RGB). Each subpixel intensity is defined as an 8-bit unsigned integer ranging from `0` (darkness) to `255` (maximum luminosity):
+
+```text
+Pure Red:    rgb(255, 0, 0)
+Pure Green:  rgb(0, 255, 0)
+Pure Blue:   rgb(0, 0, 255)
+Pure White:  rgb(255, 255, 255)
+Pure Black:  rgb(0, 0, 0)
+```
+
+### The Mathematics of HEX Notation
+
+Hexadecimal color codes are simply a base-16 shorthand representation of the exact same 8-bit RGB byte values:
+
+```text
+HEX: #3B82F6 (Tailwind Primary Blue)
+  • Red Channel:   3B (Hex) = (3 * 16) + 11 = 59
+  • Green Channel: 82 (Hex) = (8 * 16) + 2  = 130
+  • Blue Channel:  F6 (Hex) = (15 * 16) + 6 = 246
+  
+RGB Equivalent: rgb(59, 130, 246)
+```
+
+When an 8-digit HEX code is used (`#3B82F6CC`), the final two characters specify an alpha transparency channel (`CC` in base-16 = 204 in base-10; `204 / 255 = 0.8` or 80% opacity).
+
+## The Perceptual Model: HSL (Hue, Saturation, Lightness)
+
+While RGB and HEX match how computer hardware displays light, they are counterintuitive for human designers. If asked to make `#3B82F6` &ldquo;a little bit darker and more muted,&rdquo; calculating the necessary adjustments to all three hex pairs requires complex mental arithmetic.
+
+**HSL** reorganizes color into intuitive, human-centered dimensions:
+
+1. **Hue (H):** A position on the 360-degree color circle.
+   - `0°` / `360°` = Red
+   - `60°` = Yellow
+   - `120°` = Green
+   - `180°` = Cyan
+   - `240°` = Blue
+   - `300°` = Magenta
+2. **Saturation (S):** The intensity or purity of the color, expressed from `0%` (monochrome gray) to `100%` (vivid, full saturation).
+3. **Lightness (L):** The amount of light, from `0%` (solid black) through `50%` (normal balance) to `100%` (pure white).
+
+```css
+/* Dynamic UI States with HSL */
+:root {
+  --btn-hue: 217;
+  --btn-sat: 91%;
+  
+  /* Normal, Hover, and Active states adjust ONLY lightness */
+  --btn-bg:         hsl(var(--btn-hue), var(--btn-sat), 60%);
+  --btn-bg-hover:   hsl(var(--btn-hue), var(--btn-sat), 50%);
+  --btn-bg-active:  hsl(var(--btn-hue), var(--btn-sat), 40%);
+}
+```
+
+By keeping Hue and Saturation constant while varying Lightness, design systems can automate consistent button states, badges, and focus rings with zero guesswork.
+
+## The Next Generation: OKLCH and Perceptual Uniformity
+
+The newest standard in modern web design is **OKLCH** (Lightness, Chroma, Hue), formalized in CSS Color Module Level 4:
+
+```css
+.badge {
+  background-color: oklch(0.65 0.22 250);
+}
+```
+
+### Why OKLCH Outperforms HSL:
+In legacy HSL, the lightness channel is mathematically uniform but **perceptually flawed**:
+- `hsl(60, 100%, 50%)` (Pure Yellow) has a perceived luminance of over 90%.
+- `hsl(240, 100%, 50%)` (Pure Blue) has a perceived luminance of only 15%.
+
+Consequently, putting white text on yellow HSL fails accessibility contrast checks, while white text on blue HSL passes easily. OKLCH fixes this flaw: **65% lightness in OKLCH delivers the exact same perceived brightness regardless of whether the hue is yellow, blue, cyan, or green.**
+
+Use our companion tool below to convert, preview, and harmonize color codes between HEX, RGB, HSL, and OKLCH directly in your browser.

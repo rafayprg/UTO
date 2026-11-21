@@ -21,18 +21,25 @@ export interface BlogHeading {
   level: number;
 }
 
+export interface BlogCompanionTool {
+  name: string;
+  url: string;
+  description: string;
+}
+
 export interface BlogFrontmatter {
   title: string;
   description: string;
   publishedAt: string;
   updatedAt?: string;
   category: string;
-  relatedToolSlug: string;
+  relatedToolSlug?: string;
   readingTime: string;
   author?: BlogAuthor;
   keywords?: string[];
   keyTakeaways?: string[];
   faqs?: BlogFaq[];
+  companionTool?: BlogCompanionTool;
 }
 
 export interface BlogPostItem {
@@ -68,10 +75,11 @@ export const DEFAULT_AUTHORS: Record<string, BlogAuthor> = {
 };
 
 export function getDefaultAuthor(category: string): BlogAuthor {
-  if (category.toLowerCase().includes("pdf") || category.toLowerCase().includes("image")) {
+  const cat = (category || "").toLowerCase();
+  if (cat.includes("pdf") || cat.includes("image") || cat.includes("media") || cat.includes("security")) {
     return DEFAULT_AUTHORS.marcus;
   }
-  if (category.toLowerCase().includes("finance") || category.toLowerCase().includes("unit")) {
+  if (cat.includes("finance") || cat.includes("unit") || cat.includes("calculator") || cat.includes("real-estate")) {
     return DEFAULT_AUTHORS.sarah;
   }
   return DEFAULT_AUTHORS.alex;
@@ -105,7 +113,7 @@ export function getPosts(): BlogPostItem[] {
       const rawContent = fs.readFileSync(fullPath, "utf8");
       const { data, content } = matter(rawContent);
 
-      for (const key of ["title", "description", "publishedAt", "category", "relatedToolSlug", "readingTime"]) {
+      for (const key of ["title", "description", "publishedAt", "category"]) {
         if (typeof data[key] !== "string" || !data[key].trim()) {
           throw new Error(`${file}: missing ${key}`);
         }
@@ -114,10 +122,34 @@ export function getPosts(): BlogPostItem[] {
         throw new Error(`${file}: invalid publishedAt`);
       }
 
-      const frontmatter = data as BlogFrontmatter;
       const wordCount = calculateWordCount(content);
+      const readingTime = typeof data.readingTime === "string" && data.readingTime.trim()
+        ? data.readingTime
+        : `${Math.max(1, Math.round(wordCount / 200))} min read`;
+
+      const relatedToolSlug = typeof data.relatedToolSlug === "string" && data.relatedToolSlug.trim()
+        ? data.relatedToolSlug
+        : (data.companionTool?.url ? data.companionTool.url.replace(/\/$/, "").split("/").pop() || "" : "");
+
+      const authorKey = typeof data.author === "string" ? data.author.toLowerCase() : "";
+      const author = DEFAULT_AUTHORS[authorKey] || (typeof data.author === "object" ? data.author : getDefaultAuthor(data.category));
+
+      const frontmatter: BlogFrontmatter = {
+        title: data.title,
+        description: data.description,
+        publishedAt: data.publishedAt,
+        updatedAt: data.updatedAt,
+        category: data.category,
+        relatedToolSlug,
+        readingTime,
+        author,
+        keywords: Array.isArray(data.keywords) ? data.keywords : [],
+        keyTakeaways: Array.isArray(data.keyTakeaways) ? data.keyTakeaways : [],
+        faqs: Array.isArray(data.faqs) ? data.faqs : [],
+        companionTool: data.companionTool,
+      };
+
       const headings = extractHeadings(content);
-      const author = frontmatter.author || getDefaultAuthor(frontmatter.category);
       const faqs = frontmatter.faqs || [];
       const keyTakeaways = frontmatter.keyTakeaways || [];
 
@@ -139,5 +171,7 @@ export function getPosts(): BlogPostItem[] {
     });
 }
 
-export const getPost = (slug: string): BlogPostItem | undefined =>
-  getPosts().find(post => post.slug === slug);
+export function getPost(slug: string): BlogPostItem | null {
+  const posts = getPosts();
+  return posts.find((p) => p.slug === slug) || null;
+}

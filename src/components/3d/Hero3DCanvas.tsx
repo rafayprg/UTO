@@ -101,6 +101,8 @@ export default function Hero3DCanvas({
 
     // GROUPS
     const mainGroup = new THREE.Group();
+    const isDesktopInit = width >= 1024;
+    mainGroup.position.set(isDesktopInit ? 5.0 : 0, isDesktopInit ? 0.2 : 2.0, 0);
     scene.add(mainGroup);
 
     // 1. CYBER CORE (Inner Pulsing Sphere)
@@ -249,11 +251,11 @@ export default function Hero3DCanvas({
 
     const pointLight = new THREE.PointLight(
       THEME_COLORS[activeTheme].primary,
-      3.0,
-      30
+      3.5,
+      35
     );
     pointLight.position.set(0, 0, 0);
-    scene.add(pointLight);
+    mainGroup.add(pointLight);
 
     // MOUSE LISTENER
     const handleMouseMove = (e: MouseEvent) => {
@@ -272,17 +274,19 @@ export default function Hero3DCanvas({
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      const isDesktop = w >= 1024;
+      mainGroup.position.set(isDesktop ? 5.0 : 0, isDesktop ? 0.2 : 2.0, 0);
     };
 
     window.addEventListener("resize", handleResize);
 
     // ANIMATION LOOP
     let animId: number;
-    const clock = new THREE.Clock();
+    const startTime = performance.now();
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      const elapsed = clock.getElapsedTime();
+      const elapsed = (performance.now() - startTime) * 0.001;
 
       // Smooth mouse lerp
       mouseRef.current.x +=
@@ -310,10 +314,12 @@ export default function Hero3DCanvas({
       particles.rotation.y = elapsed * 0.035;
       particles.rotation.x = mouseRef.current.y * 0.15;
 
-      // Parallax camera movement
-      camera.position.x = mouseRef.current.x * 3.5;
-      camera.position.y = 1 + mouseRef.current.y * 2.5;
-      camera.lookAt(0, 0, 0);
+      // Parallax camera movement with smooth desktop focal shift
+      const isDesktop = (container.clientWidth || window.innerWidth) >= 1024;
+      const baseCamX = isDesktop ? 1.5 : 0;
+      camera.position.x = baseCamX + mouseRef.current.x * 2.5;
+      camera.position.y = 1 + mouseRef.current.y * 2.0;
+      camera.lookAt(isDesktop ? 2.5 : 0, 0, 0);
 
       // Dynamic color interpolation if theme changed
       const currentThemeConfig =

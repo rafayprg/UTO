@@ -1,0 +1,92 @@
+---
+title: "Mortgage Amortization Formulas and Monthly Interest Breakdown Guide"
+description: "Understand the mathematical formulas behind fixed-rate mortgage payments, principal versus interest curves, amortization schedules, and extra principal payoffs."
+publishedAt: "2026-11-19"
+updatedAt: "2026-11-21"
+author: "marcus"
+category: "Finance & Real Estate"
+keywords:
+  - "mortgage amortization formula"
+  - "how mortgage interest is calculated"
+  - "monthly mortgage payment calculation"
+  - "principal and interest breakdown"
+  - "amortization schedule math"
+  - "extra mortgage payment savings"
+keyTakeaways:
+  - "Fixed-rate mortgages use annuity compounding formulas where initial payments are heavily skewed toward interest and gradually shift toward principal."
+  - "Monthly interest is calculated on the remaining loan balance rather than the original loan amount, meaning early extra principal payments yield maximum compound interest savings."
+  - "Understanding loan amortization helps homebuyers calculate the true cost of borrowing across 15-year versus 30-year terms."
+  - "All mortgage calculations on Localtools execute client-side with complete privacy and zero data tracking."
+companionTool:
+  name: "Mortgage Calculator"
+  url: "/tools/real-estate/mortgage-calculator"
+  description: "Calculate monthly payments, total interest costs, and full amortization schedules in your browser."
+faqs:
+  - question: "What is the standard formula for calculating a fixed-rate mortgage payment?"
+    answer: "The formula is M = P * [r(1 + r)^n] / [(1 + r)^n - 1], where M is monthly payment, P is principal loan balance, r is monthly interest rate (annual rate divided by 12), and n is total number of monthly payments."
+  - question: "Why is mortgage interest so high during the first years of the loan?"
+    answer: "Interest is calculated each month against the current outstanding loan balance. At the beginning of the mortgage, the principal balance is at its highest, so the monthly interest charge consumes the majority of your fixed monthly payment."
+  - question: "How does an extra $100 monthly payment affect a 30-year mortgage?"
+    answer: "Because extra payments reduce the principal directly, they shorten the overall loan term and permanently eliminate future compounding interest on that principal amount, often saving tens of thousands of dollars over the loan lifespan."
+---
+
+When securing a home mortgage, the monthly payment remains fixed for the duration of the term, yet the underlying composition of that payment changes every single month. During the initial years of a 30-year loan, more than seventy percent of each payment is consumed by interest charges, with only a small fraction reducing the actual loan balance.
+
+Understanding the mechanics of mortgage amortization enables homeowners to evaluate refinancing offers, compare 15-year versus 30-year repayment options, and strategically apply extra principal payments to save thousands of dollars in lifetime financing fees.
+
+## The Standard Amortization Formula Explained
+
+A fixed-rate mortgage is structured as an ordinary annuity. The monthly payment is calculated using the following mathematical relationship:
+
+```text
+Monthly Payment (M) = P * [ r * (1 + r)^n ] / [ (1 + r)^n - 1 ]
+```
+
+Where:
+- **P** represents the initial principal balance (the total loan amount borrowed).
+- **r** represents the periodic monthly interest rate. This is the annual percentage rate (APR) expressed as a decimal and divided by 12. For example, a 6.0% annual rate yields a periodic monthly rate of `0.06 / 12 = 0.005`.
+- **n** represents the total number of monthly amortization periods. For a standard 30-year mortgage, `n = 30 * 12 = 360` payments. For a 15-year mortgage, `n = 15 * 12 = 180` payments.
+
+### Worked Example: A $400,000 Loan at 6.5% APR
+
+Let us walk through the exact numbers for a 30-year fixed loan of $400,000 at an annual interest rate of 6.5%:
+
+1. Calculate the periodic monthly rate: `r = 0.065 / 12 = 0.00541667`.
+2. Compute the compounding growth factor: `(1 + r)^360 = (1.00541667)^360 = 6.9918`.
+3. Evaluate the numerator: `0.00541667 * 6.9918 = 0.037872`.
+4. Evaluate the denominator: `6.9918 - 1 = 5.9918`.
+5. Divide numerator by denominator: `0.037872 / 5.9918 = 0.0063206`.
+6. Multiply by principal: `$400,000 * 0.0063206 = $2,528.27` per month.
+
+Across 360 monthly payments, total payments equal `$2,528.27 * 360 = $910,177.20`. Of that total, the original principal is $400,000.00, and cumulative interest charges account for **$510,177.20**—more than the initial home loan itself.
+
+## How Monthly Interest and Principal Shift Over Time
+
+The fixed monthly payment of $2,528.27 is partitioned every month according to the current outstanding principal:
+
+```text
+Monthly Interest Charge = Remaining Principal Balance * (Annual Rate / 12)
+Monthly Principal Reduction = Fixed Monthly Payment - Monthly Interest Charge
+```
+
+| Month | Starting Principal | Monthly Payment | Interest Paid | Principal Paid | Ending Principal |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Month 1** | $400,000.00 | $2,528.27 | $2,166.67 | $361.60 | $399,638.40 |
+| **Month 2** | $399,638.40 | $2,528.27 | $2,164.71 | $363.56 | $399,274.84 |
+| **Month 12** | $395,958.12 | $2,528.27 | $2,144.77 | $383.50 | $395,574.62 |
+| **Month 60** | $375,412.30 | $2,528.27 | $2,033.48 | $494.79 | $374,917.51 |
+| **Month 180** | $293,760.10 | $2,528.27 | $1,591.20 | $937.07 | $292,823.03 |
+| **Month 240** | $215,820.45 | $2,528.27 | $1,169.03 | $1,359.24 | $214,461.21 |
+| **Month 360** | $2,514.65 | $2,528.27 | $13.62 | $2,514.65 | $0.00 |
+
+Notice that during Month 1, **85.7%** of your monthly payment goes toward interest. It is not until Year 19 that the monthly payment splits 50/50 between interest and principal reduction.
+
+## The Compounding Impact of Extra Principal Payments
+
+Because interest is recalculated every month based solely on the outstanding principal balance, any additional funds applied directly to principal produce permanent compound savings:
+
+- **Immediate Term Shortening:** When you make an additional $200 principal payment during Year 1, that $200 never accrues monthly interest again for the remaining 29 years.
+- **Total Interest Reduction:** On a $400,000 mortgage at 6.5%, adding a consistent $200 monthly principal payment cuts your payoff timeline by more than **4.5 years** and eliminates over **$75,000** in interest charges.
+- **Bi-Weekly Payment Strategy:** Making 26 bi-weekly payments of half the monthly amount equates to 13 full monthly payments per year. This single extra payment per year trims roughly 4 years off a 30-year term without dramatically impacting monthly household budgeting.
+
+Use our companion tool below to run your exact loan balances, terms, and custom extra payment scenarios with 100% privacy in your browser.

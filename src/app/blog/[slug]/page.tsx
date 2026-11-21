@@ -373,9 +373,22 @@ export default async function BlogPost({
       </div>
 
       {/* Primary Companion Tool Callout Card */}
-      <div className="article-tool-cta">
-        <ToolEmbed slug={post.frontmatter.relatedToolSlug} />
-      </div>
+      {post.frontmatter.companionTool ? (
+        <div className="article-tool-cta">
+          <aside className="embed not-prose">
+            <p className="eyebrow">COMPANION TOOL</p>
+            <h3>{post.frontmatter.companionTool.name}</h3>
+            <p>{post.frontmatter.companionTool.description}</p>
+            <Link className="text-link" href={post.frontmatter.companionTool.url}>
+              Explore this tool →
+            </Link>
+          </aside>
+        </div>
+      ) : post.frontmatter.relatedToolSlug ? (
+        <div className="article-tool-cta">
+          <ToolEmbed slug={post.frontmatter.relatedToolSlug} />
+        </div>
+      ) : null}
 
       {/* Structured FAQ Section (Essential for Google FAQ Rich Snippets & AdSense E-E-A-T) */}
       {post.faqs && post.faqs.length > 0 && (

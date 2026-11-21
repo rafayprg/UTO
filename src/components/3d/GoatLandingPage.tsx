@@ -12,6 +12,7 @@ import {
   Activity,
 } from "lucide-react";
 import InteractiveHeroHUD from "./InteractiveHeroHUD";
+import HeroSearch from "./HeroSearch";
 import PrivacyVaultVisualizer from "./PrivacyVaultVisualizer";
 import ClientBenchmarkStation from "./ClientBenchmarkStation";
 import CategoryGalaxy from "./CategoryGalaxy";
@@ -59,19 +60,19 @@ export default function GoatLandingPage() {
           {/* Left Column: Vision & Value Proposition */}
           <div className="lg:col-span-7 space-y-6 text-left">
             {/* Live Privacy Beacon */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/90 border border-slate-700/80 shadow-lg shadow-cyan-950/50 backdrop-blur-md">
-              <span className="relative flex h-2.5 w-2.5">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-cyan-500/30 shadow-lg shadow-cyan-950/40 backdrop-blur-md">
+              <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              <span className="text-xs font-mono font-semibold tracking-wider text-slate-300 uppercase">
-                100% Client-Side · Zero Server Uploads · Air-Gapped Ready
+              <span className="text-[11px] font-mono font-semibold tracking-wider text-cyan-300 uppercase">
+                AIR-GAPPED BROWSER WORKSPACE · ZERO SERVER UPLOADS
               </span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
-              1,034+ Professional Tools.
+            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight text-white leading-[1.08]">
+              1,034+ In-Browser Tools.
               <br />
               <span className="hero-gradient-text">
                 Zero Data Leaves Your Device.
@@ -80,82 +81,79 @@ export default function GoatLandingPage() {
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
-              Transform PDFs, analyze corporate financials, run cryptographic
-              ciphers, and convert media directly inside your browser’s isolated
-              memory. Powered by client-side WebAssembly, Web Crypto, and GPU
-              pipelines. No accounts, no paywalls, and no telemetry.
+              Merge PDFs, remove backgrounds, calculate 1099 taxes, and encrypt
+              data with 100% private in-browser memory execution. Powered by
+              WebAssembly, Web Crypto, and GPU shaders. Completely free forever
+              with zero sign-ups.
             </p>
 
-            {/* 3D Theme Customizer Pills */}
-            <div className="flex items-center gap-2 flex-wrap pt-1">
-              <span className="text-xs font-mono text-slate-400 mr-1 flex items-center gap-1">
-                <Sparkles size={13} className="text-cyan-400" /> 3D Mode:
-              </span>
-              {(
-                [
-                  { id: "cyan", label: "Quantum Cyan" },
-                  { id: "emerald", label: "Vault Emerald" },
-                  { id: "violet", label: "Neural Violet" },
-                  { id: "ruby", label: "Crimson Forge" },
-                  { id: "amber", label: "Solar Gold" },
-                ] as const
-              ).map((th) => (
-                <button
-                  key={th.id}
-                  type="button"
-                  onClick={() => handleThemeChange(th.id)}
-                  className={`text-xs font-mono px-3 py-1 rounded-full border transition-all ${
-                    activeTheme === th.id
-                      ? "bg-slate-800 border-cyan-400 text-cyan-300 shadow-md shadow-cyan-500/20"
-                      : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
-                  }`}
-                >
-                  {th.label}
-                </button>
-              ))}
+            {/* Hero Instant Quick Search Bar */}
+            <div className="pt-1 pb-2">
+              <HeroSearch />
             </div>
 
-            {/* Primary Action Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-3">
+            {/* Primary Action Buttons & Compact 3D Atmosphere Selector */}
+            <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
                 href="/tools/"
                 onClick={() => sounds.playClick()}
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm tracking-wide transition-all shadow-xl shadow-cyan-500/25 active:scale-95"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm tracking-wide transition-all shadow-xl shadow-cyan-500/25 active:scale-95"
               >
-                <span>Launch Tool Matrix (1,034 Tools)</span>
-                <ArrowRight size={17} />
+                <span>Launch Matrix (1,034 Tools)</span>
+                <ArrowRight size={16} />
               </Link>
 
               <a
                 href="#benchmark"
                 onClick={() => sounds.playClick()}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-slate-200 font-semibold text-sm transition-all hover:border-slate-600 shadow-lg"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-slate-200 font-semibold text-sm transition-all hover:border-slate-600 shadow-lg"
               >
-                <Activity size={16} className="text-cyan-400" />
-                <span>Run Speed Benchmark</span>
+                <Activity size={15} className="text-cyan-400" />
+                <span>Test Hardware Speed</span>
               </a>
 
-              <Link
-                href="/blog/"
-                onClick={() => sounds.playClick()}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-3 text-slate-400 hover:text-white text-xs font-mono transition-colors"
-              >
-                <BookOpen size={14} />
-                <span>1,034 Dedicated Guides</span>
-              </Link>
+              {/* Compact Atmosphere Selector */}
+              <div className="inline-flex items-center gap-1.5 p-1 bg-slate-900/90 rounded-xl border border-slate-800 text-xs font-mono text-slate-400">
+                <span className="px-2 text-[11px] text-slate-400 flex items-center gap-1">
+                  <Sparkles size={11} className="text-cyan-400" /> Atmosphere:
+                </span>
+                {(
+                  [
+                    { id: "cyan", label: "Cyan", dot: "bg-cyan-400" },
+                    { id: "emerald", label: "Emerald", dot: "bg-emerald-400" },
+                    { id: "violet", label: "Violet", dot: "bg-violet-400" },
+                    { id: "ruby", label: "Ruby", dot: "bg-rose-400" },
+                    { id: "amber", label: "Amber", dot: "bg-amber-400" },
+                  ] as const
+                ).map((th) => (
+                  <button
+                    key={th.id}
+                    type="button"
+                    onClick={() => handleThemeChange(th.id)}
+                    className={`px-2 py-1 rounded-lg text-[11px] transition-all flex items-center gap-1 ${
+                      activeTheme === th.id
+                        ? "bg-slate-800 text-white font-semibold border border-slate-700 shadow-sm"
+                        : "hover:text-slate-200"
+                    }`}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full ${th.dot}`} />
+                    <span>{th.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Stats Strip */}
-            <div className="pt-6 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div>
+            {/* Stats Strip with Glass Tiles */}
+            <div className="pt-6 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-md">
                 <strong className="block text-2xl sm:text-3xl font-extrabold text-white font-mono">
-                  1,034
+                  1,034+
                 </strong>
                 <span className="text-xs text-slate-400">
                   Browser-Native Tools
                 </span>
               </div>
-              <div>
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-md">
                 <strong className="block text-2xl sm:text-3xl font-extrabold text-cyan-400 font-mono">
                   15
                 </strong>
@@ -163,15 +161,15 @@ export default function GoatLandingPage() {
                   Specialized Suites
                 </span>
               </div>
-              <div>
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-md">
                 <strong className="block text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">
                   0 KB
                 </strong>
                 <span className="text-xs text-slate-400">
-                  Sent to Cloud Servers
+                  Cloud Server Uploads
                 </span>
               </div>
-              <div>
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-md">
                 <strong className="block text-2xl sm:text-3xl font-extrabold text-violet-400 font-mono">
                   100%
                 </strong>
