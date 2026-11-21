@@ -8,3 +8,5 @@ tmp/
 preview*.jpg
 audit-report.json
 .claude/
+
+deploy.tar.gz
