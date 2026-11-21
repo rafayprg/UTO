@@ -1,5 +1,6 @@
 import { categories, type ToolCategory, type Tier1Category } from "./categories";
 import { CATALOG, type CatalogEntry, type PlannedInput } from "./catalog";
+import { generateProgrammaticTools } from "./programmatic-tools";
 
 export { categories, type ToolCategory, type Tier1Category };
 export type ToolStatus = "live" | "planned";
@@ -43,6 +44,7 @@ export interface ToolDefinition {
   plannedEngine?: string;
   plannedInput?: PlannedInput;
   faq: Array<{ q: string; a: string }>;
+  publishWave?: number;
 }
 
 type DefinitionInput = Partial<ToolDefinition> & {
@@ -1189,7 +1191,15 @@ function buildTools(): ToolDefinition[] {
 }
 
 export const TOOLS_REGISTRY: ToolDefinition[] = buildTools();
-export const tools = TOOLS_REGISTRY;
+export const MANUAL_TOOLS: ToolDefinition[] = TOOLS_REGISTRY;
+
+const existingManualSlugs = new Set(MANUAL_TOOLS.map(t => t.slug));
+export const PROGRAMMATIC_TOOLS: ToolDefinition[] = generateProgrammaticTools().filter(
+  tool => !existingManualSlugs.has(tool.slug)
+);
+
+export const ALL_TOOLS: ToolDefinition[] = [...MANUAL_TOOLS, ...PROGRAMMATIC_TOOLS];
+export const tools: ToolDefinition[] = ALL_TOOLS;
 export const liveTools = tools.filter(tool => tool.status === "live");
 export const toolPath = (tool: ToolDefinition) => `/tools/${tool.category}/${tool.slug}/`;
 export const getTool = (slug: string) => tools.find(tool => tool.slug === slug);

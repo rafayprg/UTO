@@ -54,6 +54,13 @@ const components: Record<string, ComponentType<ToolProps>> = {
   "adsense-rpm-calculator": dynamic(() => import("./Tier1Calculators").then(m => m.AdSenseRpmCalculator), { ssr: false, loading }),
   "freelance-nda-generator": dynamic(() => import("./Tier1Calculators").then(m => m.FreelanceNdaGenerator), { ssr: false, loading }),
 
+  // Programmatic Scale Engines
+  "state-tax-paycheck-engine": dynamic(() => import("./programmatic/StateTaxPaycheckEngine"), { ssr: false, loading }),
+  "platform-fee-engine": dynamic(() => import("./programmatic/PlatformFeeEngine"), { ssr: false, loading }),
+  "tier1-country-finance-engine": dynamic(() => import("./programmatic/Tier1CountryFinanceEngine"), { ssr: false, loading }),
+  "unit-pair-converter-engine": dynamic(() => import("./programmatic/UnitPairConverterEngine"), { ssr: false, loading }),
+  "format-pair-converter-engine": dynamic(() => import("./programmatic/FormatPairConverterEngine"), { ssr: false, loading }),
+
   // Shared Engines
   "text-engine": dynamic(() => import("./engines/TextEngine"), { ssr: false, loading }),
   "calc-engine": dynamic(() => import("./engines/CalcEngine"), { ssr: false, loading }),

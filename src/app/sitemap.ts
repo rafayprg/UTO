@@ -43,8 +43,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.3,
   }));
 
+  const maxWave = Number(process.env.NEXT_PUBLIC_MAX_WAVE || 2);
+  const eligibleTools = tools.filter(
+    (tool) => tool.indexable && (tool.publishWave ?? 1) <= maxWave
+  );
+
   const categoryHubs: MetadataRoute.Sitemap = Object.keys(categories)
-    .filter((category) => tools.some((tool) => tool.category === category && tool.indexable))
+    .filter((category) => eligibleTools.some((tool) => tool.category === category))
     .map((category) => ({
       url: absolute(`/tools/${category}/`),
       lastModified: buildDate,
@@ -52,8 +57,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     }));
 
-  const toolPages: MetadataRoute.Sitemap = tools
-    .filter((tool) => tool.indexable)
+  const toolPages: MetadataRoute.Sitemap = eligibleTools
     .map((tool) => ({
       url: absolute(toolPath(tool)),
       lastModified: buildDate,
@@ -61,8 +65,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     }));
 
-  const toolGuidePages: MetadataRoute.Sitemap = tools
-    .filter((tool) => tool.indexable)
+  const toolGuidePages: MetadataRoute.Sitemap = eligibleTools
     .map((tool) => ({
       url: absolute(`${toolPath(tool)}guide/`),
       lastModified: buildDate,

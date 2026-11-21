@@ -22,7 +22,10 @@ type Props = { params: Promise<{ category: string; slug: string }> };
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return tools.map(({ category, slug }) => ({ category, slug }));
+  const maxWave = Number(process.env.NEXT_PUBLIC_MAX_WAVE || 2);
+  return tools
+    .filter((tool) => (tool.publishWave ?? 1) <= maxWave)
+    .map(({ category, slug }) => ({ category, slug }));
 }
 
 async function resolve(params: Props["params"]) {
