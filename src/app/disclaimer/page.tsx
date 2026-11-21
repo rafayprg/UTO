@@ -3,7 +3,7 @@ import Link from "next/link";
 import { site, absolute } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Disclaimer — Computational & Financial Limits | Localtools",
+  title: "Disclaimer — Computational & Financial Limits",
   description:
     "Important disclosures regarding calculations, financial formulas, image processing, and technical boundaries on Localtools.",
   alternates: {

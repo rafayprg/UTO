@@ -7,7 +7,7 @@ import { absolute, site } from "@/lib/site";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Practical Browser Tool Guides & Calculation Formulas — Localtools Hub",
+  title: "Engineering Blog & Technical Deep Dives",
   description: "Comprehensive step-by-step technical guides, mathematical formulas, and data privacy explainers for in-browser tools. 100% client-side with zero data uploads.",
   keywords: [
     "browser tool guides",

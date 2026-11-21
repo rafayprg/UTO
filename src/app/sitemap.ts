@@ -27,6 +27,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.7,
     },
+    {
+      url: absolute("/guides/"),
+      lastModified: buildDate,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
   ];
 
   const infoPages: MetadataRoute.Sitemap = [

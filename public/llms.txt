@@ -1,0 +1,19 @@
+# Localtools
+
+> 100% Free, client-side, zero-upload private browser tools for calculations, conversions, PDFs, images, finance, and code.
+
+## About Localtools
+Localtools runs all computation locally in the client browser using WebAssembly, Web Crypto, HTML5 Canvas, and modern Web APIs. No user data, files, or sensitive payloads are ever uploaded to a remote server.
+
+## Tool Categories
+- [Finance & Tax Tools](/tools/finance): Paycheck calculators for all 50 US states, sales tax, overtime, 1099 independent contractor tax, compound interest, loan payoff.
+- [Business & Fee Calculators](/tools/business): Stripe fee calculator, PayPal fees, Shopify, Amazon FBA, eBay, Etsy, Upwork, Fiverr, reverse payout calculations.
+- [Unit Converters](/tools/converters): High-precision 2-way conversion for length, mass, temperature, data storage, pressure, and volume.
+- [Format & Code Tools](/tools/developer): In-browser WebP, PNG, JPG, CSV to JSON, JSON to YAML, Markdown to HTML, Base64, UUIDs, Hash functions.
+- [PDF & Document Tools](/tools/pdf): Merge PDFs, split, compress, invoice generation, all client-side without upload.
+
+## Canonical URLs & Sitemap
+- Homepage: https://68.233.120.24/
+- Sitemap: https://68.233.120.24/sitemap.xml
+- Guides Index: https://68.233.120.24/guides/
+- Blog Index: https://68.233.120.24/blog/

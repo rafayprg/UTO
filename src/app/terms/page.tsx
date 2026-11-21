@@ -3,7 +3,7 @@ import Link from "next/link";
 import { site, absolute } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Terms of Use — User Rights & Service Agreement | Localtools",
+  title: "Terms of Use — User Rights & Service Agreement",
   description:
     "Review the terms of service governing access to Localtools client-side calculators, developer converters, and document processing utilities.",
   alternates: {

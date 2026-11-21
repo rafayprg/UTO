@@ -3,7 +3,7 @@ import Link from "next/link";
 import { site, absolute } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Zero-Upload Client-Side Guarantee | Localtools",
+  title: "Privacy Policy — Zero-Upload Client-Side Guarantee",
   description:
     "Comprehensive privacy policy for Localtools. Discover how client-side WebAssembly and browser Web Workers keep your files, images, and text 100% private.",
   alternates: {

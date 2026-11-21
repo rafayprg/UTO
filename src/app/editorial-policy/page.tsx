@@ -3,7 +3,7 @@ import Link from "next/link";
 import { site, absolute } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Editorial Policy & Verification Standards | Localtools",
+  title: "Editorial Policy & Verification Standards",
   description:
     "How Localtools prepares practical technical guides, audits calculation formulas, explains tool constraints, and verifies accuracy with zero hype.",
   alternates: {

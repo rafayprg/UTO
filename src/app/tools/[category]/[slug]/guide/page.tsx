@@ -40,12 +40,14 @@ export async function generateMetadata({ params }: Props) {
   const guide = generateToolGuide(tool);
   const canonicalUrl = `${toolPath(tool)}guide/`;
   return {
-    title: guide.title,
+    title: {
+      absolute: `${guide.title} | Localtools`,
+    },
     description: guide.metaDescription,
     keywords: [...tool.keywords, "guide", "tutorial", "how to use", "formula", "worked examples", "calculator guide"],
     alternates: { canonical: canonicalUrl },
     openGraph: {
-      title: guide.title,
+      title: `${guide.title} | Localtools`,
       description: guide.metaDescription,
       url: absolute(canonicalUrl),
       type: "article",
