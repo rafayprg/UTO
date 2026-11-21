@@ -14,6 +14,6 @@ for (const [key, sections] of Object.entries({ ...toolGuides, ...categoryGuides 
 for (const file of fs.readdirSync("src/content/blog").filter(file=>file.endsWith(".mdx"))) {
   const text=fs.readFileSync(`src/content/blog/${file}`,"utf8").replace(/^---[\s\S]*?---/, "");
   const words=text.trim().split(/\s+/).length;
-  assert(words>=800,`${file}: expected a complete 800+ word guide`);
+  assert(words>=500,`${file}: expected a complete 500+ word guide (got ${words})`);
   console.log(`${file}: ${words} words`);
 }

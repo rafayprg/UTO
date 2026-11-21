@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, Sparkles, ShieldCheck, Layers, Clock, FileText, ArrowRight } from "lucide-react";
+import { BookOpen, Sparkles, ShieldCheck, Layers, Clock, FileText } from "lucide-react";
 import { getPosts } from "@/lib/mdx";
 import { GuideDirectory } from "@/components/GuideDirectory";
 import { tools } from "@/lib/tools-registry";

@@ -29,7 +29,7 @@ faqs:
     answer: "No. In standard accounting, gross margin cannot exceed 100% unless you have negative production costs. Markup, however, can easily exceed 100%, 500%, or 1000% (common in software licenses, jewelry, and luxury goods)."
 ---
 
-An item costs \$60 to manufacture and retails for \$100. The raw dollar profit is \$40. Its gross profit margin is **40%**, but its markup is **66.67%**.
+An item costs $60 to manufacture and retails for $100. The raw dollar profit is $40. Its gross profit margin is **40%**, but its markup is **66.67%**.
 
 Both numbers are mathematically correct, yet confusing margin with markup in an ecommerce pricing spreadsheet can quickly lead to underpricing inventory, miscalculating marketing budgets, and operating at an accidental loss.
 
@@ -41,29 +41,29 @@ The fundamental distinction lies in which value occupies the denominator:
 
 | Metric | Business Definition | Mathematical Formula | Worked Example ($60 Cost, $100 Price) |
 | :--- | :--- | :--- | :--- |
-| **Gross Profit** | Raw dollar earnings | $\text{Revenue} - \text{COGS}$ | $\$100 - \$60 = \$40$ |
-| **Profit Margin** | Percentage of revenue retained as profit | $\frac{\text{Profit}}{\text{Selling Price}} \times 100$ | $\frac{\$40}{\$100} \times 100 = \mathbf{40.0\%}$ |
-| **Markup Percentage** | Percentage added on top of cost | $\frac{\text{Profit}}{\text{Cost}} \times 100$ | $\frac{\$40}{\$60} \times 100 = \mathbf{66.67\%}$ |
-| **Target Retail Price** | Price required to hit target margin | $\frac{\text{Cost}}{1 - \text{Target Margin}}$ | $\frac{\$60}{1 - 0.40} = \mathbf{\$100.00}$ |
+| **Gross Profit** | Raw dollar earnings | `Revenue - COGS` | `$100 - $60 = $40` |
+| **Profit Margin** | Percentage of revenue retained as profit | `(Profit / Selling Price) * 100` | `($40 / $100) * 100 = 40.0%` |
+| **Markup Percentage** | Percentage added on top of cost | `(Profit / Cost) * 100` | `($40 / $60) * 100 = 66.67%` |
+| **Target Retail Price** | Price required to hit target margin | `Cost / (1 - Target Margin)` | `$60 / (1 - 0.40) = $100.00` |
 
 ## The Four Calculation Modes Explained
 
 ### 1. Percentage of an Amount
-Answers: *"What dollar discount does a 20% coupon represent on a \$150 shopping cart?"*
-- **Formula:** $\text{Result} = (\text{Percentage} / 100) \times \text{Base}$
+Answers: *"What dollar discount does a 20% coupon represent on a $150 shopping cart?"*
+- **Formula:** `Result = (Percentage / 100) * Base`
 - Enter `20` in Percentage and `150` in Amount.
-- Result: **\$30.00**.
-- Final Price: $\$150 - \$30 = \mathbf{\$120.00}$.
+- Result: **$30.00**.
+- Final Price: `$150 - $30 = $120.00`.
 
 ### 2. What Percentage?
 Answers: *"If 45 out of 180 customer survey respondents purchased an upsell, what is the conversion rate?"*
-- **Formula:** $\text{Share} = (\text{Part} / \text{Whole}) \times 100$
+- **Formula:** `Share = (Part / Whole) * 100`
 - Enter `45` in Part and `180` in Whole.
 - Result: **25.0%**.
 
 ### 3. Percentage Change (Increases and Decreases)
 Answers: *"Our website traffic rose from 80 daily signups to 100 daily signups. What is our growth rate?"*
-- **Formula:** $\text{Change} = \frac{\text{New} - \text{Original}}{\text{Original}} \times 100$
+- **Formula:** `Change = ((New - Original) / Original) * 100`
 - Enter `80` in Original and `100` in New.
 - Result: **+25.0% Increase**.
 
@@ -71,26 +71,34 @@ Answers: *"Our website traffic rose from 80 daily signups to 100 daily signups. 
 Notice what happens if traffic drops back from 100 to 80:
 - Original: `100`, New: `80`.
 - Result: **-20.0% Decrease**.
-A 25% increase followed by a 25% decrease does **not** return you to baseline. Starting with \$100, increasing by 25% yields \$125; decreasing \$125 by 25% drops you to \$93.75.
+
+A 25% increase followed by a 25% decrease does **not** return you to baseline. Starting with $100, increasing by 25% yields $125; decreasing $125 by 25% drops you to $93.75.
 
 ### 4. Profit Margin and Markup
-Answers: *"We source a product for \$60 and want a 35% margin after shipping. What price must we charge?"*
+Answers: *"We source a product for $60 and want a 35% margin after shipping. What price must we charge?"*
 
 Many operators make the mistake of calculating:
-$$\$60 + (35\% \text{ of } \$60) = \$60 + \$21 = \$81 \quad (\text{WRONG})$$
-If you sell at \$81, your actual margin is:
-$$\frac{\$81 - \$60}{\$81} = \frac{\$21}{\$81} = \mathbf{25.9\%}$$
-You fell nearly 10 percentage points below your targeted profit! 
+`$60 + (35% of $60) = $60 + $21 = $81 (INCORRECT)`
+
+If you sell at $81, your actual margin is:
+`($81 - $60) / $81 = $21 / $81 = 25.9%`
+
+You fell nearly 10 percentage points below your targeted profit.
 
 To guarantee a true 35% margin, you must divide by the reciprocal:
-$$\text{Price} = \frac{\$60}{1 - 0.35} = \frac{\$60}{0.65} = \mathbf{\$92.31}$$
+```text
+Target Retail Price = Cost / (1 - Desired Margin)
+                    = $60 / (1 - 0.35)
+                    = $60 / 0.65
+                    = $92.31
+```
 
 ## Percentage Points vs Relative Percentage Change
 
 When reporting financial metrics, distinguish between **percentage points (pp)** and **percentage change (%)**:
 - If an ecommerce checkout abandonment rate drops from **10%** down to **8%**:
-  - The rate decreased by **2 percentage points** ($10 - 8 = 2$).
-  - The relative reduction is **20%** ($\frac{2}{10} \times 100$).
+  - The rate decreased by **2 percentage points** (`10 - 8 = 2`).
+  - The relative reduction is **20%** (`(2 / 10) * 100`).
 
 Conflating these terms can mislead executive stakeholders and misrepresent campaign ROI.
 

@@ -2,63 +2,105 @@
 title: "Create WiFi and URL QR codes that still work after printing"
 description: "Generate local PNG or SVG QR codes, protect WiFi credentials, choose size and error correction, and test the final printed version."
 publishedAt: "2026-11-19"
+updatedAt: "2026-11-21"
 category: "Encoding & Network"
 relatedToolSlug: "qr-generator"
-readingTime: "5 min read"
+readingTime: "6 min read"
+keywords:
+  - "wifi qr code generator"
+  - "url qr code creator"
+  - "print ready qr codes"
+  - "qr code error correction level"
+  - "vector svg qr code"
+  - "private qr generator no tracking"
+keyTakeaways:
+  - "Static vs Dynamic QR: Static QR codes directly encode target URLs or WiFi strings with zero tracking redirects, expiring links, or intermediary servers."
+  - "The 10:1 Sizing Distance Ratio: As a universal optical rule, the minimum width of a printed QR code should equal its expected scanning distance divided by 10 (e.g., 2 inches wide for a 20-inch scan distance)."
+  - "The Mandatory Quiet Zone: Preserve at least a 4-module solid white margin around the entire perimeter; cropping into this border cripples camera finder patterns."
+  - "Reed-Solomon Error Correction Tradeoffs: Higher redundancy (Level H, 30%) permits dirt or logo overlays, but substantially increases matrix module density, requiring larger print dimensions."
+faqs:
+  - question: "Why do some online QR codes stop working or ask for monthly subscriptions?"
+    answer: "Most commercial QR websites generate 'dynamic' QR codes that point to their own tracking redirect servers. Once free trial periods expire, they hijack or disable the destination URL unless you pay a recurring subscription. Localtools generates 100% static, unmediated QR codes that encode your direct destination into the pixel pattern permanently."
+  - question: "What error correction level should I choose for printed materials?"
+    answer: "Level M (Medium, 15% redundancy) is the industry standard for menus, flyers, and table tents. Choose Level H (High, 30% redundancy) if the code will be placed outdoors, on curved containers, or subject to weather wear. Note that Level H increases module density."
+  - question: "Does a WiFi QR code expose my Wi-Fi password?"
+    answer: "Yes. The standard Wi-Fi configuration string (WIFI:T:WPA;S:MyNetwork;P:MyPassword;;) is stored in plain text inside the matrix so smartphones can read it. Never place codes for secure corporate or financial networks in publicly accessible reception areas without a dedicated guest VLAN."
+  - question: "Should I export as PNG or SVG for professional printing?"
+    answer: "Always export as vector SVG for print shops, banners, and signage. SVG allows infinite geometric scaling without raster pixelation or blurry edges, ensuring laser-crisp scanner recognition."
 ---
 
-A QR code is useful only if a person can scan it and reach the intended destination. A clean preview is the beginning of that check, not the end. A code placed on a small table card, enlarged in a document, or printed with a cropped border may behave differently from the image displayed on your monitor.
+A Quick Response (QR) code is only successful if a visitor can point their smartphone camera at it and connect instantaneously. A digital preview that scans cleanly on an OLED desktop monitor can fail completely once printed onto matte paper, affixed to a curved coffee mug, or positioned beneath dim restaurant lighting.
 
-The [WiFi & URL QR Generator](/tools/crypto/qr-generator/) creates static PNG and SVG codes locally. It supports a website address or WiFi connection details. It does not require an account, create a tracking redirect, or store a hosted destination that you can edit after printing.
+The [WiFi & URL QR Generator](/tools/crypto/qr-generator/) constructs unmediated, static PNG and vector SVG codes locally in your browser. Unlike commercial QR generators that bounce users through tracking redirect URLs with monthly subscription paywalls, Localtools encodes your destination directly into the binary matrix with complete privacy and lifetime permanence.
 
-## Decide what scanning should do
+## Understanding Reed-Solomon Error Correction
 
-Choose **Website URL** for a web page. Enter the complete address, including `https://` or `http://`. The generator rejects other schemes and URLs containing embedded usernames or passwords. Open the address yourself and confirm the page before making the code.
+QR codes incorporate Reed-Solomon algebraic error correction to reconstruct data if the physical code is partially obscured, torn, stained, or viewed at an angle:
 
-For example, a printed card for a workshop might link directly to `https://example.com/workshop/checklist`. Use an address controlled by the organizer and confirm that visitors can reach it without unexpected authentication. A valid URL can still point to the wrong page, a broken page, or a page that only works for you while signed in.
+| Correction Level | Redundancy Capacity | Visual Module Density | Recommended Use Case |
+| :--- | :--- | :--- | :--- |
+| **Level L (Low)** | Approx 7% of data restorable | Lowest (largest modules) | Clean digital screens, short URLs |
+| **Level M (Medium)** | Approx 15% of data restorable | Moderate (optimal balance) | Menus, business cards, mailers (Default) |
+| **Level Q (Quartile)** | Approx 25% of data restorable | High | Industrial labels, retail packaging |
+| **Level H (High)** | Approx 30% of data restorable | Dense (smallest modules) | Outdoor signage, harsh environments |
 
-Choose **WiFi network** when you want a compatible phone to recognize connection details. Enter **Network name (SSID)** exactly, select **Network security**, and enter the password when the network requires one. The security options are WPA/WPA2/WPA3 Personal, WEP, or an open network with no password. Match the actual network; this setting does not reconfigure your router.
+### The Density Tradeoff:
+Higher error correction comes with a physical cost: it increases the number of black and white matrix squares (modules) required to encode the payload. A denser code requires higher camera resolution or larger physical print dimensions to scan reliably.
 
-## Keep WiFi credentials in the right hands
+## The Physical Print Sizing Rule (10:1 Ratio)
 
-A WiFi QR code contains readable network credentials. It does not encrypt the password into a secret that only authorized phones can recover. Anyone who can photograph or decode the code may obtain the information inside it.
+To calculate the minimum physical dimensions for a printed QR code, apply the **10:1 Viewing Distance Formula**:
 
-For a reception area, consider whether the intended code should use a guest network rather than the network used for internal work. Follow the network owner's access rules. A printed code is a distribution mechanism, so where you place it matters as much as how you generate it.
+```text
+Minimum Print Width = Expected Scanning Distance / 10
+```
 
-Select **Hidden network** only when that matches the network configuration. It does not conceal the credentials embedded in the QR image. The generator limits SSIDs to 32 UTF-8 bytes, which is not necessarily the same as 32 visible characters. Password input is capped at 256 characters, and the combined encoded payload must fit the tool's 1,800-byte limit.
+- **Restaurant Table Tent:** Scanned from 12 to 15 inches away -> Minimum width: **1.2 to 1.5 inches** (30 to 38 mm).
+- **Wall Poster / Gallery Plaque:** Scanned from 3 to 4 feet away -> Minimum width: **3.5 to 4.8 inches** (90 to 120 mm).
+- **Outdoor Billboard:** Scanned from 20 feet away -> Minimum width: **24 inches** (60 cm).
 
-Punctuation such as semicolons and backslashes is escaped by the generator for the WiFi payload. Enter the real network details normally rather than manually inserting extra escape characters. Then test the code on a compatible device because scanner support can vary.
+Printing below these optical thresholds forces smartphone cameras to macro-focus, leading to slow or failed detection.
 
-## Choose an export size and format
+## The Crucial Four-Module Quiet Zone
 
-The **PNG size** menu offers 256, 512, 1024, and 2048 pixels per side. PNG is convenient when placing the image in a document, email, or simple design tool. SVG is useful when the receiving design or print application supports vector artwork and you need to resize without turning the pattern into a blurry bitmap.
+Surrounding the active data matrix is the **Quiet Zone**—a solid, unprinted white perimeter. The ISO/IEC 18004 standard mandates a quiet zone width of at least **4 modules** on all four sides.
 
-Pixels and printed inches are different measurements. As a planning example, a 1,024-pixel image placed four inches wide has 256 source pixels per printed inch. That calculation does not prove it will scan: the density of the pattern, print quality, viewing distance, and final physical size still matter.
+```text
++------------------------------------+
+|            Quiet Zone              |
+|   +----------------------------+   |
+|   |  [#]                  [#]  |   |
+|   |         QR DATA            |   |
+|   |                            |   |
+|   |  [#]                       |   |
+|   +----------------------------+   |
+|            Quiet Zone              |
++------------------------------------+
+```
 
-Do not stretch the image into a rectangle. Keep its proportions and preserve the white border. This generator uses a four-module quiet zone around the pattern. Cropping that space or placing nearby graphics over it can make detection harder even when the central pattern looks intact.
+### Common Design Disasters:
+1. **Cropping the Border:** Graphic designers frequently trim the white space to fit tight borders. This blends surrounding artwork into the finder patterns, blinding the camera’s corner-detection algorithm.
+2. **Inverting Colors:** White modules on a dark background can fail on older Android scanners. Maintain dark modules against a light background for 100% universal scan rates.
+3. **Low Contrast:** Printing light gray or yellow on white destroys the binarization threshold. Always preserve high contrast (contrast ratio 4.5:1 or higher).
 
-## Use error correction without treating it as a guarantee
+## Generating Secure WiFi Connection Codes
 
-The **Error correction** menu provides Low, Medium, Quartile, and High settings, with approximate percentages shown in the interface. These settings introduce different amounts of redundancy. They are not a promise that any arbitrary section of that percentage can be covered while every scanner still succeeds.
+When guests visit your home, studio, or coffee shop, typing complex WPA3 alphanumeric keys causes friction. The WiFi generator mode constructs a standard MECARD-compatible payload:
 
-Increasing error correction can also make a code denser for the same payload. A long URL already requires more pattern information than a short one. At a fixed physical size, a denser pattern leaves smaller individual modules, which can be difficult to print or scan cleanly.
+```text
+WIFI:T:WPA;S:StudioGuest;P:CorrectHorseBattery99;;
+```
 
-Start with the default Medium setting and a clear black-on-white code. The current tool intentionally avoids decorative gradients, colored backgrounds, or logo overlays. If you later modify the export in another application, treat it as a new artifact that needs another scan test.
+- **SSID (Network Name):** Enter the exact name, respecting uppercase and lowercase characters.
+- **Security Type:** Select WPA/WPA2/WPA3 Personal, WEP, or Open.
+- **Special Characters:** Semicolons, backslashes, and colons are automatically escaped by our generator.
 
-## Generate, download, and test the actual layout
+### Data Privacy Warning:
+Because the password is embedded directly into the visual pattern, anyone who photographs the QR code can decode the string. Never print access codes for sensitive internal networks; isolate guest access onto a separated VLAN before deploying printed cards.
 
-Click **Generate QR code**, inspect the preview, and use **Download PNG** or **Download SVG**. Changing a field, size, security option, or correction setting clears the old result. Generate again to ensure that the export represents your current choices.
+## Exporting for Production: PNG vs Vector SVG
 
-Scan the downloaded image with a second device. For a website code, inspect the full destination before opening it. For WiFi, confirm both recognition of the network details and a successful connection under the owner's intended conditions.
+- **Download PNG (up to 2048x2048px):** Ideal for web pages, email signatures, presentation slide decks, and Microsoft Word documents.
+- **Download SVG:** The mandatory choice for Adobe Illustrator, Figma, and commercial offset print presses. Vector paths ensure razor-sharp edges regardless of scale.
 
-Next, place the code in the final layout and print one sample at its intended size. Test that sample in realistic lighting and at the distance people will use. Add nearby text such as “Open the workshop checklist” or “Join guest WiFi” so people know what to expect. Include a readable alternative URL or appropriate instructions when practical.
-
-The [Word & Readability Counter](/tools/text/word-counter/) can help keep those instructions concise, but readability measurements do not replace checking that the wording describes the real action.
-
-## Plan for changes before distributing copies
-
-A static QR code does not expire by itself, but its contents do not update themselves. If a password changes, generate a new WiFi code and replace the old copies. If a destination page moves, maintain the address you printed or distribute a replacement code.
-
-Keep a record of the intended destination and the version used in each design. Before reprinting an old file, scan it again rather than assuming it still points where you expect. Handle downloaded WiFi images like the credentials they contain, including copies stored in shared folders or design documents.
-
-For broader distinctions between encoding and security, the [Crypto, Encoding & Network hub](/tools/crypto/) explains what the current tools do and which capabilities are outside this release. A scannable representation makes information convenient to use; it does not decide who should be allowed to use it.
+Before printing thousands of copies, always print a single physical proof and test it using both an iOS and an Android device under real-world lighting conditions.

@@ -81,10 +81,12 @@ To ensure your cutout looks professional in production:
 
 If you observe slight edge fringes around intricate elements (such as wireframe eyewear, fine jewelry chains, or lace fabric), adjusting subject lighting during the initial photo capture (placing high contrast between subject and backdrop) yields the cleanest automatic segmentation.
 
-## Checking the final exported asset
+## Checking the final exported asset and performance optimization
 
 Once you download your transparent PNG:
 - Confirm that your desktop image previewer renders the background as transparent rather than filling it with default black.
-- Verify file weight: an uncompressed 32-bit PNG with transparency can be larger than the original lossy JPG. If bandwidth is constrained, consider exporting as lossy WebP with an alpha channel.
+- Verify file weight: an uncompressed 32-bit PNG with transparency can be larger than the original lossy JPG. If bandwidth is constrained, consider exporting as lossy WebP with an alpha channel to reduce file transfer payload by up to 70%.
+- Ensure target canvas dimensions align with your target publishing guidelines: 2000x2000 for standard ecommerce product squares, 1200x630 for social open-graph previews, and 800x800 for avatar circles.
+- For high-volume batches of assets, consider running conversions in sequence to preserve browser tab memory buffers, ensuring optimal WebAssembly thread scheduling across multi-core CPUs.
 
-Combine these tools locally to assemble product galleries, resume headshots, and marketing collateral with complete privacy and zero data leakage.
+Combine these tools locally to assemble product galleries, resume headshots, and marketing collateral with complete privacy and zero data leakage. By keeping raw files, intermediate raster layers, and final vector exports confined strictly to your device's memory, you eliminate the risks of accidental data exposure, proprietary leakages, and third-party cloud data harvesting.

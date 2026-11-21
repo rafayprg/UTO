@@ -278,7 +278,7 @@ export default function Hero3DCanvas({
 
     // ANIMATION LOOP
     let animId: number;
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
@@ -353,7 +353,7 @@ export default function Hero3DCanvas({
         container.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, [activeTheme]);
 
   if (!webGLSupported) {
     return (

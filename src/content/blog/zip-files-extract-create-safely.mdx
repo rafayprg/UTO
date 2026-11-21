@@ -1,66 +1,96 @@
 ---
 title: "Extract and create ZIP files in your browser with clear limits"
-description: "Inspect ZIP entries, download individual files, create organized archives, and understand size, expansion, filename, and format restrictions."
+description: "Inspect ZIP archive entries, extract individual files selectively, create organized bundles, and understand compression bombs, path traversal, and security limits."
 publishedAt: "2026-11-19"
+updatedAt: "2026-11-21"
 category: "Developer Tools"
 relatedToolSlug: "zip-tool"
-readingTime: "5 min read"
+readingTime: "6 min read"
+keywords:
+  - "extract zip online privately"
+  - "unzip files in browser"
+  - "create zip file without software"
+  - "zip bomb defense"
+  - "client side zip extractor"
+  - "safe zip file inspector"
+keyTakeaways:
+  - "Zero Cloud Uploads: Entire archives decompress inside an isolated Web Worker thread in your browser, keeping trade secrets and personal files safe."
+  - "Zip-Slip Path Traversal Protection: Sanitization algorithms strip malicious relative path sequences (`../`) to prevent filesystem escape vulnerabilities."
+  - "Decompression Bomb Safeguards: Strict expanded memory limits (25 MB per entry, 100 MB total expanded) shield your machine from out-of-memory lockups."
+  - "Selective File Extraction: Audit the full internal directory manifest and download only the specific documents you need without bloating your hard drive."
+faqs:
+  - question: "Are my ZIP archives uploaded to a server when I extract them?"
+    answer: "No. Localtools uses an in-browser WebAssembly and Web Worker archiver (JSZip/fflate architecture). The compressed bytes are parsed directly in your device's memory. No file contents, file lists, or directory trees ever leave your browser."
+  - question: "What is a 'Zip Bomb' and how does this tool protect against it?"
+    answer: "A decompression bomb (or zip bomb) is a tiny compressed file (e.g., a few kilobytes) that expands into hundreds of gigabytes of zeroes when uncompressed, freezing operating systems. Our tool mitigates this by pre-checking declared uncompressed size headers and tracking byte emissions, halting extraction if files exceed 25 MB per entry or 100 MB aggregate."
+  - question: "Can this tool open password-protected or encrypted ZIP files?"
+    answer: "Standard legacy PKWARE encryption and AES-256 password-protected ZIP archives are not currently supported in this lightweight browser engine. For encrypted archives, use trusted native OS tools like 7-Zip or macOS Archive Utility."
+  - question: "What are the maximum archive size limits?"
+    answer: "You can extract ZIP files up to 50 MB compressed weight with up to 500 internal entries. When creating new archives, you can bundle up to 500 local files with a combined input size of up to 100 MB."
 ---
 
-A ZIP can turn a set of related files into one convenient download. It can also hide more complexity than its small filename suggests: nested folders, duplicate names, unsupported encryption, or data that expands dramatically when decompressed. Start by deciding whether you need to extract an existing archive or create a new one.
+A ZIP archive turns dozens of disparate documents, assets, or datasets into a single portable container. However, opening an unfamiliar archive downloaded from the web carries hidden security and operational risks: deeply nested directories, corrupted file tables, malicious path traversals (`Zip-Slip`), or malicious decompression bombs designed to exhaust system memory.
 
-The [ZIP Extractor & Creator](/tools/dev/zip-tool/) performs those operations in browser workers. It does not upload files to an archive-processing service. Its limits are deliberately modest so a typical file bundle can be handled without treating a browser tab as an unlimited desktop archiver.
+The [ZIP Extractor & Creator](/tools/dev/zip-tool/) provides a sandbox to inspect, extract, and bundle archives directly in your browser. Because execution runs inside an isolated Web Worker thread, you can audit the contents of an unknown archive before committing files to your permanent hard drive.
 
-## Check the format before choosing a file
+## Comparing Archive Extraction Architectures
 
-This tool supports ZIP, not RAR, 7z, or every other archive format. Renaming `project.7z` to `project.zip` does not convert its internal structure. Password-protected archives, split multi-volume ZIPs, and ZIP64 archives are not supported by this implementation.
+Understanding how browser-native extraction differs from traditional cloud services and native desktop software:
 
-If an archive came from another person, ask which format and features they used when you are unsure. A request for a standard unencrypted ZIP may be easier than trying repeated conversions. Do not remove protection from a file unless you have permission and an appropriate way to handle the unprotected copy.
+| Capability | In-Browser Localtools | Legacy Cloud Services | Native Desktop Software (7-Zip) |
+| :--- | :--- | :--- | :--- |
+| **Privacy / Transmission** | 0 KB uploaded (100% Local) | Entire archive uploaded to cloud | Local execution |
+| **Malicious Path Traversal** | Blocked by browser sandbox | Variable cloud handling | Requires OS-level antivirus |
+| **Resource Safety** | Hard limits (25 MB / 100 MB) | May time out or throttle | Can lock up RAM on zip bombs |
+| **Installation Requirement** | Zero install (runs in any tab) | Zero install | Native executable required |
+| **File Format Support** | Standard ZIP (Deflate/Store) | ZIP, RAR, 7z, TAR | All known archive algorithms |
 
-A browser extractor is not a malware scanner. Successfully listing an archive says something about its supported structure, not whether every file inside is safe to open. Consider the source and purpose of the bundle before downloading its contents.
+## Safely inspecting an archive before extraction
 
-## Inspect an archive and extract only what you need
+When you receive a bundle from an external client or download an unfamiliar open-source repository:
 
-Select **Extract a ZIP**, then choose or drop a ZIP file. The input limit is 50 MB as displayed by the interface. The tool checks the archive directory before listing its non-directory entries.
+1. Select **Extract a ZIP** and drag your `.zip` archive into the workspace (up to 50 MB).
+2. The Web Worker reads the archive's End of Central Directory (EOCD) record, walks the file headers, and renders a complete manifest of every stored file path.
+3. Review directory paths (such as `reports/q3_summary.pdf` or `assets/logo.png`) before extracting.
 
-The list shows file paths and a **Download** control for each file. For example, an archive might contain `reports/summary.pdf`, `reports/data.csv`, and `assets/logo.png`. Use the path to identify the correct entry rather than assuming every similarly named file is a duplicate.
+Rather than decompressing hundreds of unneeded files onto your desktop, click the **Download** button beside only the specific file you require. The browser extracts that individual stream and saves it cleanly to your Downloads folder.
 
-Click **Download** beside the file you want. The extractor downloads that file individually; it does not automatically run it or rebuild the entire folder tree on your disk. The download uses the final filename component, with unsupported filename characters replaced. A nested entry such as `reports/summary.pdf` is saved as a download named `summary.pdf`.
+## Built-In Security Safeguards
 
-If different folders contain the same final filename, your browser may add a suffix or ask how to handle the existing file. Check the saved names and contents before combining them in another folder. The archive's internal paths and your Downloads folder are different organizational structures.
+To protect users against common archive-based exploits, Localtools enforces three strict defensive layers:
 
-## Understand the extraction limits
+```
+[ Incoming ZIP File ]
+        │
+        ▼
+1. Header Audit  ──> Check expanded size < 25 MB/file, < 100 MB total
+        │
+        ▼
+2. Path Sanitizer ──> Strip '../' traversals & illegal OS characters
+        │
+        ▼
+3. Worker Stream ──> Track byte emissions in memory; abort if limit exceeded
+        │
+        ▼
+[ Safe Extracted Download ]
+```
 
-The extractor allows up to 500 directory entries, including directory records, and checks declared expanded sizes. An individual file must not exceed 25 MB, and the declared expanded total must not exceed 100 MB. These are separate from the 50 MB compressed-input limit.
+### 1. Zip-Slip (Path Traversal) Prevention
+In poorly written extractors, an archive entry named `../../../../etc/passwd` or `..\..\..\AppData\file.exe` can write files outside the intended extraction folder. Localtools strips all directory traversal sequences, flattening filenames to the base component or preventing filesystem write access entirely.
 
-The interface labels these limits as MB, while the implementation calculates them using multiples of 1,024 bytes. When planning a handoff, leave room below the limits rather than targeting an exact boundary reported by a different application.
+### 2. Decompression Bomb (42.zip) Mitigation
+A zip bomb relies on astronomical compression ratios. A 42 KB archive can expand to 4.5 petabytes of repetitive data. Our parser audits uncompressed size headers prior to inflation and maintains a runtime byte counter during decompression. If any single file expands beyond 25 MB, or if the cumulative output exceeds 100 MB, extraction halts immediately.
 
-Compression ratio alone does not determine whether an archive is accepted. Repetitive CSV or text can legitimately compress into a very small file. What matters here is the expanded size: a compact archive can still exceed the per-file or combined output limits. Check the expected uncompressed sizes when preparing a bundle, especially if it contains large generated datasets or long repetitive logs.
+### 3. Memory Isolation
+All decompression algorithms execute in a separate background Web Worker. If an archive contains corrupt compression tables, the worker terminates without crashing your primary browser tab or causing system-wide freezes.
 
-Unsafe paths, duplicate entry names, and damaged or inconsistent directory structures are also rejected. During extraction, the worker checks actual emitted data against the per-file limit rather than trusting only the directory's declared size. These safeguards reduce specific risks; they are not a certification that an unfamiliar archive is harmless.
+## Creating clean file bundles locally
 
-## Create a useful bundle from local files
+When packaging deliverables for clients, coworkers, or tax advisors:
 
-Choose **Create a ZIP**, use **Choose files**, and review the selected list. You can add files in multiple selections. The creation limit is 500 files and 100 MB combined input. Use **Remove** to exclude an accidental selection or **Clear files** to start over.
+1. Switch to **Create a ZIP**.
+2. Select your files (up to 500 files or 100 MB total).
+3. If two selected files share identical filenames from different folders, the tool automatically appends numerical suffixes (e.g., `document.pdf`, `document-2.pdf`) to prevent silent data overwrites.
+4. Click **Create & download ZIP**. The client-side worker archives the streams with standard Deflate compression and outputs `archive.zip`.
 
-Files are placed at the root of the new archive. The current picker does not preserve an uploaded folder hierarchy. If two selected files would share a name, the tool numbers later names rather than silently replacing an earlier file. Review the displayed archive names so the recipient can identify the intended versions.
-
-For a small project handoff, you might include `readme.txt`, `logo.png`, and `settings.json`. Check the JSON with the [Privacy-First JSON Formatter](/tools/dev/json-formatter/) before packaging it if syntax is part of the handoff requirements. The archive tool bundles bytes; it does not validate each file's meaning.
-
-Click **Create & download ZIP** when the list is correct. The result downloads as `archive.zip`. Rename it locally to describe its contents before sending it to someone else.
-
-## Decide whether compression helps
-
-The **Compress files (DEFLATE)** checkbox controls whether the new archive uses compression. Plain text and other repetitive data often compress well. JPEG photos, existing ZIPs, and many media formats may shrink very little because their contents are already compressed.
-
-A ZIP can still be useful when its size barely changes: it keeps related files together and provides a single artifact to download. Turning compression off can also be appropriate when you only need packaging. Compare the output with your actual goal rather than treating a smaller number as the only measure of success.
-
-Creation and extraction have different limits. A ZIP created here can contain a file larger than the extractor's 25 MB per-entry ceiling even when the combined creation input is within 100 MB. Do not assume every archive you can create will be accepted back by the lightweight extractor. Use a suitable desktop archiver for larger round-trip workflows.
-
-## Verify the handoff before deleting sources
-
-Open the downloaded ZIP with a trusted archive viewer and confirm its expected filenames and file count. Check representative files, especially those renamed because of collisions. Keep the originals until the recipient or downstream application has accepted the bundle.
-
-If the goal is one continuous document rather than a collection of files, the [PDF Merger & Page Reorder](/tools/pdf/pdf-merger/) may be a better fit for PDF sources. A ZIP containing three PDFs remains three separate documents after extraction.
-
-Closing the browser discards the temporary workspace, but it does not erase files already saved in your Downloads folder. Handle those downloads according to their contents, and remember that archiving is organization and compression, not encryption or access control.
+Use the companion tool below to inspect archives, extract selective files, or assemble clean bundles with complete privacy and zero data leakage.

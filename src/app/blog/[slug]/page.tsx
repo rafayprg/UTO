@@ -12,10 +12,9 @@ import {
   ChevronRight, 
   ArrowLeft,
   Sparkles,
-  BookOpen,
-  Share2
+  BookOpen
 } from "lucide-react";
-import { getPost, getPosts, type BlogPostItem } from "@/lib/mdx";
+import { getPost, getPosts } from "@/lib/mdx";
 import { ToolEmbed } from "@/components/ToolEmbed";
 import { absolute, site } from "@/lib/site";
 import type { Metadata } from "next";
