@@ -8,7 +8,7 @@ import { ShieldCheck, MapPin } from "lucide-react";
 interface PresetData {
   stateCode?: string;
   stateSlug?: string;
-  calcMode?: "paycheck" | "sales-tax" | "overtime" | "hourly";
+  calcMode?: "paycheck" | "sales-tax" | "overtime" | "hourly" | "1099-tax";
 }
 
 // 2026 Federal Brackets (Single)
@@ -43,6 +43,9 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
   const [overtimeHours, setOvertimeHours] = useState<number>(10);
   const [doubleTimeHours, setDoubleTimeHours] = useState<number>(0);
 
+  // 1099 Self-Employment mode states
+  const [businessExpenses, setBusinessExpenses] = useState<number>(12000);
+
   const stateData = useMemo(() => {
     return US_STATES.find((s) => s.code === selectedStateCode) || US_STATES[0];
   }, [selectedStateCode]);
@@ -54,8 +57,19 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
       annualGross = hourlyRate * hoursPerWeek * 52;
     }
 
+    let seTax = 0;
+    let netTaxableBase = annualGross;
+    if (mode === "1099-tax") {
+      const netProfit = Math.max(0, annualGross - businessExpenses);
+      const seTaxable = netProfit * 0.9235;
+      const ssSe = Math.min(seTaxable, 168600) * 0.124;
+      const medSe = seTaxable * 0.029;
+      seTax = ssSe + medSe;
+      netTaxableBase = Math.max(0, netProfit - seTax * 0.5);
+    }
+
     // Federal Tax Calculation
-    const fedTaxable = Math.max(0, annualGross - FEDERAL_STANDARD_DEDUCTION);
+    const fedTaxable = Math.max(0, netTaxableBase - FEDERAL_STANDARD_DEDUCTION);
     let federalTax = 0;
     for (let i = 0; i < FEDERAL_BRACKETS_SINGLE.length; i++) {
       const current = FEDERAL_BRACKETS_SINGLE[i];
@@ -66,19 +80,20 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
       }
     }
 
-    // FICA
-    const ssTax = Math.min(annualGross, 168600) * 0.062;
-    const medicareTax = annualGross * 0.0145;
-    const ficaTotal = ssTax + medicareTax;
+    // FICA / Self-Employment Tax
+    const ssTax = mode === "1099-tax" ? Math.min(Math.max(0, annualGross - businessExpenses) * 0.9235, 168600) * 0.124 : Math.min(annualGross, 168600) * 0.062;
+    const medicareTax = mode === "1099-tax" ? Math.max(0, annualGross - businessExpenses) * 0.9235 * 0.029 : annualGross * 0.0145;
+    const ficaTotal = mode === "1099-tax" ? seTax : ssTax + medicareTax;
 
     // State Tax
     let stateTax = 0;
+    const stateTaxableIncome = mode === "1099-tax" ? netTaxableBase : annualGross;
     if (stateData.hasIncomeTax) {
       if (stateData.incomeTaxType === "flat" && stateData.flatRate) {
-        const stateTaxable = Math.max(0, annualGross - stateData.standardDeductionSingle);
+        const stateTaxable = Math.max(0, stateTaxableIncome - stateData.standardDeductionSingle);
         stateTax = stateTaxable * (stateData.flatRate / 100);
       } else if (stateData.brackets && stateData.brackets.length > 0) {
-        const stateTaxable = Math.max(0, annualGross - stateData.standardDeductionSingle);
+        const stateTaxable = Math.max(0, stateTaxableIncome - stateData.standardDeductionSingle);
         for (let i = 0; i < stateData.brackets.length; i++) {
           const b = stateData.brackets[i];
           const next = stateData.brackets[i + 1];
@@ -88,13 +103,14 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
           }
         }
       } else {
-        stateTax = Math.max(0, annualGross - stateData.standardDeductionSingle) * (stateData.topMarginalRate / 100);
+        stateTax = Math.max(0, stateTaxableIncome - stateData.standardDeductionSingle) * (stateData.topMarginalRate / 100);
       }
     }
 
     const totalTaxes = federalTax + ficaTotal + stateTax;
-    const netAnnual = Math.max(0, annualGross - totalTaxes);
-    const effectiveRate = annualGross > 0 ? (totalTaxes / annualGross) * 100 : 0;
+    const effectiveBase = mode === "1099-tax" ? Math.max(1, annualGross - businessExpenses) : Math.max(1, annualGross);
+    const netAnnual = Math.max(0, (mode === "1099-tax" ? annualGross - businessExpenses : annualGross) - totalTaxes);
+    const effectiveRate = (totalTaxes / effectiveBase) * 100;
 
     const periodsCount = {
       annual: 1,
@@ -105,6 +121,9 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
 
     return {
       annualGross,
+      businessExpenses,
+      netProfit: mode === "1099-tax" ? Math.max(0, annualGross - businessExpenses) : annualGross,
+      seTax,
       federalTax,
       ssTax,
       medicareTax,
@@ -113,10 +132,10 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
       totalTaxes,
       netAnnual,
       takeHomePayPerPeriod: netAnnual / periodsCount,
-      grossPayPerPeriod: annualGross / periodsCount,
+      grossPayPerPeriod: (mode === "1099-tax" ? Math.max(0, annualGross - businessExpenses) : annualGross) / periodsCount,
       effectiveRate,
     };
-  }, [grossAnnual, hourlyRate, hoursPerWeek, payPeriod, mode, stateData]);
+  }, [grossAnnual, businessExpenses, hourlyRate, hoursPerWeek, payPeriod, mode, stateData]);
 
   // Sales Tax Mode calculation
   const salesTaxCalc = useMemo(() => {
@@ -314,6 +333,29 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
                   />
                 </div>
               </>
+            ) : mode === "1099-tax" ? (
+              <>
+                <div className="field-group">
+                  <label>1099 Gross Business Revenue ($)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="1000"
+                    value={grossAnnual}
+                    onChange={(e) => setGrossAnnual(Number(e.target.value) || 0)}
+                  />
+                </div>
+                <div className="field-group">
+                  <label>Annual Business Expenses & Deductions ($)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="500"
+                    value={businessExpenses}
+                    onChange={(e) => setBusinessExpenses(Number(e.target.value) || 0)}
+                  />
+                </div>
+              </>
             ) : (
               <div className="field-group">
                 <label>Annual Gross Salary ($)</label>
@@ -353,37 +395,45 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
           </div>
 
           <div className="results-panel">
-            <h3>{stateData.name} Take-Home Paycheck</h3>
+            <h3>{mode === "1099-tax" ? `${stateData.name} 1099 Tax & Net Profit` : `${stateData.name} Take-Home Paycheck`}</h3>
             <div className="metric-highlight">
-              <span>Take-Home Pay ({payPeriod})</span>
-              <strong>${calculations.takeHomePayPerPeriod.toLocaleString("en-US", { maximumFractionDigits: 0 })}</strong>
+              <span>{mode === "1099-tax" ? "Net Take-Home Earnings" : `Take-Home Pay (${payPeriod})`}</span>
+              <strong>${(mode === "1099-tax" ? calculations.netAnnual : calculations.takeHomePayPerPeriod).toLocaleString("en-US", { maximumFractionDigits: 0 })}</strong>
             </div>
 
             <div className="breakdown-table">
               <div className="table-row">
-                <span>Gross Pay ({payPeriod}):</span>
-                <span>${calculations.grossPayPerPeriod.toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
+                <span>{mode === "1099-tax" ? "1099 Gross Business Revenue:" : `Gross Pay (${payPeriod}):`}</span>
+                <span>${(mode === "1099-tax" ? calculations.annualGross : calculations.grossPayPerPeriod).toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
               </div>
+              {mode === "1099-tax" && (
+                <div className="table-row">
+                  <span>Business Deductions & Expenses:</span>
+                  <span className="negative-val">-${calculations.businessExpenses.toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
+                </div>
+              )}
+              {mode === "1099-tax" && (
+                <div className="table-row">
+                  <span>Taxable Net Business Profit:</span>
+                  <span>${calculations.netProfit.toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
+                </div>
+              )}
               <div className="table-row">
                 <span>Federal Income Tax:</span>
-                <span className="negative-val">-${(calculations.federalTax / (payPeriod === "annual" ? 1 : payPeriod === "monthly" ? 12 : payPeriod === "biweekly" ? 26 : 52)).toFixed(0)}</span>
+                <span className="negative-val">-${(calculations.federalTax / (mode === "1099-tax" ? 1 : payPeriod === "annual" ? 1 : payPeriod === "monthly" ? 12 : payPeriod === "biweekly" ? 26 : 52)).toFixed(0)}</span>
               </div>
               <div className="table-row">
-                <span>Social Security (6.2%):</span>
-                <span className="negative-val">-${(calculations.ssTax / (payPeriod === "annual" ? 1 : payPeriod === "monthly" ? 12 : payPeriod === "biweekly" ? 26 : 52)).toFixed(0)}</span>
-              </div>
-              <div className="table-row">
-                <span>Medicare (1.45%):</span>
-                <span className="negative-val">-${(calculations.medicareTax / (payPeriod === "annual" ? 1 : payPeriod === "monthly" ? 12 : payPeriod === "biweekly" ? 26 : 52)).toFixed(0)}</span>
+                <span>{mode === "1099-tax" ? "Self-Employment Tax (15.3% SECA):" : "FICA Payroll Tax (7.65%):"}</span>
+                <span className="negative-val">-${(calculations.ficaTotal / (mode === "1099-tax" ? 1 : payPeriod === "annual" ? 1 : payPeriod === "monthly" ? 12 : payPeriod === "biweekly" ? 26 : 52)).toFixed(0)}</span>
               </div>
               <div className="table-row">
                 <span>{stateData.name} State Tax:</span>
                 <span className={stateData.hasIncomeTax ? "negative-val" : "green-val"}>
-                  {stateData.hasIncomeTax ? `-$${(calculations.stateTax / (payPeriod === "annual" ? 1 : payPeriod === "monthly" ? 12 : payPeriod === "biweekly" ? 26 : 52)).toFixed(0)}` : "$0 (No state tax)"}
+                  {stateData.hasIncomeTax ? `-$${(calculations.stateTax / (mode === "1099-tax" ? 1 : payPeriod === "annual" ? 1 : payPeriod === "monthly" ? 12 : payPeriod === "biweekly" ? 26 : 52)).toFixed(0)}` : "$0 (No state tax)"}
                 </span>
               </div>
               <div className="table-row total-row">
-                <span>Total Annual Take-Home:</span>
+                <span>Total Annual Net Take-Home:</span>
                 <strong>${calculations.netAnnual.toLocaleString("en-US", { maximumFractionDigits: 0 })}</strong>
               </div>
               <div className="table-row">

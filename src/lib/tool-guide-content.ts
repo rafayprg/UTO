@@ -102,6 +102,21 @@ function getCategoryMethodology(tool: ToolDefinition): {
     }
   }
 
+  if (cat === "legal") {
+    return {
+      heading: "Enforceable Contract Architecture & Statutory Clause Framework",
+      formula: "Binding Agreement = Mutual Assent + Definite Terms + Consideration + Capacity + Legality",
+      explanation: tool.formulaExplanation || "Generates standardized state-specific legal contracts adhering to governing state jurisdiction, mutual consideration doctrines, and statutory execution requirements.",
+      variables: [
+        { name: "Parties (Grantor / Covenantor / Maker)", definition: "Identified legal individuals or corporate entities entering the covenant", unit: "Legal Entities" },
+        { name: "Consideration / Exchange Value", definition: "Bargained-for benefit, exchange of property, or monetary purchase consideration", unit: "Currency / Terms" },
+        { name: "Governing Jurisdiction", definition: "Applicable state statutes governing construction, venue, and dispute resolution", unit: "State Jurisdiction" },
+        { name: "Severability & Termination", definition: "Survival clauses preserving valid terms if individual covenants are adjudicated void", unit: "Statutory Clauses" }
+      ],
+      standardOrReference: "Uniform Commercial Code (UCC) & Restatement (Second) of Contracts"
+    };
+  }
+
   if (cat === "dev" || cat === "data" || cat === "crypto") {
     if (t.includes("json") || t.includes("xml") || t.includes("yaml") || t.includes("sql") || t.includes("csv") || t.includes("tsv")) {
       return {

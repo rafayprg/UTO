@@ -71,6 +71,11 @@ const ENGINE_COPY: Record<string, { how: string; check: string; privacy: string 
     check: "Review the local cost-of-living index and county property tax schedules. Use metrics for real estate budgeting and investment evaluation.",
     privacy: "Your property investments and housing numbers execute locally on your machine with complete confidentiality.",
   },
+  "state-legal-document-engine": {
+    how: "Fill in the party names, consideration, property or loan details, and custom covenants. The engine generates formatted legal agreements in real time.",
+    check: "Review state-specific statutory disclaimers and governing jurisdiction clauses. Confirm final documents with an attorney licensed in your state before executing binding covenants.",
+    privacy: "All contract terms, personal names, and financial figures remain strictly confidential in your browser runtime and are never uploaded or stored.",
+  },
 };
 
 export function toolGuideSections(tool: ToolDefinition): GuideSection[] {

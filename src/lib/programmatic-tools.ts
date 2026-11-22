@@ -8,6 +8,7 @@ import { INVESTMENT_CRYPTO_TOOLS } from "@/data/programmatic/investments-crypto"
 import { GROWTH_ECOMMERCE_TOOLS } from "@/data/programmatic/growth-ecommerce";
 import { CONTRACTOR_BILLING_TOOLS } from "@/data/programmatic/contractor-billing";
 import { US_INSURANCE_DATA } from "@/data/programmatic/us-insurance";
+import { US_LEGAL_DATA } from "@/data/programmatic/us-legal";
 import type { ToolDefinition } from "./tools-registry";
 
 /**
@@ -1252,6 +1253,312 @@ export function generateProgrammaticTools(): ToolDefinition[] {
       ],
       faq: [{ q: `Does this support short-term Airbnb rentals?`, a: "Yes, you can input projected monthly short-term rental revenue directly." }],
       relatedSlugs: [`${c.slug}-mortgage-calculator`, "rental-roi-calculator", "rent-vs-buy"],
+    });
+  }
+
+  // ==========================================
+  // FAMILY 13: 50 US States Legal Document Builders (200 Tools)
+  // ==========================================
+  for (const leg of US_LEGAL_DATA) {
+    // 1. Bill of Sale
+    programmaticList.push({
+      id: `prog-${leg.slug}-bill-of-sale`,
+      slug: `${leg.slug}-bill-of-sale`,
+      name: `${leg.name} Bill of Sale`,
+      title: `${leg.name} Bill of Sale (Free Printable Legal Form)`,
+      shortDesc: `Generate a legally binding ${leg.name} Bill of Sale for vehicles, cars, boats, or personal property with AS-IS warranty disclaimers.`,
+      seoTitle: `${leg.name} Bill of Sale 2026 – Free Printable Legal Form`,
+      metaDescription: `Free ${leg.name} bill of sale form. Customize and print a legally binding bill of sale with AS-IS warranty disclaimers and notary acknowledgment. 100% private.`,
+      category: "legal",
+      group: "State Legal & Document Builders",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-legal-document-engine",
+      preset: { stateCode: leg.code, docType: "bill-of-sale" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["CA", "TX", "FL", "NY", "PA", "OH"].includes(leg.code),
+      publishWave: 2,
+      keywords: [
+        `${leg.name.toLowerCase()} bill of sale`,
+        `free ${leg.slug} bill of sale pdf`,
+        `car bill of sale ${leg.code.toLowerCase()}`,
+        `printable bill of sale form ${leg.name.toLowerCase()}`,
+      ],
+      formulaExplanation: `Binding Legal Transfer = Grantor/Grantee Identification + Definite Property Description (VIN/Serial) + Monetary Consideration + ${leg.name} Commercial Code AS-IS Disclaimer.`,
+      workedExamples: [
+        {
+          title: `Used Vehicle Sale in ${leg.name} ($18,500)`,
+          inputSummary: `Seller in ${leg.name} conveying personal vehicle for $18,500 cash.`,
+          resultSummary: `Generates a compliant ${leg.name} bill of sale with statutory lien warranties and optional notary acknowledgment.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `Does a bill of sale have to be notarized in ${leg.name}?`,
+          answer: leg.notaryRequired
+            ? `Yes. In ${leg.name}, vehicle title transfers or DMV bill of sale instruments typically require a notary public acknowledgment.`
+            : `In ${leg.name}, a standard personal property bill of sale does not strictly require notarization, though having it notarized provides superior evidentiary protection against fraud.`,
+        },
+        {
+          question: `Does an 'AS IS' clause protect the seller in ${leg.name}?`,
+          answer: `Yes. Under ${leg.asIsDisclaimer}, an express AS-IS waiver excludes implied warranties of merchantability and fitness for a particular purpose.`,
+        },
+      ],
+      faq: [{ q: `Can I download this ${leg.name} bill of sale as a PDF?`, a: "Yes, click 'Print / Save PDF' to instantly save a formatted legal PDF without registration." }],
+      relatedSlugs: [`${leg.slug}-promissory-note`, `${leg.slug}-llc-operating-agreement`],
+    });
+
+    // 2. Non-Disclosure Agreement (NDA)
+    programmaticList.push({
+      id: `prog-${leg.slug}-non-disclosure-agreement`,
+      slug: `${leg.slug}-non-disclosure-agreement`,
+      name: `${leg.name} Non-Disclosure Agreement`,
+      title: `${leg.name} Non-Disclosure Agreement (Free NDA Template)`,
+      shortDesc: `Create a confidential non-disclosure agreement (NDA) governed by ${leg.name} trade secret and contract statutes.`,
+      seoTitle: `${leg.name} Non-Disclosure Agreement 2026 – Free NDA Form`,
+      metaDescription: `Create an enforceable ${leg.name} mutual NDA. Protect proprietary code, business data, and trade secrets under ${leg.name} law. Free, client-side, zero signup.`,
+      category: "legal",
+      group: "State Legal & Document Builders",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-legal-document-engine",
+      preset: { stateCode: leg.code, docType: "nda" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["CA", "NY", "TX", "FL", "IL", "WA"].includes(leg.code),
+      publishWave: 2,
+      keywords: [
+        `${leg.name.toLowerCase()} nda`,
+        `${leg.slug} non disclosure agreement`,
+        `free confidentiality agreement ${leg.code.toLowerCase()}`,
+        `trade secret nda template ${leg.name.toLowerCase()}`,
+      ],
+      formulaExplanation: `Enforceable Covenant = Definition of Proprietary Information + Reasonable Duration + Statutory Workplace Exclusions + ${leg.name} Substantive Jurisdiction.`,
+      workedExamples: [
+        {
+          title: `Commercial Partnership in ${leg.name}`,
+          inputSummary: `Two business entities discussing technical software integration in ${leg.name}.`,
+          resultSummary: `Generates a mutual 2-year non-disclosure covenant with injunctive relief clauses under ${leg.name} Trade Secrets jurisprudence.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `Is an NDA legally enforceable in ${leg.name}?`,
+          answer: `Yes. ${leg.name} courts uphold non-disclosure agreements that protect legitimate business trade secrets and are reasonable in duration and scope.`,
+        },
+        {
+          question: `Does this ${leg.name} NDA comply with modern employment laws?`,
+          answer: `Yes. It incorporates statutory carve-outs reflecting ${leg.statutoryNotice}.`,
+        },
+      ],
+      faq: [{ q: `Is this NDA template free to use commercially?`, a: "Yes, 100% free with no sign-up or licensing restrictions." }],
+      relatedSlugs: [`${leg.slug}-llc-operating-agreement`, "freelance-nda-generator"],
+    });
+
+    // 3. LLC Operating Agreement
+    programmaticList.push({
+      id: `prog-${leg.slug}-llc-operating-agreement`,
+      slug: `${leg.slug}-llc-operating-agreement`,
+      name: `${leg.name} LLC Operating Agreement`,
+      title: `${leg.name} LLC Operating Agreement (Member-Managed Template)`,
+      shortDesc: `Draft a customized ${leg.name} LLC Operating Agreement defining member ownership, voting rights, and statutory compliance.`,
+      seoTitle: `${leg.name} LLC Operating Agreement 2026 – Free Member Template`,
+      metaDescription: `Draft a complete ${leg.name} LLC operating agreement. Protect corporate veil, define ownership percentages, and establish voting rights under ${leg.name} LLC statutes.`,
+      category: "legal",
+      group: "State Legal & Document Builders",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-legal-document-engine",
+      preset: { stateCode: leg.code, docType: "llc" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["DE", "WY", "TX", "FL", "CA", "NV"].includes(leg.code),
+      publishWave: 2,
+      keywords: [
+        `${leg.name.toLowerCase()} llc operating agreement`,
+        `free operating agreement template ${leg.slug}`,
+        `single member llc agreement ${leg.code.toLowerCase()}`,
+        `llc operating contract ${leg.name.toLowerCase()}`,
+      ],
+      formulaExplanation: `Corporate Structure = Member Capital Contributions + Distribution Rights (IRC § 704b) + Right of First Refusal + ${leg.name} Limited Liability Company Act compliance.`,
+      workedExamples: [
+        {
+          title: `2-Member LLC in ${leg.name} (60/40 Split)`,
+          inputSummary: `Founders establishing an LLC filed with ${leg.stateFilingAgency}.`,
+          resultSummary: `Generates an operating agreement with capital interest splits, indemnification protections, and transfer restrictions.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `Is an operating agreement legally required for an LLC in ${leg.name}?`,
+          answer: `While some states do not mandate filing the operating agreement with ${leg.stateFilingAgency}, financial institutions, title companies, and the IRS universally require an executed operating agreement to establish limited liability protections.`,
+        },
+        {
+          question: `Can this agreement be used for single-member LLCs in ${leg.name}?`,
+          answer: `Yes. The template supports both single-member and multi-member LLC structures.`,
+        },
+      ],
+      faq: [{ q: `Do I have to file this operating agreement with the state?`, a: `No. Operating agreements are internal company documents kept with your corporate records.` }],
+      relatedSlugs: [`${leg.slug}-non-disclosure-agreement`, `${leg.slug}-promissory-note`],
+    });
+
+    // 4. Promissory Note
+    programmaticList.push({
+      id: `prog-${leg.slug}-promissory-note`,
+      slug: `${leg.slug}-promissory-note`,
+      name: `${leg.name} Promissory Note`,
+      title: `${leg.name} Promissory Note (Legally Binding Loan Contract)`,
+      shortDesc: `Generate a legally binding loan promissory note in ${leg.name} with interest schedules, maturity dates, and usury savings clauses.`,
+      seoTitle: `${leg.name} Promissory Note 2026 – Free Printable Loan Contract`,
+      metaDescription: `Create an enforceable ${leg.name} promissory note. Customize loan principal, interest rate within statutory usury limits, and monthly payments. 100% free.`,
+      category: "legal",
+      group: "State Legal & Document Builders",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-legal-document-engine",
+      preset: { stateCode: leg.code, docType: "promissory-note" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["CA", "TX", "FL", "NY", "GA", "IL"].includes(leg.code),
+      publishWave: 2,
+      keywords: [
+        `${leg.name.toLowerCase()} promissory note`,
+        `free loan contract template ${leg.slug}`,
+        `promissory note with interest ${leg.code.toLowerCase()}`,
+        `borrower note ${leg.name.toLowerCase()}`,
+      ],
+      formulaExplanation: `Enforceable Debt = Unconditional Promise to Pay + Principal Sum + Legal Interest Rate (capped at ${leg.statutoryInterestRate}% state usury ceiling) + Acceleration on Default.`,
+      workedExamples: [
+        {
+          title: `$15,000 Personal Loan in ${leg.name} (24-Month Term)`,
+          inputSummary: `Lender extending $15,000 at ${leg.statutoryInterestRate}% APR.`,
+          resultSummary: `Computes monthly amortized repayment installments with usury savings protection under ${leg.name} statutes.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `What is the legal interest rate limit for loans in ${leg.name}?`,
+          answer: `In ${leg.name}, statutory usury limits cap general unwritten or private loans at approximately ${leg.statutoryInterestRate}%, unless statutory exemptions for commercial transactions apply.`,
+        },
+        {
+          question: `Is an unsecured promissory note legally binding in ${leg.name}?`,
+          answer: `Yes. A promissory note signed by the borrower constitutes an enforceable legal contract under the Uniform Commercial Code (UCC Article 3) in ${leg.name}.`,
+        },
+      ],
+      faq: [{ q: `Can I prepay this loan early without penalty?`, a: "Yes, the contract includes a standard prepayment privilege clause allowing early payoff without penalty." }],
+      relatedSlugs: [`${leg.slug}-bill-of-sale`, `${leg.slug}-llc-operating-agreement`],
+    });
+  }
+
+  // ==========================================
+  // FAMILY 1 EXPANSION: 50 US States Additional Tax Calculators (100 Tools)
+  // ==========================================
+  for (const s of US_STATES) {
+    // 1. 1099 Self-Employment Tax Calculator
+    programmaticList.push({
+      id: `prog-${s.slug}-1099-tax-calculator`,
+      slug: `${s.slug}-1099-tax-calculator`,
+      name: `${s.name} 1099 Tax Calculator`,
+      title: `${s.name} 1099 Tax Calculator (2026 Self-Employment)`,
+      shortDesc: `Calculate ${s.name} 1099 self-employment taxes, write-offs, federal FICA, and net business take-home profit.`,
+      seoTitle: `${s.name} 1099 Tax Calculator 2026 – Free Self-Employment`,
+      metaDescription: `Calculate your 1099 self-employment tax in ${s.name}. Estimate 2026 SECA (15.3%), federal tax, and ${s.name} state income tax. Free, 100% private.`,
+      category: "finance",
+      group: "US State Paycheck & Taxes",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-tax-paycheck-engine",
+      preset: { stateCode: s.code, stateSlug: s.slug, calcMode: "1099-tax" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["CA", "TX", "FL", "NY", "CO", "WA"].includes(s.code),
+      publishWave: 2,
+      keywords: [
+        `${s.name.toLowerCase()} 1099 tax calculator`,
+        `${s.slug} self employment tax`,
+        `free ${s.name.toLowerCase()} 1099 calculator`,
+        `1099 deductions ${s.code.toLowerCase()}`,
+      ],
+      formulaExplanation: `1099 Net Profit = Gross Revenue − Qualified Business Deductions. SE Tax = 15.3% on 92.35% of profit. Total Tax = SE Tax + Federal Income Tax (less 50% SE tax deduction) + ${s.name} State Tax (${s.hasIncomeTax ? (s.incomeTaxType === "flat" ? `${s.flatRate}% flat` : `up to ${s.topMarginalRate}%`) : "0% No State Tax"}).`,
+      workedExamples: [
+        {
+          title: `$100,000 1099 Contractor Revenue in ${s.name}`,
+          inputSummary: `$100,000 1099 revenue with $15,000 business write-offs.`,
+          resultSummary: `Net profit is $85,000. SE tax is approx. $12,010. Estimated net take-home is approx. $59,000 – $66,000 depending on deductions.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `What is the self-employment tax rate for 1099 contractors in ${s.name}?`,
+          answer: `The federal self-employment tax rate is 15.3% (12.4% for Social Security on income up to $168,600, plus 2.9% for Medicare). In ${s.name}, you ${s.hasIncomeTax ? `also pay state income tax up to ${s.topMarginalRate}%` : "pay 0% state income tax"}.`,
+        },
+        {
+          question: `Can 1099 workers deduct business expenses in ${s.name}?`,
+          answer: `Yes. Ordinary and necessary business expenses (home office, equipment, software, mileage, professional insurance) reduce both your federal SE tax and ${s.name} state tax burden.`,
+        },
+      ],
+      faq: [{ q: `Do I have to pay quarterly taxes in ${s.name}?`, a: "Yes, 1099 independent contractors generally pay quarterly estimated taxes (IRS Form 1040-ES) if they expect to owe $1,000 or more." }],
+      relatedSlugs: [`${s.slug}-paycheck-calculator`, `${s.slug}-income-tax-calculator`, "us-1099-tax-calculator"],
+    });
+
+    // 2. Overtime Calculator
+    programmaticList.push({
+      id: `prog-${s.slug}-overtime-calculator`,
+      slug: `${s.slug}-overtime-calculator`,
+      name: `${s.name} Overtime Calculator`,
+      title: `${s.name} Overtime Calculator (Time-and-a-Half Pay)`,
+      shortDesc: `Calculate exact overtime pay in ${s.name} at 1.5x regular wage under state and federal FLSA labor regulations.`,
+      seoTitle: `${s.name} Overtime Calculator 2026 – Time-and-a-Half Pay`,
+      metaDescription: `Calculate overtime pay in ${s.name}. Accurate 2026 time-and-a-half rate, double-time rules, and gross weekly earnings. Free and private.`,
+      category: "finance",
+      group: "US State Paycheck & Taxes",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-tax-paycheck-engine",
+      preset: { stateCode: s.code, stateSlug: s.slug, calcMode: "overtime" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["CA", "NY", "NV", "TX", "IL", "FL"].includes(s.code),
+      publishWave: 2,
+      keywords: [
+        `${s.name.toLowerCase()} overtime calculator`,
+        `${s.slug} time and a half pay`,
+        `free ${s.name.toLowerCase()} overtime rate`,
+        `overtime laws ${s.code.toLowerCase()}`,
+      ],
+      formulaExplanation: `Overtime Pay in ${s.name} = (Hourly Rate × 1.5 × Overtime Hours) + (Hourly Rate × 2.0 × Double Time Hours) + (Hourly Rate × Regular Hours). Follows ${s.overtimeRule === "daily_8" ? "daily overtime after 8 hours in a workday" : "standard FLSA weekly overtime after 40 hours"}.`,
+      workedExamples: [
+        {
+          title: `48 Hours Worked at $30/hr in ${s.name}`,
+          inputSummary: `40 regular hours + 8 overtime hours at $30/hr standard rate.`,
+          resultSummary: `Regular pay: $1,200. Overtime pay (8 hrs × $45/hr): $360. Total weekly gross: $1,560.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `How is overtime calculated in ${s.name}?`,
+          answer: `${s.name} requires overtime pay at 1.5 times your regular rate under ${s.overtimeRule === "daily_8" ? "state law after 8 hours worked in a single calendar day" : "FLSA rules after 40 hours worked in a single workweek"}.`,
+        },
+        {
+          question: `Are salaried employees eligible for overtime in ${s.name}?`,
+          answer: `Salaried employees earning below the statutory salary threshold ($43,888/year or state-specific minimum) remain non-exempt and legally entitled to 1.5x overtime pay.`,
+        },
+      ],
+      faq: [{ q: `What is double time pay?`, a: "Double time is 2.0x regular pay, required under specific state statutes (such as California after 12 hours in a single workday or 8 hours on the 7th consecutive day)." }],
+      relatedSlugs: [`${s.slug}-paycheck-calculator`, `${s.slug}-hourly-to-salary-calculator`],
     });
   }
 
