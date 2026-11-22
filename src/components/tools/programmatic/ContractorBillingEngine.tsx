@@ -400,6 +400,33 @@ export default function ContractorBillingEngine({ tool }: { tool: ToolDefinition
                   />
                 </div>
               </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Self-Employment Tax ({seTaxRate}%)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={seTaxRate}
+                    onChange={(e) => setSeTaxRate(Number(e.target.value))}
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-sm font-mono focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Effective Income Tax ({incomeTaxRate}%)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={incomeTaxRate}
+                    onChange={(e) => setIncomeTaxRate(Number(e.target.value))}
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-sm font-mono focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
+              </div>
             </div>
           )}
 
@@ -441,18 +468,31 @@ export default function ContractorBillingEngine({ tool }: { tool: ToolDefinition
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                  Paid Time Off: <span className="text-indigo-400 font-mono">{w2PtoDays} Days</span>
-                </label>
-                <input
-                  type="range"
-                  min="5"
-                  max="40"
-                  value={w2PtoDays}
-                  onChange={(e) => setW2PtoDays(Number(e.target.value))}
-                  className="w-full accent-indigo-500"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Contractor Overhead ($/yr)
+                  </label>
+                  <input
+                    type="number"
+                    value={contractorOverhead}
+                    onChange={(e) => setContractorOverhead(Math.max(0, Number(e.target.value)))}
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-sm font-mono focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Paid Off Days ({w2PtoDays})
+                  </label>
+                  <input
+                    type="range"
+                    min="5"
+                    max="40"
+                    value={w2PtoDays}
+                    onChange={(e) => setW2PtoDays(Number(e.target.value))}
+                    className="w-full accent-indigo-500"
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -484,18 +524,31 @@ export default function ContractorBillingEngine({ tool }: { tool: ToolDefinition
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                  Retainer Volume Discount: <span className="text-indigo-400 font-mono">{retainerDiscount}%</span>
-                </label>
-                <input
-                  type="range"
-                  min="0"
-                  max="30"
-                  value={retainerDiscount}
-                  onChange={(e) => setRetainerDiscount(Number(e.target.value))}
-                  className="w-full accent-indigo-500"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Discount ({retainerDiscount}%)
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="30"
+                    value={retainerDiscount}
+                    onChange={(e) => setRetainerDiscount(Number(e.target.value))}
+                    className="w-full accent-indigo-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Overage Hourly ($)
+                  </label>
+                  <input
+                    type="number"
+                    value={overageRate}
+                    onChange={(e) => setOverageRate(Math.max(10, Number(e.target.value)))}
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-sm font-mono focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -514,28 +567,39 @@ export default function ContractorBillingEngine({ tool }: { tool: ToolDefinition
                   className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3.5 py-2.5 text-sm font-mono focus:border-rose-500 focus:outline-none"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-2">
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                    Days Past Due
+                    Days Overdue
                   </label>
                   <input
                     type="number"
                     value={daysOverdue}
                     onChange={(e) => setDaysOverdue(Math.max(1, Number(e.target.value)))}
-                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-sm font-mono focus:border-rose-500 focus:outline-none"
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-2.5 py-2 text-sm font-mono focus:border-rose-500 focus:outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                    Annual Rate (%)
+                    APR (%)
                   </label>
                   <input
                     type="number"
                     step="0.5"
                     value={annualLateRate}
                     onChange={(e) => setAnnualLateRate(Number(e.target.value))}
-                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-sm font-mono focus:border-rose-500 focus:outline-none"
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-2.5 py-2 text-sm font-mono focus:border-rose-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Late Fee ($)
+                  </label>
+                  <input
+                    type="number"
+                    value={flatLateFee}
+                    onChange={(e) => setFlatLateFee(Math.max(0, Number(e.target.value)))}
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-2.5 py-2 text-sm font-mono focus:border-rose-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -584,6 +648,19 @@ export default function ContractorBillingEngine({ tool }: { tool: ToolDefinition
                   />
                 </div>
               </div>
+              {businessStructure === "s_corp" && (
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    S-Corp Owner W-2 Wage ($)
+                  </label>
+                  <input
+                    type="number"
+                    value={w2WageSCorp}
+                    onChange={(e) => setW2WageSCorp(Math.max(0, Number(e.target.value)))}
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3.5 py-2 text-sm font-mono focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
