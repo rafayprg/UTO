@@ -36,6 +36,26 @@ const ENGINE_COPY: Record<string, { how: string; check: string; privacy: string 
     check: "Until the tool goes live, use a related live tool from this suite, listed on this page.",
     privacy: "When it launches, this tool will follow the same rule as the rest of the site: processing happens in your browser.",
   },
+  "city-tax-paycheck-engine": {
+    how: "Select your municipal city and residency status, enter your gross salary or hourly wage, and toggle between Annual, Monthly, Bi-Weekly, or Weekly views.",
+    check: "Compare the line-item breakdown against your recent local paystub. Note that city income taxes (like NYC, Philadelphia, Columbus, Detroit) apply in addition to state and federal deductions.",
+    privacy: "Your compensation and location data stay 100% inside your browser. No figures are ever transmitted to any external server.",
+  },
+  "investment-crypto-engine": {
+    how: "Enter your principal investment, recurring contributions, expected APY or returns, and investment horizon. The engine automatically runs real-time compounding simulations.",
+    check: "Review the net take-home and projection metrics. Investment simulations are mathematical projections for planning purposes and do not represent guaranteed financial returns.",
+    privacy: "Your portfolio balances and trade amounts remain strictly private and execute exclusively in your local browser sandbox.",
+  },
+  "growth-ecommerce-engine": {
+    how: "Input your unit economics (retail price, COGS, shipping, payment processing fees) and current marketing metrics (ad spend, customer counts, or PPC revenue).",
+    check: "Review your breakeven thresholds, target CPA limits, and LTV ratios. Use these benchmarks to optimize ad campaign bidding and maintain profitability.",
+    privacy: "Your sales volumes, profit margins, and ad spend figures never leave your device. All unit economics calculate locally.",
+  },
+  "contractor-billing-engine": {
+    how: "Enter your desired net annual income, business overhead, health insurance, and billable utilization hours to reverse-engineer your required rate.",
+    check: "Ensure your billable hours accurately reflect only client-facing time (typically 20–25 hours per week for solo consultants) to avoid undercharging.",
+    privacy: "Your billing rates, client retainer agreements, and contract fee calculations are confidential and processed 100% client-side.",
+  },
 };
 
 export function toolGuideSections(tool: ToolDefinition): GuideSection[] {
@@ -48,6 +68,14 @@ export function toolGuideSections(tool: ToolDefinition): GuideSection[] {
     sections.push({
       heading: "Calculation logic & formula",
       paragraphs: [tool.formulaExplanation],
+    });
+  }
+  if (tool.workedExamples && tool.workedExamples.length > 0) {
+    sections.push({
+      heading: "Worked calculation examples",
+      paragraphs: tool.workedExamples.map(
+        ex => `${ex.title}: Input parameters (${ex.inputSummary}). Calculated result: ${ex.resultSummary}`
+      ),
     });
   }
   sections.push(

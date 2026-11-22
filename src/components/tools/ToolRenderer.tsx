@@ -60,6 +60,10 @@ const components: Record<string, ComponentType<ToolProps>> = {
   "tier1-country-finance-engine": dynamic(() => import("./programmatic/Tier1CountryFinanceEngine"), { ssr: false, loading }),
   "unit-pair-converter-engine": dynamic(() => import("./programmatic/UnitPairConverterEngine"), { ssr: false, loading }),
   "format-pair-converter-engine": dynamic(() => import("./programmatic/FormatPairConverterEngine"), { ssr: false, loading }),
+  "city-tax-paycheck-engine": dynamic(() => import("./programmatic/CityTaxPaycheckEngine"), { ssr: false, loading }),
+  "investment-crypto-engine": dynamic(() => import("./programmatic/InvestmentCryptoEngine"), { ssr: false, loading }),
+  "growth-ecommerce-engine": dynamic(() => import("./programmatic/GrowthEcommerceEngine"), { ssr: false, loading }),
+  "contractor-billing-engine": dynamic(() => import("./programmatic/ContractorBillingEngine"), { ssr: false, loading }),
 
   // Shared Engines
   "text-engine": dynamic(() => import("./engines/TextEngine"), { ssr: false, loading }),

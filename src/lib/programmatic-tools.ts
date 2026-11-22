@@ -3,6 +3,10 @@ import { TIER1_COUNTRIES } from "@/data/programmatic/tier1-countries";
 import { PAYMENT_PLATFORMS } from "@/data/programmatic/payment-platforms";
 import { UNIT_PAIRS } from "@/data/programmatic/unit-pairs";
 import { FORMAT_PAIRS } from "@/data/programmatic/format-pairs";
+import { US_MAJOR_CITIES } from "@/data/programmatic/us-cities";
+import { INVESTMENT_CRYPTO_TOOLS } from "@/data/programmatic/investments-crypto";
+import { GROWTH_ECOMMERCE_TOOLS } from "@/data/programmatic/growth-ecommerce";
+import { CONTRACTOR_BILLING_TOOLS } from "@/data/programmatic/contractor-billing";
 import type { ToolDefinition } from "./tools-registry";
 
 /**
@@ -533,6 +537,291 @@ export function generateProgrammaticTools(): ToolDefinition[] {
       ],
       faq: [{ q: "Is there a file size limit?", a: "Only limited by your computer's browser memory." }],
       relatedSlugs: ["heic-converter", "background-remover", "json-formatter"],
+    });
+  }
+
+  // ==========================================
+  // FAMILY 6: US Major City Tax & Paycheck Engines
+  // ==========================================
+  for (const c of US_MAJOR_CITIES) {
+    // 1. City Paycheck Calculator
+    programmaticList.push({
+      id: `prog-${c.slug}-paycheck-calculator`,
+      slug: `${c.slug}-paycheck-calculator`,
+      name: `${c.name} Paycheck Calculator`,
+      title: `${c.name} Paycheck Calculator (2026 Take-Home Pay & Municipal Taxes)`,
+      shortDesc: `Calculate your exact net paycheck in ${c.name}, ${c.stateCode} after federal taxes, FICA, ${c.stateName} state tax, and local city wage deductions.`,
+      seoTitle: `${c.name} Paycheck Calculator 2026 – City Take-Home Pay`,
+      metaDescription: `Calculate your take-home paycheck in ${c.name}, ${c.stateCode}. Accounts for 2026 IRS federal brackets, state tax, and municipal wage tax. 100% private.`,
+      category: "finance",
+      group: "US City Paycheck & Local Taxes",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "city-tax-paycheck-engine",
+      preset: { citySlug: c.slug, calcMode: "paycheck" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["new-york-city", "los-angeles", "chicago", "houston", "philadelphia"].includes(c.slug),
+      publishWave: 2,
+      keywords: [
+        `${c.name.toLowerCase()} paycheck calculator`,
+        `${c.slug} take home pay`,
+        `${c.name.toLowerCase()} salary calculator`,
+        `${c.name.toLowerCase()} wage tax`,
+      ],
+      formulaExplanation: `Net Take-Home = Gross Pay − Federal Income Tax − Social Security (6.2%) − Medicare (1.45%) − ${c.stateName} State Tax − ${c.name} Local Tax (${c.hasSpecialLocalTax ? `${c.cityResidentRate}% resident rate` : "0% direct city wage tax"}).`,
+      workedExamples: [
+        {
+          title: `$85,000 Salary in ${c.name}, ${c.stateCode}`,
+          inputSummary: `$85,000 gross salary, Single filer, paid Bi-Weekly in ${c.name}.`,
+          resultSummary: `Estimated net paycheck is calculated with local municipal deductions and full federal withholding.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `Does ${c.name} have a local city income or wage tax?`,
+          answer: c.hasSpecialLocalTax
+            ? `Yes. ${c.name} imposes a local municipal tax (${c.cityResidentRate}% for residents, ${c.cityNonResidentRate}% for non-resident commuters).`
+            : `No. ${c.name} does not impose an additional municipal wage tax; only federal and ${c.stateName} state taxes apply.`,
+        },
+      ],
+      faq: [{ q: `Is this ${c.name} paycheck calculator free?`, a: "Yes, 100% free with no sign-up or data upload required." }],
+      relatedSlugs: [`${c.slug}-income-tax-calculator`, `${c.stateSlug}-paycheck-calculator`],
+    });
+
+    // 2. City Income Tax Calculator
+    programmaticList.push({
+      id: `prog-${c.slug}-income-tax-calculator`,
+      slug: `${c.slug}-income-tax-calculator`,
+      name: `${c.name} Income Tax Calculator`,
+      title: `${c.name} Income Tax Calculator (2026 City & State Tax Rates)`,
+      shortDesc: `Estimate your total tax liability in ${c.name}, ${c.stateCode} including local municipal taxes, state tax brackets, and effective tax rates.`,
+      seoTitle: `${c.name} Income Tax Calculator 2026 – Local Wage Tax Rates`,
+      metaDescription: `Free ${c.name} local income tax calculator. Check combined municipal and state tax burdens for 2026. 100% private, no signup.`,
+      category: "finance",
+      group: "US City Paycheck & Local Taxes",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "city-tax-paycheck-engine",
+      preset: { citySlug: c.slug, calcMode: "income-tax" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: false,
+      publishWave: 2,
+      keywords: [
+        `${c.name.toLowerCase()} income tax calculator`,
+        `${c.name.toLowerCase()} municipal tax brackets`,
+        `${c.slug} local tax rate`,
+      ],
+      formulaExplanation: `Total Tax Burden = Federal Tax + FICA (7.65%) + ${c.stateName} State Tax + ${c.name} City Tax.`,
+      workedExamples: [
+        {
+          title: `Combined Tax on $100,000 in ${c.name}`,
+          inputSummary: `$100,000 annual taxable income as a resident of ${c.name}.`,
+          resultSummary: `Calculates exact federal, state, and local city tax percentages.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `How much is the local tax in ${c.name}?`,
+          answer: c.hasSpecialLocalTax
+            ? `${c.name} local tax is ${c.cityResidentRate}% for residents.`
+            : `${c.name} has no additional local wage tax.`,
+        },
+      ],
+      faq: [{ q: "Are deductions included?", a: "Yes, standard federal and state deductions are applied." }],
+      relatedSlugs: [`${c.slug}-paycheck-calculator`, `${c.stateSlug}-income-tax-calculator`],
+    });
+
+    // 3. City Hourly to Salary Calculator
+    programmaticList.push({
+      id: `prog-${c.slug}-hourly-to-salary-calculator`,
+      slug: `${c.slug}-hourly-to-salary-calculator`,
+      name: `${c.name} Hourly to Salary Calculator`,
+      title: `${c.name} Hourly to Salary Calculator (Net Take-Home Pay)`,
+      shortDesc: `Convert hourly wages to gross and net annual take-home salary in ${c.name}, ${c.stateCode} with municipal taxes factored in.`,
+      seoTitle: `${c.name} Hourly to Salary Calculator – Take-Home Pay`,
+      metaDescription: `Convert your hourly pay to annual salary in ${c.name}, ${c.stateCode}. See net take-home pay after local city taxes. 100% private.`,
+      category: "finance",
+      group: "US City Paycheck & Local Taxes",
+      region: "US",
+      cpcTier: "medium",
+      engineType: "native",
+      componentKey: "city-tax-paycheck-engine",
+      preset: { citySlug: c.slug, calcMode: "hourly" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: false,
+      publishWave: 2,
+      keywords: [
+        `${c.name.toLowerCase()} hourly to salary`,
+        `convert hourly wage to salary ${c.slug}`,
+        `${c.name.toLowerCase()} hourly take home pay`,
+      ],
+      formulaExplanation: `Annual Gross = Hourly Rate × Hours Per Week × 52 Weeks. Net Pay is calculated after applying 2026 federal, state, and ${c.name} local taxes.`,
+      workedExamples: [
+        {
+          title: `$40/hr in ${c.name}`,
+          inputSummary: `$40/hr at 40 hours per week = $83,200 annual gross salary in ${c.name}.`,
+          resultSummary: `Calculates exact bi-weekly net paycheck after all federal and municipal deductions.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `How many working hours are in a year for ${c.name} workers?`,
+          answer: `Standard full-time employment equals 2,080 hours per year (40 hours/week × 52 weeks).`,
+        },
+      ],
+      faq: [{ q: "Can I adjust weekly hours?", a: "Yes, you can adjust weekly hours from 1 to 80." }],
+      relatedSlugs: [`${c.slug}-paycheck-calculator`, `${c.slug}-overtime-pay-calculator`],
+    });
+
+    // 4. City Overtime Pay Calculator
+    programmaticList.push({
+      id: `prog-${c.slug}-overtime-pay-calculator`,
+      slug: `${c.slug}-overtime-pay-calculator`,
+      name: `${c.name} Overtime Pay Calculator`,
+      title: `${c.name} Overtime Pay Calculator (1.5x Time & a Half Take-Home)`,
+      shortDesc: `Calculate overtime earnings and net take-home pay in ${c.name}, ${c.stateCode} with time-and-a-half (1.5x) and municipal tax withholding.`,
+      seoTitle: `${c.name} Overtime Calculator 2026 – Time and a Half Pay`,
+      metaDescription: `Calculate your overtime pay in ${c.name}, ${c.stateCode}. Factor 1.5x rate and municipal tax withholding. 100% private.`,
+      category: "finance",
+      group: "US City Paycheck & Local Taxes",
+      region: "US",
+      cpcTier: "medium",
+      engineType: "native",
+      componentKey: "city-tax-paycheck-engine",
+      preset: { citySlug: c.slug, calcMode: "overtime" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: false,
+      publishWave: 2,
+      keywords: [
+        `${c.name.toLowerCase()} overtime calculator`,
+        `${c.slug} time and a half pay`,
+        `overtime tax rate ${c.name.toLowerCase()}`,
+      ],
+      formulaExplanation: `Overtime Rate = Regular Hourly Rate × 1.5. Total Pay = Base Hours Pay + Overtime Hours Pay, less tax withholdings.`,
+      workedExamples: [
+        {
+          title: `10 Overtime Hours at $30/hr Base in ${c.name}`,
+          inputSummary: `$30/hr base rate, 40 regular hours + 10 OT hours ($45/hr OT rate).`,
+          resultSummary: `Gross weekly pay increases from $1,200 to $1,650 ($450 gross OT boost).`,
+        },
+      ],
+      faqs: [
+        {
+          question: `Is overtime taxed at a higher rate in ${c.name}?`,
+          answer: `Overtime pay is taxed as ordinary income. While payroll software may withhold at a higher supplemental rate temporarily, your true annual tax bracket determines the final tax owed.`,
+        },
+      ],
+      faq: [{ q: "Does this cover FLSA standards?", a: "Yes, follows federal FLSA 1.5x standards." }],
+      relatedSlugs: [`${c.slug}-paycheck-calculator`, `${c.slug}-hourly-to-salary-calculator`],
+    });
+  }
+
+  // ==========================================
+  // FAMILY 7: Investment & Crypto Engines
+  // ==========================================
+  for (const t of INVESTMENT_CRYPTO_TOOLS) {
+    programmaticList.push({
+      id: t.id,
+      slug: t.slug,
+      name: t.name,
+      title: t.title,
+      shortDesc: t.shortDesc,
+      seoTitle: t.seoTitle,
+      metaDescription: t.metaDescription,
+      category: t.category,
+      group: t.group,
+      region: "GLOBAL",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "investment-crypto-engine",
+      preset: { calcType: t.calcType },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["bitcoin-dca-calculator", "ethereum-staking-rewards-calculator", "sp500-investment-growth-calculator"].includes(t.slug),
+      publishWave: 2,
+      keywords: t.keywords,
+      formulaExplanation: t.formulaExplanation,
+      workedExamples: t.workedExamples,
+      faqs: t.faqs,
+      faq: [{ q: "Is any financial data uploaded or stored?", a: "Never. All calculations run strictly in your local browser sandbox." }],
+      relatedSlugs: ["mortgage-calculator", "401k-retirement-calculator", "saas-metrics-calculator"],
+    });
+  }
+
+  // ==========================================
+  // FAMILY 8: Growth & E-Commerce Engines
+  // ==========================================
+  for (const g of GROWTH_ECOMMERCE_TOOLS) {
+    programmaticList.push({
+      id: g.id,
+      slug: g.slug,
+      name: g.name,
+      title: g.title,
+      shortDesc: g.shortDesc,
+      seoTitle: g.seoTitle,
+      metaDescription: g.metaDescription,
+      category: g.category,
+      group: g.group,
+      region: "GLOBAL",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "growth-ecommerce-engine",
+      preset: { calcType: g.calcType },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["breakeven-roas-calculator", "target-cpa-calculator", "shopify-profit-margin-calculator"].includes(g.slug),
+      publishWave: 2,
+      keywords: g.keywords,
+      formulaExplanation: g.formulaExplanation,
+      workedExamples: g.workedExamples,
+      faqs: g.faqs,
+      faq: [{ q: "Are customer and order metrics private?", a: "100% private. No figures leave your browser." }],
+      relatedSlugs: ["stripe-fee-calculator", "amazon-fba-calculator", "roas-cpa-calculator"],
+    });
+  }
+
+  // ==========================================
+  // FAMILY 9: Contractor & Freelance Engines
+  // ==========================================
+  for (const b of CONTRACTOR_BILLING_TOOLS) {
+    programmaticList.push({
+      id: b.id,
+      slug: b.slug,
+      name: b.name,
+      title: b.title,
+      shortDesc: b.shortDesc,
+      seoTitle: b.seoTitle,
+      metaDescription: b.metaDescription,
+      category: b.category,
+      group: b.group,
+      region: "GLOBAL",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "contractor-billing-engine",
+      preset: { calcType: b.calcType },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["freelance-hourly-rate-calculator", "w2-vs-1099-contractor-calculator"].includes(b.slug),
+      publishWave: 2,
+      keywords: b.keywords,
+      formulaExplanation: b.formulaExplanation,
+      workedExamples: b.workedExamples,
+      faqs: b.faqs,
+      faq: [{ q: "Is this updated for 2026 IRS tax rates?", a: "Yes, models 2026 self-employment tax and retirement limits." }],
+      relatedSlugs: ["tax-1099-calculator", "invoice-pdf-generator", "freelance-nda-generator"],
     });
   }
 
