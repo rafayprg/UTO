@@ -108,6 +108,25 @@ export default function ContractorBillingEngine({ tool }: { tool: ToolDefinition
     Number(currentToolData.defaultInputs.w2WageSCorp || 70000)
   );
 
+  // 6. S-Corp Tax Savings States
+  const [netProfitSCorp, setNetProfitSCorp] = useState<number>(
+    Number(currentToolData.defaultInputs.netProfit || 150000)
+  );
+  const [reasonableSalarySCorp, setReasonableSalarySCorp] = useState<number>(
+    Number(currentToolData.defaultInputs.reasonableSalary || 70000)
+  );
+  const [adminOverheadSCorp, setAdminOverheadSCorp] = useState<number>(
+    Number(currentToolData.defaultInputs.adminOverhead || 2000)
+  );
+
+  // 7. PayPal Fee States
+  const [paypalAmount, setPaypalAmount] = useState<number>(
+    Number(currentToolData.defaultInputs.amount || 1000)
+  );
+  const [paypalTier, setPaypalTier] = useState<"invoicing" | "checkout" | "qr">("invoicing");
+  const [paypalIsIntl, setPaypalIsIntl] = useState<boolean>(false);
+  const [paypalIsReverse, setPaypalIsReverse] = useState<boolean>(false);
+
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
   // Calculations
@@ -196,6 +215,63 @@ export default function ContractorBillingEngine({ tool }: { tool: ToolDefinition
       };
     }
 
+    if (calcType === "s-corp-tax-savings") {
+      const distribution = Math.max(0, netProfitSCorp - reasonableSalarySCorp);
+      const grossFicaSaved = distribution * 0.153;
+      const netSavings = grossFicaSaved - adminOverheadSCorp;
+      const isProfitable = netSavings > 0;
+
+      return {
+        heroLabel: "Net Annual S-Corp Savings",
+        heroVal: isProfitable ? `+$${Math.round(netSavings).toLocaleString()} / yr` : `-$${Math.round(Math.abs(netSavings)).toLocaleString()} / yr`,
+        heroSub: isProfitable
+          ? `Eliminates 15.3% FICA on $${Math.round(distribution).toLocaleString()} distribution, saving $${Math.round(grossFicaSaved).toLocaleString()} minus $${adminOverheadSCorp.toLocaleString()} admin overhead`
+          : `Admin overhead ($${adminOverheadSCorp.toLocaleString()}) exceeds FICA savings ($${Math.round(grossFicaSaved).toLocaleString()}). S-Corp election not recommended.`,
+        stat1Label: "Shareholder Distribution",
+        stat1Val: `$${Math.round(distribution).toLocaleString()}`,
+        stat2Label: "Gross FICA Saved (15.3%)",
+        stat2Val: `$${Math.round(grossFicaSaved).toLocaleString()}`,
+        stat3Label: "Corporate Overhead",
+        stat3Val: `$${adminOverheadSCorp.toLocaleString()}/yr`,
+        color: isProfitable ? "text-emerald-400" : "text-amber-400",
+      };
+    }
+
+    if (calcType === "paypal-fee") {
+      const basePct = paypalTier === "invoicing" ? 0.0349 : paypalTier === "checkout" ? 0.0299 : 0.019;
+      const fixedFee = paypalTier === "invoicing" ? 0.49 : paypalTier === "checkout" ? 0.49 : 0.10;
+      const intlSurcharge = paypalIsIntl ? 0.015 : 0;
+      const totalPct = basePct + intlSurcharge;
+
+      let fee = 0;
+      let net = 0;
+      let gross = paypalAmount;
+
+      if (paypalIsReverse) {
+        gross = (paypalAmount + fixedFee) / (1 - totalPct);
+        fee = gross - paypalAmount;
+        net = paypalAmount;
+      } else {
+        fee = (paypalAmount * totalPct) + fixedFee;
+        net = Math.max(0, paypalAmount - fee);
+      }
+
+      const effectiveRate = gross > 0 ? (fee / gross) * 100 : 0;
+
+      return {
+        heroLabel: paypalIsReverse ? "Amount to Invoice Client" : "Net Settled to PayPal",
+        heroVal: paypalIsReverse ? `$${gross.toFixed(2)}` : `$${net.toFixed(2)}`,
+        heroSub: `PayPal Fee: $${fee.toFixed(2)} (${effectiveRate.toFixed(2)}% effective drag) · ${paypalTier.toUpperCase()}${paypalIsIntl ? " + Intl (1.5%)" : ""}`,
+        stat1Label: paypalIsReverse ? "Target Net Cash" : "Gross Charge",
+        stat1Val: `$${paypalAmount.toLocaleString()}`,
+        stat2Label: "Total PayPal Deductions",
+        stat2Val: `$${fee.toFixed(2)}`,
+        stat3Label: "Effective Fee Rate",
+        stat3Val: `${effectiveRate.toFixed(2)}%`,
+        color: "text-cyan-400",
+      };
+    }
+
     // Default: Solo 401(k) vs SEP IRA
     const electiveLimit = age >= 50 ? 31000 : 23500;
     let employerMax = 0;
@@ -252,6 +328,13 @@ export default function ContractorBillingEngine({ tool }: { tool: ToolDefinition
     age,
     businessStructure,
     w2WageSCorp,
+    netProfitSCorp,
+    reasonableSalarySCorp,
+    adminOverheadSCorp,
+    paypalAmount,
+    paypalTier,
+    paypalIsIntl,
+    paypalIsReverse,
   ]);
 
   const handleCopy = useCallback(() => {
@@ -661,6 +744,125 @@ export default function ContractorBillingEngine({ tool }: { tool: ToolDefinition
                   />
                 </div>
               )}
+            </div>
+          )}
+
+          {/* 6. S-Corp Tax Savings Inputs */}
+          {calcType === "s-corp-tax-savings" && (
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Annual Net Business Operating Profit ($)
+                </label>
+                <input
+                  type="number"
+                  value={netProfitSCorp}
+                  onChange={(e) => setNetProfitSCorp(Math.max(0, Number(e.target.value)))}
+                  className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3.5 py-2.5 text-sm font-mono focus:border-emerald-500 focus:outline-none"
+                />
+                <div className="flex gap-2 mt-2">
+                  {[60000, 100000, 150000, 200000].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setNetProfitSCorp(preset)}
+                      className="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400 hover:text-emerald-400"
+                    >
+                      ${preset / 1000}k
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Reasonable W-2 Salary ($)
+                  </label>
+                  <input
+                    type="number"
+                    value={reasonableSalarySCorp}
+                    onChange={(e) => setReasonableSalarySCorp(Math.max(0, Number(e.target.value)))}
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-sm font-mono focus:border-emerald-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Annual Admin Costs ($)
+                  </label>
+                  <input
+                    type="number"
+                    value={adminOverheadSCorp}
+                    onChange={(e) => setAdminOverheadSCorp(Math.max(0, Number(e.target.value)))}
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-sm font-mono focus:border-emerald-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 7. PayPal Fee Inputs */}
+          {calcType === "paypal-fee" && (
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  {paypalIsReverse ? "Target Net Cash Required ($)" : "Gross Charge / Sale Amount ($)"}
+                </label>
+                <input
+                  type="number"
+                  value={paypalAmount}
+                  onChange={(e) => setPaypalAmount(Math.max(1, Number(e.target.value)))}
+                  className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3.5 py-2.5 text-sm font-mono focus:border-cyan-500 focus:outline-none"
+                />
+                <div className="flex gap-2 mt-2">
+                  {[25, 100, 500, 1200, 2500].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setPaypalAmount(preset)}
+                      className="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400 hover:text-cyan-400"
+                    >
+                      ${preset}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Transaction Type & Rate
+                </label>
+                <select
+                  value={paypalTier}
+                  onChange={(e) => setPaypalTier(e.target.value as "invoicing" | "checkout" | "qr")}
+                  className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-xs font-mono focus:border-cyan-500 focus:outline-none"
+                >
+                  <option value="invoicing">PayPal Invoicing (3.49% + $0.49)</option>
+                  <option value="checkout">PayPal Checkout / Button (2.99% + $0.49)</option>
+                  <option value="qr">In-Person QR Code (&gt; $10: 1.90% + $0.10)</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 pt-1">
+                <label className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-950 border border-slate-800 cursor-pointer text-xs text-slate-300">
+                  <input
+                    type="checkbox"
+                    checked={paypalIsIntl}
+                    onChange={(e) => setPaypalIsIntl(e.target.checked)}
+                    className="accent-cyan-500 rounded"
+                  />
+                  <span>Intl Card (+1.50%)</span>
+                </label>
+
+                <label className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-950 border border-slate-800 cursor-pointer text-xs text-slate-300">
+                  <input
+                    type="checkbox"
+                    checked={paypalIsReverse}
+                    onChange={(e) => setPaypalIsReverse(e.target.checked)}
+                    className="accent-cyan-500 rounded"
+                  />
+                  <span>Reverse (Bill Client)</span>
+                </label>
+              </div>
             </div>
           )}
         </div>

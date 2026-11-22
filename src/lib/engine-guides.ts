@@ -56,6 +56,11 @@ const ENGINE_COPY: Record<string, { how: string; check: string; privacy: string 
     check: "Ensure your billable hours accurately reflect only client-facing time (typically 20–25 hours per week for solo consultants) to avoid undercharging.",
     privacy: "Your billing rates, client retainer agreements, and contract fee calculations are confidential and processed 100% client-side.",
   },
+  "fha-loan-engine": {
+    how: "Enter home price, down payment percentage, interest rate, and term. The engine computes financed Upfront MIP (1.75%) and monthly annual MIP.",
+    check: "Review total monthly PITI payments. Note that with down payment under 10%, FHA annual MIP persists for the full 30-year term unless refinanced.",
+    privacy: "Your home purchase and financing parameters stay 100% in your local browser sandbox. No financial data is ever sent to any remote server.",
+  },
 };
 
 export function toolGuideSections(tool: ToolDefinition): GuideSection[] {

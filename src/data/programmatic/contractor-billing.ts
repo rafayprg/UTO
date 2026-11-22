@@ -16,7 +16,9 @@ export interface ContractorBillingToolData {
     | "late-invoice-interest"
     | "billable-hours"
     | "subcontractor-markup"
-    | "sep-ira-solo-401k";
+    | "sep-ira-solo-401k"
+    | "s-corp-tax-savings"
+    | "paypal-fee";
   defaultInputs: Record<string, number | string | boolean>;
   formulaExplanation: string;
   workedExamples: {
@@ -201,5 +203,78 @@ export const CONTRACTOR_BILLING_TOOLS: ContractorBillingToolData[] = [
       },
     ],
     keywords: ["solo 401k calculator", "sep ira contribution calculator 2026", "self employed retirement contribution limits", "solo 401k vs sep ira maximum"],
+  },
+  {
+    id: "prog-s-corp-tax-savings-calculator",
+    slug: "s-corp-tax-savings-calculator",
+    name: "S-Corporation Tax Savings Calculator",
+    title: "S-Corp Tax Savings Calculator (Reasonable Salary & FICA Elimination)",
+    shortDesc: "Calculate annual self-employment tax savings from electing S-Corporation tax status vs sole proprietorship LLC after reasonable salary and admin overhead.",
+    seoTitle: "S-Corp Tax Savings Calculator 2026 – Compare LLC vs S-Corp",
+    metaDescription: "Calculate S-Corp tax savings vs LLC sole proprietorship. Optimize reasonable W-2 salary, eliminate 15.3% self-employment tax, and net out fees. Free.",
+    category: "business",
+    group: "Contractor & Freelance Engines",
+    calcType: "s-corp-tax-savings",
+    defaultInputs: {
+      netProfit: 150000,
+      reasonableSalary: 70000,
+      adminOverhead: 2000,
+    },
+    formulaExplanation: "Net Savings = [(Net Business Profit - W-2 Officer Salary) × 15.3% FICA] - Annual Corporate Admin Overhead.",
+    workedExamples: [
+      {
+        title: "$160,000 Net Profit S-Corp vs LLC",
+        inputSummary: "$160k profit, $75k W-2 salary, $2,200 admin overhead.",
+        resultSummary: "Saves $10,805 net cash annually after subtracting payroll software and corporate tax preparation costs.",
+      },
+    ],
+    faqs: [
+      {
+        question: "At what net profit level does an S-Corp election make sense?",
+        answer: "An S-Corp election typically becomes financially advantageous when annual business net profit consistently reaches $70,000 to $80,000, where FICA tax savings outweigh corporate compliance costs.",
+      },
+      {
+        question: "What is reasonable compensation for an S-Corp owner?",
+        answer: "The IRS defines reasonable compensation as what you would pay an unrelated third party to perform your duties, considering industry wages, hours worked, and business complexity.",
+      },
+    ],
+    keywords: ["s-corp tax savings calculator", "reasonable salary calculator", "llc vs s-corp calculator", "self employment tax savings s-corp"],
+  },
+  {
+    id: "prog-paypal-fee-calculator",
+    slug: "paypal-fee-calculator",
+    name: "PayPal Merchant & Goods Fee Calculator",
+    title: "PayPal Fee & Reverse Net Payout Calculator",
+    shortDesc: "Calculate exact PayPal Invoicing (3.49% + $0.49), Checkout (2.99% + $0.49), and international transaction fees. Compute reverse invoice to receive full net pay.",
+    seoTitle: "PayPal Fee Calculator 2026 – Goods & Services & Invoicing",
+    metaDescription: "Calculate PayPal Goods & Services, merchant, and international transaction fees. Get exact reverse invoice amounts to receive 100% net payout. Free.",
+    category: "business",
+    group: "Contractor & Freelance Engines",
+    calcType: "paypal-fee",
+    defaultInputs: {
+      amount: 1000,
+      tier: "invoicing",
+      isInternational: false,
+      isReverse: false,
+    },
+    formulaExplanation: "Invoicing Fee = (Amount × 3.49%) + $0.49. Reverse Net Invoice = (Target Net + $0.49) / (1 - 0.0349).",
+    workedExamples: [
+      {
+        title: "Reverse Invoicing for $1,200 Net Payout",
+        inputSummary: "$1,200 net target, PayPal digital invoice.",
+        resultSummary: "Invoice $1,243.90 to receive exactly $1,200.00 in your PayPal account.",
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the PayPal fee for digital invoicing?",
+        answer: "PayPal Invoicing charges 3.49% + $0.49 for domestic digital invoices, while website checkouts carry 2.99% + $0.49.",
+      },
+      {
+        question: "How do I calculate the invoice amount to cover PayPal fees?",
+        answer: "Use the reverse formula: Gross = (Target Net + 0.49) / (1 - 0.0349). To net $1,000, bill $1,036.67.",
+      },
+    ],
+    keywords: ["paypal fee calculator", "paypal goods and services fee", "paypal invoice fee calculator", "reverse paypal fee calculator"],
   },
 ];

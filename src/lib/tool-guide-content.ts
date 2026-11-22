@@ -1,4 +1,5 @@
 import type { ToolDefinition } from "./tools-registry";
+import { HANDCRAFTED_GUIDES } from "./handcrafted-guides";
 
 export interface ToolGuideContent {
   title: string;
@@ -160,6 +161,10 @@ function getCategoryMethodology(tool: ToolDefinition): {
 }
 
 export function generateToolGuide(tool: ToolDefinition): ToolGuideContent {
+  if (HANDCRAFTED_GUIDES[tool.slug]) {
+    return HANDCRAFTED_GUIDES[tool.slug];
+  }
+
   const methodology = getCategoryMethodology(tool);
   const regionText = tool.region && tool.region !== "GLOBAL" ? ` tailored for ${tool.region} regulations and standards` : "";
 

@@ -825,5 +825,57 @@ export function generateProgrammaticTools(): ToolDefinition[] {
     });
   }
 
+  // ==========================================
+  // FAMILY 10: High-Value Mortgage & Loan Engines
+  // ==========================================
+  programmaticList.push({
+    id: "prog-fha-loan-calculator",
+    slug: "fha-loan-calculator",
+    name: "FHA Loan Calculator",
+    title: "FHA Loan Calculator (Upfront & Annual MIP Monthly Payment Formula)",
+    shortDesc: "Calculate monthly FHA mortgage payments, 1.75% Upfront MIP, and 0.55% annual mortgage insurance. Model exact 3.5% down payment loan terms.",
+    seoTitle: "FHA Loan Calculator 2026 – Upfront & Monthly MIP Formula",
+    metaDescription: "Calculate monthly FHA mortgage payments, 1.75% Upfront MIP, and 0.55% annual mortgage insurance. Model exact 3.5% down payment loan terms. Free.",
+    category: "real-estate",
+    group: "Mortgage & Property Finance",
+    region: "US",
+    cpcTier: "high",
+    engineType: "native",
+    componentKey: "fha-loan-engine",
+    status: "live",
+    indexable: true,
+    isWasm: false,
+    trending: true,
+    publishWave: 2,
+    keywords: [
+      "fha loan calculator",
+      "fha mortgage payment calculator",
+      "fha mip calculator",
+      "upfront mip calculator",
+      "fha monthly payment formula",
+      "3.5 down payment calculator",
+    ],
+    formulaExplanation: "Total Monthly Payment = Principal & Interest(Base Loan × 1.0175) + [(Base Loan × 0.0055) / 12].",
+    workedExamples: [
+      {
+        title: "$350,000 Purchase at 3.5% Down (6.5% Rate)",
+        inputSummary: "$350k price, $12,250 down payment, 6.5% 30-year fixed rate.",
+        resultSummary: "Monthly P&I: $2,172.18, Monthly MIP: $154.80. Total monthly housing payment is $2,326.98.",
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the minimum down payment for an FHA loan?",
+        answer: "3.5% for borrowers with a credit score of 580 or higher (10% for credit scores between 500 and 579).",
+      },
+      {
+        question: "Does FHA MIP ever cancel?",
+        answer: "If you put down less than 10%, annual MIP persists for the full 30-year life of the loan unless refinanced into a conventional loan.",
+      },
+    ],
+    faq: [{ q: "Does this calculation upload my personal housing data?", a: "No, all amortization and MIP calculations execute 100% locally in your browser." }],
+    relatedSlugs: ["mortgage-calculator", "rent-vs-buy", "rental-roi-calculator"],
+  });
+
   return programmaticList;
 }
