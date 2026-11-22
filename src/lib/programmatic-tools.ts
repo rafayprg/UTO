@@ -7,6 +7,7 @@ import { US_MAJOR_CITIES } from "@/data/programmatic/us-cities";
 import { INVESTMENT_CRYPTO_TOOLS } from "@/data/programmatic/investments-crypto";
 import { GROWTH_ECOMMERCE_TOOLS } from "@/data/programmatic/growth-ecommerce";
 import { CONTRACTOR_BILLING_TOOLS } from "@/data/programmatic/contractor-billing";
+import { US_INSURANCE_DATA } from "@/data/programmatic/us-insurance";
 import type { ToolDefinition } from "./tools-registry";
 
 /**
@@ -876,6 +877,383 @@ export function generateProgrammaticTools(): ToolDefinition[] {
     faq: [{ q: "Does this calculation upload my personal housing data?", a: "No, all amortization and MIP calculations execute 100% locally in your browser." }],
     relatedSlugs: ["mortgage-calculator", "rent-vs-buy", "rental-roi-calculator"],
   });
+
+  // ==========================================
+  // FAMILY 11: 50 US States Insurance & Refinance Engines (200 Tools)
+  // ==========================================
+  for (const ins of US_INSURANCE_DATA) {
+    // 1. Car Insurance Calculator
+    programmaticList.push({
+      id: `prog-${ins.slug}-car-insurance-calculator`,
+      slug: `${ins.slug}-car-insurance-calculator`,
+      name: `${ins.stateName} Car Insurance Calculator`,
+      title: `${ins.stateName} Car Insurance Calculator (Rates & Statutory Minimums)`,
+      shortDesc: `Calculate estimated car insurance rates in ${ins.stateName} (${ins.stateCode}) based on statutory ${ins.minLiabilityBodilyPerPerson}/${ins.minLiabilityBodilyTotal}/${ins.minLiabilityProperty} minimums and full coverage tiers.`,
+      seoTitle: `${ins.stateName} Car Insurance Calculator 2026 – Auto Rates`,
+      metaDescription: `Calculate ${ins.stateName} car insurance costs. Compare minimum vs full coverage against state average ($${ins.avgAnnualCarInsurance}/yr). 100% private.`,
+      category: "insurance",
+      group: "State Auto Insurance",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-insurance-engine",
+      preset: { stateCode: ins.stateCode, toolType: "car-insurance" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["california", "texas", "florida", "new-york"].includes(ins.slug),
+      publishWave: 2,
+      keywords: [
+        `${ins.stateName.toLowerCase()} car insurance calculator`,
+        `${ins.slug} auto insurance rates`,
+        `how much is car insurance in ${ins.stateName.toLowerCase()}`,
+        `${ins.stateCode.toLowerCase()} minimum auto liability`,
+      ],
+      formulaExplanation: `Estimated Annual Premium = State Baseline ($${ins.avgAnnualCarInsurance}) × Coverage Tier Factor × Driver Age & History Risk Coefficients.`,
+      workedExamples: [
+        {
+          title: `Full Coverage in ${ins.stateName} (Age 35, Clean Record)`,
+          inputSummary: `Full collision and comprehensive coverage, statutory ${ins.minLiabilityBodilyPerPerson}/${ins.minLiabilityBodilyTotal}/${ins.minLiabilityProperty} limits.`,
+          resultSummary: `Estimated annual premium is ~$${ins.avgAnnualCarInsurance.toLocaleString()} (~$${Math.round(ins.avgAnnualCarInsurance / 12)}/month).`,
+        },
+      ],
+      faqs: [
+        {
+          question: `What are the minimum auto insurance requirements in ${ins.stateName}?`,
+          answer: `${ins.stateName} mandates minimum liability limits of $${ins.minLiabilityBodilyPerPerson},000 bodily injury per person, $${ins.minLiabilityBodilyTotal},000 bodily injury per accident, and $${ins.minLiabilityProperty},000 property damage.`,
+        },
+        {
+          question: `What is the average cost of car insurance in ${ins.stateName}?`,
+          answer: `The average annual full coverage rate in ${ins.stateName} is approximately $${ins.avgAnnualCarInsurance.toLocaleString()} per year ($${Math.round(ins.avgAnnualCarInsurance / 12)}/month).`,
+        },
+      ],
+      faq: [{ q: `Who regulates auto insurers in ${ins.stateName}?`, a: `The ${ins.statutoryInsuranceRegulator}.` }],
+      relatedSlugs: [`${ins.slug}-auto-refinance-calculator`, `${ins.slug}-home-insurance-calculator`, "auto-deductible-vs-premium"],
+    });
+
+    // 2. Home Insurance Calculator
+    programmaticList.push({
+      id: `prog-${ins.slug}-home-insurance-calculator`,
+      slug: `${ins.slug}-home-insurance-calculator`,
+      name: `${ins.stateName} Homeowners Insurance Calculator`,
+      title: `${ins.stateName} Homeowners Insurance Calculator (Dwelling Coverage A)`,
+      shortDesc: `Calculate recommended dwelling Coverage A replacement cost and homeowners insurance premiums in ${ins.stateName}.`,
+      seoTitle: `${ins.stateName} Home Insurance Calculator 2026 – Rebuild Costs`,
+      metaDescription: `Calculate ${ins.stateName} homeowners insurance costs on $350k+ dwelling. Compare local deductibles against state average ($${ins.avgAnnualHomeInsurance}/yr). Free.`,
+      category: "insurance",
+      group: "State Property Insurance",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-insurance-engine",
+      preset: { stateCode: ins.stateCode, toolType: "home-insurance" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["florida", "texas", "california", "louisiana"].includes(ins.slug),
+      publishWave: 2,
+      keywords: [
+        `${ins.stateName.toLowerCase()} home insurance calculator`,
+        `${ins.slug} homeowners insurance rates`,
+        `average home insurance cost in ${ins.stateName.toLowerCase()}`,
+        "dwelling coverage replacement cost estimator",
+      ],
+      formulaExplanation: `Home Premium = State Benchmark ($${ins.avgAnnualHomeInsurance} on $350k) × (Dwelling Value / $350,000) × Deductible Modifier.`,
+      workedExamples: [
+        {
+          title: `$375,000 Dwelling Coverage in ${ins.stateName}`,
+          inputSummary: `$375,000 replacement value, $1,000 standard deductible.`,
+          resultSummary: `Estimated annual policy cost is ~$${Math.round(ins.avgAnnualHomeInsurance * (375 / 350)).toLocaleString()}/yr (~$${Math.round((ins.avgAnnualHomeInsurance * (375 / 350)) / 12)}/month).`,
+        },
+      ],
+      faqs: [
+        {
+          question: `How much is average home insurance in ${ins.stateName}?`,
+          answer: `Average annual homeowners insurance in ${ins.stateName} is approximately $${ins.avgAnnualHomeInsurance.toLocaleString()} per year on a typical single-family home.`,
+        },
+      ],
+      faq: [{ q: `Does standard insurance cover flood in ${ins.stateName}?`, a: "No, flood coverage requires a separate NFIP or private flood endorsement." }],
+      relatedSlugs: [`${ins.slug}-car-insurance-calculator`, "homeowners-replacement-cost", "flood-insurance-risk-estimator"],
+    });
+
+    // 3. Auto Refinance Calculator
+    programmaticList.push({
+      id: `prog-${ins.slug}-auto-refinance-calculator`,
+      slug: `${ins.slug}-auto-refinance-calculator`,
+      name: `${ins.stateName} Auto Refinance Calculator`,
+      title: `${ins.stateName} Auto Refinance Calculator (Monthly & Lifetime Savings)`,
+      shortDesc: `Determine your monthly and lifetime interest savings by refinancing an existing car loan in ${ins.stateName} to current ${ins.avgAutoLoanRate}% rates.`,
+      seoTitle: `${ins.stateName} Auto Refinance Calculator 2026 – Car Loan Savings`,
+      metaDescription: `Calculate car loan refinance savings in ${ins.stateName}. Lower your APR to current ${ins.avgAutoLoanRate}% benchmark and save thousands. Free.`,
+      category: "insurance",
+      group: "Auto Loans & Refinance",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-insurance-engine",
+      preset: { stateCode: ins.stateCode, toolType: "auto-refinance" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: false,
+      publishWave: 2,
+      keywords: [
+        `${ins.stateName.toLowerCase()} auto refinance calculator`,
+        `refinance car loan ${ins.slug}`,
+        "car loan refinance savings calculator",
+        "auto refinance apr reduction formula",
+      ],
+      formulaExplanation: `Monthly Savings = Amortization(Old APR, Balance, Months) - Amortization(New APR, Balance, Months). Total Savings = Monthly Savings × Months.`,
+      workedExamples: [
+        {
+          title: `Dropping from 9.5% to ${ins.avgAutoLoanRate}% on $28,000 Loan`,
+          inputSummary: `$28k balance, 48 remaining months in ${ins.stateName}.`,
+          resultSummary: `Saves ~$${Math.round(ins.avgRefiSavingsAnnual / 12)}/month, totaling ~$${ins.avgRefiSavingsAnnual.toLocaleString()} in interest savings.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `What is the average auto loan interest rate in ${ins.stateName}?`,
+          answer: `The average benchmark auto refinance rate in ${ins.stateName} currently sits near ${ins.avgAutoLoanRate}% for prime credit borrowers.`,
+        },
+      ],
+      faq: [{ q: `Does refinancing hurt credit score?`, a: "A temporary hard inquiry drop of 3–5 points occurs, but is quickly recovered by lowering monthly debt obligations." }],
+      relatedSlugs: [`${ins.slug}-car-insurance-calculator`, "auto-refinance-calculator", "debt-payoff-calculator"],
+    });
+
+    // 4. Term Life Insurance Needs Calculator
+    programmaticList.push({
+      id: `prog-${ins.slug}-term-life-insurance-calculator`,
+      slug: `${ins.slug}-term-life-insurance-calculator`,
+      name: `${ins.stateName} Term Life Insurance Calculator`,
+      title: `${ins.stateName} Term Life Insurance Needs Calculator (DIME Method)`,
+      shortDesc: `Calculate recommended term life insurance coverage in ${ins.stateName} using the DIME formula (Debt, Income, Mortgage, Education).`,
+      seoTitle: `${ins.stateName} Term Life Insurance Calculator 2026 – DIME Need`,
+      metaDescription: `Calculate term life insurance needs in ${ins.stateName}. Size your 20-30 year term policy using the DIME formula with zero data retention. Free.`,
+      category: "insurance",
+      group: "Life & Disability Insurance",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-insurance-engine",
+      preset: { stateCode: ins.stateCode, toolType: "term-life" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: false,
+      publishWave: 2,
+      keywords: [
+        `${ins.stateName.toLowerCase()} life insurance calculator`,
+        `${ins.slug} term life policy size`,
+        "dime life insurance calculator",
+        "how much life insurance do i need",
+      ],
+      formulaExplanation: `Life Insurance Need = Outstanding Debt + (Annual Income × 10) + Mortgage Balance + (Children × $100,000 Education).`,
+      workedExamples: [
+        {
+          title: `Family with 2 Kids in ${ins.stateName} ($95k Income)`,
+          inputSummary: `$95k salary, $280k mortgage, $25k debt, 2 college funds.`,
+          resultSummary: `Recommended policy size is $1.455 Million across a 20-year or 30-year term.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `How much term life insurance is recommended for families in ${ins.stateName}?`,
+          answer: `Financial planners recommend 10 to 12 times your annual household income plus full payoff of residential mortgage and children's future education funds.`,
+        },
+      ],
+      faq: [{ q: `Is life insurance payout taxable in ${ins.stateName}?`, a: "Federal and state laws generally exempt term life lump-sum death benefits from income taxes." }],
+      relatedSlugs: [`${ins.slug}-home-insurance-calculator`, "term-life-insurance-calculator", "term-vs-whole-life"],
+    });
+  }
+
+  // ==========================================
+  // FAMILY 12: US Major Metro Real Estate & Rental ROI (160 Tools)
+  // ==========================================
+  for (const c of US_MAJOR_CITIES) {
+    const defaultPrice = Math.round(380000 * (c.costOfLivingIndex / 100));
+    const defaultRent = Math.round(1950 * (c.costOfLivingIndex / 100));
+
+    // 1. Metro Mortgage Calculator
+    programmaticList.push({
+      id: `prog-${c.slug}-mortgage-calculator`,
+      slug: `${c.slug}-mortgage-calculator`,
+      name: `${c.name} Mortgage Calculator`,
+      title: `${c.name} Mortgage Calculator (Taxes, Insurance & PITI)`,
+      shortDesc: `Calculate monthly mortgage payments in ${c.name}, ${c.stateCode} with local county property tax rates and home prices.`,
+      seoTitle: `${c.name} Mortgage Calculator 2026 – Monthly PITI & Taxes`,
+      metaDescription: `Calculate ${c.name} monthly mortgage payments. Includes local property taxes, homeowners insurance, and amortization schedules. Free.`,
+      category: "real-estate",
+      group: "Metro Mortgage & Property",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "metro-real-estate-engine",
+      preset: { citySlug: c.slug, toolType: "mortgage" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["new-york-city", "los-angeles", "chicago", "houston", "miami"].includes(c.slug),
+      publishWave: 2,
+      keywords: [
+        `${c.name.toLowerCase()} mortgage calculator`,
+        `mortgage payments in ${c.name.toLowerCase()}`,
+        `${c.slug} property tax mortgage calculator`,
+        "monthly piti calculator",
+      ],
+      formulaExplanation: `Monthly PITI = Principal & Interest + (Home Price × Local Property Tax / 12) + Hazard Insurance.`,
+      workedExamples: [
+        {
+          title: `Median Home in ${c.name} ($${defaultPrice.toLocaleString()})`,
+          inputSummary: `20% down ($${Math.round(defaultPrice * 0.2).toLocaleString()}), 6.65% 30-year fixed loan.`,
+          resultSummary: `Estimated total monthly payment is ~$${Math.round(defaultPrice * 0.0078)}/month including local taxes.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `What is the average home price in ${c.name}?`,
+          answer: `Based on a Cost of Living Index of ${c.costOfLivingIndex}, the benchmark median home price is approximately $${defaultPrice.toLocaleString()}.`,
+        },
+      ],
+      faq: [{ q: `Does this calculator upload my home search data?`, a: "No, all amortization runs 100% locally in your browser." }],
+      relatedSlugs: [`${c.slug}-rent-vs-buy-calculator`, `${c.slug}-closing-costs-calculator`, "mortgage-calculator"],
+    });
+
+    // 2. Metro Rent vs. Buy Calculator
+    programmaticList.push({
+      id: `prog-${c.slug}-rent-vs-buy-calculator`,
+      slug: `${c.slug}-rent-vs-buy-calculator`,
+      name: `${c.name} Rent vs. Buy Calculator`,
+      title: `${c.name} Rent vs. Buy Calculator (5-Year Break-Even Analysis)`,
+      shortDesc: `Determine whether renting or buying is mathematically superior in ${c.name}, ${c.stateCode} factoring in home appreciation and rent inflation.`,
+      seoTitle: `${c.name} Rent vs Buy Calculator 2026 – Break-Even Analysis`,
+      metaDescription: `Compare buying vs renting in ${c.name}. Calculate 5-year equity gains, rent inflation, and break-even timelines. 100% private.`,
+      category: "real-estate",
+      group: "Metro Housing Decisions",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "metro-real-estate-engine",
+      preset: { citySlug: c.slug, toolType: "rent-vs-buy" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["new-york-city", "san-francisco", "austin", "seattle"].includes(c.slug),
+      publishWave: 2,
+      keywords: [
+        `rent vs buy ${c.name.toLowerCase()}`,
+        `is it better to rent or buy in ${c.name.toLowerCase()}`,
+        `${c.slug} housing break even calculator`,
+        "buy vs rent financial decision model",
+      ],
+      formulaExplanation: `5-Year Net Comparison = (Cumulative Rent + Inflation) vs (Mortgage Interest + Taxes + Maintenance - Equity Gained from Amortization & Appreciation).`,
+      workedExamples: [
+        {
+          title: `Renting ($${defaultRent}/mo) vs Buying ($${defaultPrice.toLocaleString()}) in ${c.name}`,
+          inputSummary: `Comparing 5 years of renting vs purchasing with 20% down.`,
+          resultSummary: `Purchasing reaches break-even between 3.8 and 5.5 years depending on local appreciation rates.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `How many years does it take to break even on buying a home in ${c.name}?`,
+          answer: `In ${c.name}, the financial break-even between renting and buying typically ranges from 3.5 to 6 years depending on mortgage rates and market appreciation.`,
+        },
+      ],
+      faq: [{ q: `Are rental rates rising in ${c.name}?`, a: "Historical metro inflation has averaged 3.0% to 5.0% annually." }],
+      relatedSlugs: [`${c.slug}-mortgage-calculator`, "rent-vs-buy", "rental-roi-calculator"],
+    });
+
+    // 3. Metro Closing Costs Calculator
+    programmaticList.push({
+      id: `prog-${c.slug}-closing-costs-calculator`,
+      slug: `${c.slug}-closing-costs-calculator`,
+      name: `${c.name} Closing Costs Calculator`,
+      title: `${c.name} Closing Costs Calculator (Buyer & Seller Fees)`,
+      shortDesc: `Estimate buyer and seller closing costs, title escrow fees, transfer taxes, and prepaid escrows in ${c.name}, ${c.stateCode}.`,
+      seoTitle: `${c.name} Closing Costs Calculator 2026 – Buyer Escrow Fees`,
+      metaDescription: `Calculate buyer closing costs in ${c.name}. Model lender fees, title insurance, transfer taxes, and prepaid escrows. Free.`,
+      category: "real-estate",
+      group: "Metro Real Estate Transactions",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "metro-real-estate-engine",
+      preset: { citySlug: c.slug, toolType: "closing-costs" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: false,
+      publishWave: 2,
+      keywords: [
+        `${c.name.toLowerCase()} closing costs calculator`,
+        `how much are closing costs in ${c.name.toLowerCase()}`,
+        `${c.slug} title insurance and escrow fees`,
+        "buyer closing cost estimator",
+      ],
+      formulaExplanation: `Closing Costs = Lender Fees ($1,500) + Title Escrow & Appraisal ($2,800) + Prepaid Escrows (6 mo Taxes + 1 yr Insurance) + Transfer Taxes (0.75%).`,
+      workedExamples: [
+        {
+          title: `Buyer Closing Costs on $${defaultPrice.toLocaleString()} Home in ${c.name}`,
+          inputSummary: `Standard conventional purchase with 20% down.`,
+          resultSummary: `Estimated closing costs are ~$${Math.round(defaultPrice * 0.026).toLocaleString()} (~2.6% of purchase price).`,
+        },
+      ],
+      faqs: [
+        {
+          question: `What percentage are closing costs in ${c.name}?`,
+          answer: `Buyer closing costs in ${c.name} typically average 2.0% to 3.5% of the total purchase price.`,
+        },
+      ],
+      faq: [{ q: `Can closing costs be rolled into the loan?`, a: "On purchases, buyers generally pay closing costs in cash or negotiate seller concessions." }],
+      relatedSlugs: [`${c.slug}-mortgage-calculator`, "mortgage-calculator", "fha-loan-calculator"],
+    });
+
+    // 4. Metro Rental & Airbnb ROI Calculator
+    programmaticList.push({
+      id: `prog-${c.slug}-rental-roi-calculator`,
+      slug: `${c.slug}-rental-roi-calculator`,
+      name: `${c.name} Rental Property ROI Calculator`,
+      title: `${c.name} Rental Property & Airbnb ROI Calculator (Cap Rate & Cash-on-Cash)`,
+      shortDesc: `Calculate Net Operating Income (NOI), capitalization rate, and cash-on-cash return for investment properties in ${c.name}, ${c.stateCode}.`,
+      seoTitle: `${c.name} Rental ROI Calculator 2026 – Cap Rate & Cash Flow`,
+      metaDescription: `Calculate rental property ROI and Cap Rate in ${c.name}. Model gross rents, HOA, property taxes, and net annual cash flow. Free.`,
+      category: "real-estate",
+      group: "Metro Investment Property",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "metro-real-estate-engine",
+      preset: { citySlug: c.slug, toolType: "rental-roi" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["miami", "austin", "orlando", "las-vegas", "phoenix"].includes(c.slug),
+      publishWave: 2,
+      keywords: [
+        `${c.name.toLowerCase()} rental roi calculator`,
+        `cap rate calculator ${c.name.toLowerCase()}`,
+        `${c.slug} investment property cash flow`,
+        "airbnb rental yield calculator",
+      ],
+      formulaExplanation: `Cap Rate = (Net Operating Income / Property Purchase Price) × 100. Cash-on-Cash = (Annual Net Cash Flow / Initial Cash Invested) × 100.`,
+      workedExamples: [
+        {
+          title: `Investment Property in ${c.name} ($${Math.round(defaultRent * 1.25)}/mo Rent)`,
+          inputSummary: `$${defaultPrice.toLocaleString()} acquisition with 25% down.`,
+          resultSummary: `Generates a Cap Rate of ~5.2% to 6.8% with positive net annual cash flow after debt service.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `What is a good Cap Rate in ${c.name}?`,
+          answer: `In ${c.name}, competitive residential Cap Rates generally fall between 4.5% and 7.0% depending on neighborhood class and tenant profile.`,
+        },
+      ],
+      faq: [{ q: `Does this support short-term Airbnb rentals?`, a: "Yes, you can input projected monthly short-term rental revenue directly." }],
+      relatedSlugs: [`${c.slug}-mortgage-calculator`, "rental-roi-calculator", "rent-vs-buy"],
+    });
+  }
 
   return programmaticList;
 }

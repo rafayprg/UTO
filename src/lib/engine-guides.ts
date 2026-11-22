@@ -61,6 +61,16 @@ const ENGINE_COPY: Record<string, { how: string; check: string; privacy: string 
     check: "Review total monthly PITI payments. Note that with down payment under 10%, FHA annual MIP persists for the full 30-year term unless refinanced.",
     privacy: "Your home purchase and financing parameters stay 100% in your local browser sandbox. No financial data is ever sent to any remote server.",
   },
+  "state-insurance-engine": {
+    how: "Select your coverage tier, input driver/home parameters, or set loan amounts to compute state-specific insurance premiums and refinance savings.",
+    check: "Compare against your current policy declaration page. Note that statutory minimum liability limits vary significantly by state.",
+    privacy: "Your vehicle, property, and personal financial data remain 100% inside your browser session with zero server retention.",
+  },
+  "metro-real-estate-engine": {
+    how: "Enter property price, down payment, interest rate, or monthly rent. The engine models local property tax schedules, closing costs, and rental ROI.",
+    check: "Review the local cost-of-living index and county property tax schedules. Use metrics for real estate budgeting and investment evaluation.",
+    privacy: "Your property investments and housing numbers execute locally on your machine with complete confidentiality.",
+  },
 };
 
 export function toolGuideSections(tool: ToolDefinition): GuideSection[] {

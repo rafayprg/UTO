@@ -65,6 +65,8 @@ const components: Record<string, ComponentType<ToolProps>> = {
   "growth-ecommerce-engine": dynamic(() => import("./programmatic/GrowthEcommerceEngine"), { ssr: false, loading }),
   "contractor-billing-engine": dynamic(() => import("./programmatic/ContractorBillingEngine"), { ssr: false, loading }),
   "fha-loan-engine": dynamic(() => import("./programmatic/FhaLoanEngine"), { ssr: false, loading }),
+  "state-insurance-engine": dynamic(() => import("./programmatic/StateInsuranceEngine"), { ssr: false, loading }),
+  "metro-real-estate-engine": dynamic(() => import("./programmatic/MetroRealEstateEngine"), { ssr: false, loading }),
 
   // Shared Engines
   "text-engine": dynamic(() => import("./engines/TextEngine"), { ssr: false, loading }),
