@@ -3,14 +3,25 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { BrandJsonLd } from "@/components/seo/BrandJsonLd";
 import { GoogleAnalytics } from "@/components/seo/GoogleAnalytics";
+import { SearchDialog } from "@/components/layout/SearchDialog";
 import { site } from "@/lib/site";
+import { Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
+import "./ui.css";
+import "./engines.css";
+
+const schibsted = Schibsted_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-schibsted",
+  display: "swap",
+});
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#090d16",
+  themeColor: "#f5f6f2",
 };
 
 export const metadata: Metadata = {
@@ -91,7 +102,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-US">
+    <html lang="en-US" className={schibsted.variable}>
       <head>
         <BrandJsonLd />
         <GoogleAnalytics />
@@ -103,6 +114,7 @@ export default function RootLayout({
         <Header />
         <main id="main">{children}</main>
         <Footer />
+        <SearchDialog />
       </body>
     </html>
   );

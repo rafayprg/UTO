@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
-import GoatLandingPage from "@/components/3d/GoatLandingPage";
+import { HomePage } from "@/components/home/HomePage";
+import { publishedTools } from "@/lib/published";
+
+const total = publishedTools.length.toLocaleString("en-US");
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
   title: {
-    absolute: "Localtools — 1,322+ 100% Free Private Browser Tools for Work, Code & Everyday Math",
+    absolute: `Localtools — ${total} Free Private Tools That Run in Your Browser`,
   },
-  description:
-    "One unified 3D-accelerated workspace of 1,034+ 100% free professional tools for PDFs, finance, code, media, and calculations. Zero server uploads. 100% private in-browser execution.",
+  description: `${total} free calculators, converters and document builders. Paycheck and tax tools for every US state, PDF and image tools, and more. Nothing is uploaded.`,
   openGraph: {
-    title: "Localtools — 1,034+ Free Private Browser Tools",
-    description:
-      "1,034+ browser-native utilities with 0 server uploads. 100% private client-side execution.",
+    title: `Localtools — ${total} Free Private Browser Tools`,
+    description: `${total} free tools that run in your browser. No uploads, no sign-up.`,
     url: "/",
     siteName: "Localtools",
     locale: "en_US",
@@ -20,5 +21,5 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return <GoatLandingPage />;
+  return <HomePage />;
 }

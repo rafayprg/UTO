@@ -97,11 +97,25 @@ class ToolBoundary extends Component<{ children: ReactNode }, { failed: boolean 
   }
 }
 
+// Engines drawn with a dark Tailwind palette. They are shown inside a wrapper
+// that flips the palette to match the light site theme (see app/engines.css).
+const DARK_PALETTE_ENGINES = new Set([
+  "city-tax-paycheck-engine",
+  "investment-crypto-engine",
+  "growth-ecommerce-engine",
+  "contractor-billing-engine",
+  "fha-loan-engine",
+  "state-insurance-engine",
+  "metro-real-estate-engine",
+  "state-legal-document-engine",
+]);
+
 export function ToolRenderer({ tool }: { tool: ToolDefinition }) {
   const Tool = components[tool.componentKey] || PlannedTool;
-  return (
+  const workspace = (
     <ToolBoundary key={tool.slug}>
       <Tool preset={tool.preset} tool={tool} />
     </ToolBoundary>
   );
+  return DARK_PALETTE_ENGINES.has(tool.componentKey) ? <div className="lt-invert">{workspace}</div> : workspace;
 }

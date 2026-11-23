@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { US_STATES } from "@/data/programmatic/us-states";
 import type { ToolDefinition } from "@/lib/tools-registry";
 import { ShieldCheck, MapPin } from "lucide-react";
+import { FEDERAL_BRACKETS_SINGLE, FEDERAL_STANDARD_DEDUCTION } from "@/lib/paycheck";
 
 interface PresetData {
   stateCode?: string;
@@ -11,18 +12,6 @@ interface PresetData {
   calcMode?: "paycheck" | "sales-tax" | "overtime" | "hourly" | "1099-tax";
 }
 
-// 2026 Federal Brackets (Single)
-const FEDERAL_BRACKETS_SINGLE = [
-  { threshold: 0, rate: 0.10 },
-  { threshold: 11600, rate: 0.12 },
-  { threshold: 47150, rate: 0.22 },
-  { threshold: 100525, rate: 0.24 },
-  { threshold: 191950, rate: 0.32 },
-  { threshold: 243725, rate: 0.35 },
-  { threshold: 609350, rate: 0.37 },
-];
-
-const FEDERAL_STANDARD_DEDUCTION = 14600;
 
 export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition }) {
   const preset = (tool.preset || {}) as PresetData;
