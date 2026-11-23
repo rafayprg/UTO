@@ -226,9 +226,9 @@ export default function StateInsuranceEngine({ tool }: StateInsuranceEngineProps
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm font-bold tracking-wide uppercase text-slate-200">
+              <h2 className="text-sm font-bold tracking-wide uppercase text-slate-200">
                 {tool.title}
-              </h1>
+              </h2>
               <span className="px-2 py-0.5 text-[10px] font-mono font-medium rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">
                 {stateData.stateCode} · 100% Client-Side
               </span>

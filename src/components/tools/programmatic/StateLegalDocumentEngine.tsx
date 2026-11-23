@@ -352,9 +352,9 @@ export default function StateLegalDocumentEngine({ tool }: StateLegalDocumentEng
                 100% Client-Side Private
               </span>
             </div>
-            <h1 className="text-lg font-bold text-white tracking-tight">
+            <h2 className="text-lg font-bold text-slate-100 tracking-tight">
               {tool.title}
-            </h1>
+            </h2>
           </div>
         </div>
 

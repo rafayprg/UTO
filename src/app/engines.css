@@ -1,0 +1,219 @@
+/* ==========================================================================
+   Styles for the shared programmatic engine markup
+   (StateTaxPaycheck, PlatformFee, Tier1CountryFinance, FormatPair, UnitPair).
+   These class names had no CSS before, so those tools rendered unstyled.
+   ========================================================================== */
+
+.engine-card {
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-m);
+  background: var(--paper);
+}
+.card-row-between {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+.state-badge-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.state-flag-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 999px;
+  background: var(--ink); color: var(--paper);
+  font-size: 0.88rem; font-weight: 600;
+}
+.income-tax-status { font-size: 0.9rem; color: var(--graphite); }
+.income-tax-status strong { color: var(--ledger) !important; }
+
+.state-select-label {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 0.88rem; font-weight: 600; color: var(--graphite);
+}
+.state-select {
+  height: 40px; padding: 0 34px 0 12px; border-radius: var(--radius-s);
+  border: 1px solid var(--rule-strong); background: var(--surface);
+  color: var(--ink); font-size: 0.95rem; font-weight: 500; max-width: 100%;
+}
+
+.calc-layout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(16px, 3vw, 32px);
+  align-items: start;
+}
+.input-panel h3, .results-panel h3 {
+  font-size: 1rem; font-weight: 700; letter-spacing: -0.01em;
+  margin-bottom: 16px; color: var(--ink);
+}
+.field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field-group label { font-size: 0.88rem; font-weight: 600; color: var(--graphite); }
+.field-group input:not([type="checkbox"]):not([type="radio"]),
+.field-group select,
+.field-group textarea {
+  width: 100%; min-height: 46px; padding: 10px 12px;
+  border-radius: var(--radius-s); border: 1px solid var(--rule-strong);
+  background: var(--paper); color: var(--ink); font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+.field-group textarea { min-height: 160px; font-family: ui-monospace, Consolas, monospace; font-size: 0.9rem; }
+.field-group input:focus, .field-group select:focus, .field-group textarea:focus {
+  outline: 2px solid var(--ledger); outline-offset: 0; border-color: var(--ledger); background: var(--surface);
+}
+.checkbox-group { flex-direction: row; align-items: center; gap: 10px; }
+.checkbox-group input { width: 18px; height: 18px; accent-color: var(--ledger); }
+.field-hint { font-size: 0.85rem; color: var(--graphite); }
+
+.results-panel {
+  padding: clamp(16px, 2.5vw, 24px);
+  border-radius: var(--radius-m);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+}
+.metric-highlight {
+  display: flex; flex-direction: column; gap: 2px;
+  padding-bottom: 16px; margin-bottom: 8px;
+  border-bottom: 1px dashed var(--rule-strong);
+}
+.metric-highlight span { font-size: 0.9rem; color: var(--graphite); }
+.metric-highlight strong {
+  align-self: flex-start;
+  font-size: clamp(2rem, 1.5rem + 1.6vw, 2.75rem);
+  font-weight: 800; letter-spacing: -0.035em; line-height: 1.15;
+  color: var(--ink); font-variant-numeric: tabular-nums;
+  background: linear-gradient(transparent 55%, var(--marker) 55%, var(--marker) 92%, transparent 92%);
+  padding-inline: 2px;
+}
+.breakdown-table { display: grid; }
+.table-row {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+  padding: 9px 0; border-bottom: 1px solid var(--rule);
+  font-size: 0.93rem; color: var(--graphite);
+}
+.table-row > :last-child { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.table-row:last-child { border-bottom: 0; }
+.total-row { border-top: 1.5px solid var(--ink); border-bottom: 0; margin-top: 4px; padding-top: 12px; }
+.total-row > * { color: var(--ink) !important; font-weight: 700; }
+.negative-val { color: var(--danger) !important; }
+
+.reverse-calc-box {
+  margin-top: 16px; padding: 14px 16px; border-radius: var(--radius-s);
+  background: var(--ledger-tint); border: 1px solid #bcdcc9; font-size: 0.92rem;
+}
+.engine-footer-note {
+  display: flex; gap: 8px; align-items: flex-start;
+  margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--rule);
+  font-size: 0.85rem; color: var(--graphite);
+}
+.engine-footer-note svg { flex-shrink: 0; color: var(--ledger); margin-top: 2px; }
+
+.unit-pair-engine .center, .format-pair-engine .center { text-align: center; }
+.button.large { min-height: 50px; padding: 0 22px; font-size: 1rem; }
+
+@media (max-width: 760px) {
+  .calc-layout-grid { grid-template-columns: 1fr; }
+  .state-select-label { flex-direction: column; align-items: stretch; width: 100%; }
+}
+
+/* --------------------------------------------------------------------------
+   Light conversion for the dark "HUD" engines (insurance, legal, metro real
+   estate, FHA, contractor, growth, investment, city paycheck).
+   Tailwind v4 utilities read colors from CSS variables, so flipping the
+   scales inside this wrapper turns their dark panels into light ones
+   without rewriting each engine.
+   -------------------------------------------------------------------------- */
+.lt-invert {
+  --color-slate-50: #0e1411;
+  --color-slate-100: #15201b;
+  --color-slate-200: #252d29;
+  --color-slate-300: #39423d;
+  --color-slate-400: #56615b;
+  --color-slate-500: #66706a;
+  --color-slate-600: #8e988f;
+  --color-slate-700: #c3cac2;
+  --color-slate-800: #dce1da;
+  --color-slate-900: #f5f6f2;
+  --color-slate-950: #ffffff;
+
+  --color-indigo-50: #04211a;
+  --color-indigo-100: #08392a;
+  --color-indigo-200: #094834;
+  --color-indigo-300: #0a5940;
+  --color-indigo-400: #0c6b4e;
+  --color-indigo-500: #0c6b4e;
+  --color-indigo-600: #15201b;
+  --color-indigo-700: #08392a;
+  --color-indigo-800: #afd6bf;
+  --color-indigo-900: #d6ebdf;
+  --color-indigo-950: #edf6f1;
+
+  --color-blue-300: #0a5940;
+  --color-blue-400: #0c6b4e;
+  --color-blue-500: #0c6b4e;
+  --color-blue-600: #15201b;
+
+  --color-cyan-50: #04211a;
+  --color-cyan-100: #08392a;
+  --color-cyan-200: #094834;
+  --color-cyan-300: #0a5940;
+  --color-cyan-400: #0c6b4e;
+  --color-cyan-500: #237f58;
+  --color-cyan-600: #0c6b4e;
+  --color-cyan-700: #7cba98;
+  --color-cyan-800: #afd6bf;
+  --color-cyan-900: #d6ebdf;
+  --color-cyan-950: #edf6f1;
+
+  --color-teal-300: #0a5940;
+  --color-teal-400: #0c6b4e;
+  --color-teal-500: #237f58;
+  --color-teal-900: #d6ebdf;
+  --color-teal-950: #edf6f1;
+
+  --color-emerald-50: #022c22;
+  --color-emerald-100: #064e3b;
+  --color-emerald-200: #065f46;
+  --color-emerald-300: #047857;
+  --color-emerald-400: #047857;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #047857;
+  --color-emerald-700: #a7f3d0;
+  --color-emerald-800: #d1fae5;
+  --color-emerald-900: #ecfdf5;
+  --color-emerald-950: #f6fdf9;
+
+  --color-amber-100: #78350f;
+  --color-amber-200: #92400e;
+  --color-amber-300: #b45309;
+  --color-amber-400: #b45309;
+  --color-amber-500: #d97706;
+  --color-amber-600: #b45309;
+  --color-amber-700: #fcd34d;
+  --color-amber-800: #fde68a;
+  --color-amber-900: #fef3c7;
+  --color-amber-950: #fffbeb;
+
+  --color-rose-100: #881337;
+  --color-rose-200: #9f1239;
+  --color-rose-300: #be123c;
+  --color-rose-400: #be123c;
+  --color-rose-500: #e11d48;
+  --color-rose-600: #be123c;
+  --color-rose-700: #fda4af;
+  --color-rose-800: #fecdd3;
+  --color-rose-900: #ffe4e6;
+  --color-rose-950: #fff1f2;
+
+  --color-purple-300: #7e22ce;
+  --color-purple-400: #7e22ce;
+  --color-purple-500: #a855f7;
+  --color-purple-600: #7e22ce;
+  --color-purple-700: #d8b4fe;
+  --color-purple-800: #e9d5ff;
+  --color-purple-900: #f3e8ff;
+  --color-purple-950: #faf5ff;
+}
+.lt-invert ::placeholder { color: #8e988f; }
+.lt-invert input[type="range"] { accent-color: var(--ledger); }
