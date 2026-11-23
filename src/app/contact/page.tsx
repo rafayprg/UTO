@@ -86,7 +86,11 @@ export default function Contact() {
         <div className="embed">
           <h2>Technical Support & Inquiries</h2>
           <p>
-            For questions, bugs, or feature inquiries, our team actively monitors incoming requests. When submitting feedback, please avoid sharing private, confidential, or sensitive files.
+            For questions, bugs, or feature inquiries, our team actively monitors incoming requests at{" "}
+            <a href="mailto:support@techdeva.net" className="font-semibold text-foreground underline">
+              support@techdeva.net
+            </a>
+            . When submitting feedback, please avoid sharing private, confidential, or sensitive files.
           </p>
         </div>
 

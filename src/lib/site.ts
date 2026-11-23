@@ -1,2 +1,8 @@
-export const site = { name: "Localtools", url: process.env.NEXT_PUBLIC_SITE_URL || "http://68.233.120.24", description: "100% Free browser tools for PDFs, images, code, writing, and everyday calculations. Work locally with practical, example-led guides.", operatorName: process.env.NEXT_PUBLIC_OPERATOR_NAME || "", supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "" };
+export const site = {
+  name: "Localtools",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://free-local-tools.pages.dev",
+  description: "100% Free browser tools for PDFs, images, code, writing, and everyday calculations. Work locally with practical, example-led guides.",
+  operatorName: process.env.NEXT_PUBLIC_OPERATOR_NAME || "Localtools Engineering & Operations",
+  supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@techdeva.net",
+};
 export function absolute(path: string) { return new URL(path, site.url).toString(); }
