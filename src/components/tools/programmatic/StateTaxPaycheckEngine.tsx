@@ -8,7 +8,7 @@ import { ShieldCheck, MapPin } from "lucide-react";
 interface PresetData {
   stateCode?: string;
   stateSlug?: string;
-  calcMode?: "paycheck" | "sales-tax" | "overtime" | "hourly" | "1099-tax";
+  calcMode?: "paycheck" | "sales-tax" | "overtime" | "hourly" | "1099-tax" | "property-tax" | "capital-gains";
 }
 
 // 2026 Federal Brackets (Single)
@@ -30,6 +30,11 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
   const mode = preset.calcMode || "paycheck";
 
   const [selectedStateCode, setSelectedStateCode] = useState<string>(initialCode);
+
+  const stateData = useMemo(() => {
+    return US_STATES.find((s) => s.code === selectedStateCode) || US_STATES[0];
+  }, [selectedStateCode]);
+
   const [grossAnnual, setGrossAnnual] = useState<number>(75000);
   const [hourlyRate, setHourlyRate] = useState<number>(35);
   const [hoursPerWeek, setHoursPerWeek] = useState<number>(40);
@@ -46,9 +51,16 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
   // 1099 Self-Employment mode states
   const [businessExpenses, setBusinessExpenses] = useState<number>(12000);
 
-  const stateData = useMemo(() => {
-    return US_STATES.find((s) => s.code === selectedStateCode) || US_STATES[0];
-  }, [selectedStateCode]);
+  // Property Tax mode states
+  const [propertyValue, setPropertyValue] = useState<number>(stateData.medianHomePrice || 350000);
+  const [homesteadExemption, setHomesteadExemption] = useState<number>(25000);
+  const [propertyTaxRate, setPropertyTaxRate] = useState<number>(stateData.avgPropertyTaxRate || 1.1);
+
+  // Capital Gains mode states
+  const [assetPurchasePrice, setAssetPurchasePrice] = useState<number>(50000);
+  const [assetSalePrice, setAssetSalePrice] = useState<number>(85000);
+  const [holdingPeriod, setHoldingPeriod] = useState<"long-term" | "short-term">("long-term");
+  const [otherIncome, setOtherIncome] = useState<number>(95000);
 
   // Tax and Paycheck Calculations
   const calculations = useMemo(() => {
@@ -154,6 +166,42 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
     const totalWeeklyGross = regularPay + overtimePay + doubleTimePay;
     return { regularPay, overtimePay, doubleTimePay, totalWeeklyGross };
   }, [hourlyRate, hoursPerWeek, overtimeHours, doubleTimeHours]);
+
+  // Property Tax Mode calculation
+  const propertyTaxCalc = useMemo(() => {
+    const taxableValue = Math.max(0, propertyValue - homesteadExemption);
+    const annualTax = taxableValue * (propertyTaxRate / 100);
+    const monthlyEscrow = annualTax / 12;
+    const effectiveRate = propertyValue > 0 ? (annualTax / propertyValue) * 100 : 0;
+    return { taxableValue, annualTax, monthlyEscrow, effectiveRate };
+  }, [propertyValue, homesteadExemption, propertyTaxRate]);
+
+  // Capital Gains Mode calculation
+  const capitalGainsCalc = useMemo(() => {
+    const capitalGain = Math.max(0, assetSalePrice - assetPurchasePrice);
+    let federalRate = 0;
+    if (holdingPeriod === "long-term") {
+      if (otherIncome + capitalGain <= 47025) federalRate = 0;
+      else if (otherIncome + capitalGain <= 518900) federalRate = 0.15;
+      else federalRate = 0.20;
+    } else {
+      federalRate = 0.24;
+    }
+    const niitTax = (otherIncome + capitalGain > 200000 && capitalGain > 0) ? capitalGain * 0.038 : 0;
+    const fedGainsTax = capitalGain * federalRate + niitTax;
+
+    let stateGainsRate = 0;
+    if (stateData.hasIncomeTax) {
+      stateGainsRate = (stateData.topMarginalRate || 5.0) / 100;
+    }
+    const stateGainsTax = capitalGain * stateGainsRate;
+    const totalGainsTax = fedGainsTax + stateGainsTax;
+    const netGainsProceeds = capitalGain - totalGainsTax;
+    const totalCashOut = assetSalePrice - totalGainsTax;
+    const effectiveGainsRate = capitalGain > 0 ? (totalGainsTax / capitalGain) * 100 : 0;
+
+    return { capitalGain, fedGainsTax, stateGainsTax, totalGainsTax, netGainsProceeds, totalCashOut, effectiveGainsRate, federalRate: federalRate * 100, stateGainsRate: stateGainsRate * 100 };
+  }, [assetPurchasePrice, assetSalePrice, holdingPeriod, otherIncome, stateData]);
 
   return (
     <div className="state-tax-engine">
@@ -302,6 +350,166 @@ export default function StateTaxPaycheckEngine({ tool }: { tool: ToolDefinition 
                   <span>+${overtimeCalc.doubleTimePay.toFixed(2)}</span>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      ) : mode === "property-tax" ? (
+        <div className="calc-layout-grid">
+          <div className="input-panel">
+            <h3>{stateData.name} Property Tax Parameters</h3>
+            <div className="field-group">
+              <label>Home Assessed Value ($)</label>
+              <input
+                type="number"
+                min="0"
+                step="5000"
+                value={propertyValue}
+                onChange={(e) => setPropertyValue(Number(e.target.value) || 0)}
+              />
+              <p className="field-hint">Median state home value: ${stateData.medianHomePrice.toLocaleString()}</p>
+            </div>
+            <div className="field-group">
+              <label>Homestead Exemption ($)</label>
+              <input
+                type="number"
+                min="0"
+                step="1000"
+                value={homesteadExemption}
+                onChange={(e) => setHomesteadExemption(Number(e.target.value) || 0)}
+              />
+              <p className="field-hint">Primary residence tax relief deduction</p>
+            </div>
+            <div className="field-group">
+              <label>Effective Property Tax Rate (%)</label>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={propertyTaxRate}
+                onChange={(e) => setPropertyTaxRate(Number(e.target.value) || 0)}
+              />
+              <p className="field-hint">{stateData.name} state average: {stateData.avgPropertyTaxRate}%</p>
+            </div>
+          </div>
+
+          <div className="results-panel">
+            <h3>{stateData.name} Property Tax Estimate</h3>
+            <div className="metric-highlight">
+              <span>Annual Property Tax Due</span>
+              <strong>${propertyTaxCalc.annualTax.toLocaleString("en-US", { maximumFractionDigits: 0 })}</strong>
+            </div>
+            <div className="breakdown-table">
+              <div className="table-row">
+                <span>Monthly Escrow Payment:</span>
+                <strong>${propertyTaxCalc.monthlyEscrow.toFixed(2)}/mo</strong>
+              </div>
+              <div className="table-row">
+                <span>Gross Assessed Value:</span>
+                <span>${propertyValue.toLocaleString()}</span>
+              </div>
+              <div className="table-row">
+                <span>Homestead Exemption:</span>
+                <span className="negative-val">-${homesteadExemption.toLocaleString()}</span>
+              </div>
+              <div className="table-row">
+                <span>Net Taxable Assessed Value:</span>
+                <span>${propertyTaxCalc.taxableValue.toLocaleString()}</span>
+              </div>
+              <div className="table-row total-row">
+                <span>Effective Tax Rate:</span>
+                <span>{propertyTaxCalc.effectiveRate.toFixed(2)}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : mode === "capital-gains" ? (
+        <div className="calc-layout-grid">
+          <div className="input-panel">
+            <h3>Capital Gains Parameters</h3>
+            <div className="field-group">
+              <label>Original Purchase Cost ($)</label>
+              <input
+                type="number"
+                min="0"
+                step="1000"
+                value={assetPurchasePrice}
+                onChange={(e) => setAssetPurchasePrice(Number(e.target.value) || 0)}
+              />
+            </div>
+            <div className="field-group">
+              <label>Total Sale Price ($)</label>
+              <input
+                type="number"
+                min="0"
+                step="1000"
+                value={assetSalePrice}
+                onChange={(e) => setAssetSalePrice(Number(e.target.value) || 0)}
+              />
+            </div>
+            <div className="field-group">
+              <label>Holding Period</label>
+              <div className="radio-pill-group">
+                <button
+                  type="button"
+                  className={holdingPeriod === "long-term" ? "pill-active" : "pill-btn"}
+                  onClick={() => setHoldingPeriod("long-term")}
+                >
+                  Long-Term (&gt; 1 Year)
+                </button>
+                <button
+                  type="button"
+                  className={holdingPeriod === "short-term" ? "pill-active" : "pill-btn"}
+                  onClick={() => setHoldingPeriod("short-term")}
+                >
+                  Short-Term (&le; 1 Year)
+                </button>
+              </div>
+            </div>
+            <div className="field-group">
+              <label>Other Annual Taxable Income ($)</label>
+              <input
+                type="number"
+                min="0"
+                step="5000"
+                value={otherIncome}
+                onChange={(e) => setOtherIncome(Number(e.target.value) || 0)}
+              />
+            </div>
+          </div>
+
+          <div className="results-panel">
+            <h3>{stateData.name} Capital Gains Breakdown</h3>
+            <div className="metric-highlight">
+              <span>Net After-Tax Profit</span>
+              <strong>${capitalGainsCalc.netGainsProceeds.toLocaleString("en-US", { maximumFractionDigits: 0 })}</strong>
+            </div>
+            <div className="breakdown-table">
+              <div className="table-row">
+                <span>Gross Capital Gain:</span>
+                <span>${capitalGainsCalc.capitalGain.toLocaleString()}</span>
+              </div>
+              <div className="table-row">
+                <span>Federal Tax ({capitalGainsCalc.federalRate.toFixed(1)}%):</span>
+                <span className="negative-val">-${capitalGainsCalc.fedGainsTax.toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
+              </div>
+              <div className="table-row">
+                <span>{stateData.name} State Tax ({capitalGainsCalc.stateGainsRate.toFixed(1)}%):</span>
+                <span className={stateData.hasIncomeTax ? "negative-val" : "green-val"}>
+                  {stateData.hasIncomeTax ? `-$${capitalGainsCalc.stateGainsTax.toLocaleString("en-US", { maximumFractionDigits: 0 })}` : "$0 (0% State Capital Gains)"}
+                </span>
+              </div>
+              <div className="table-row total-row">
+                <span>Total Tax Due:</span>
+                <span>${capitalGainsCalc.totalGainsTax.toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
+              </div>
+              <div className="table-row">
+                <span>Total Cash Returned:</span>
+                <strong>${capitalGainsCalc.totalCashOut.toLocaleString("en-US", { maximumFractionDigits: 0 })}</strong>
+              </div>
+              <div className="table-row">
+                <span>Effective Tax on Profit:</span>
+                <span>{capitalGainsCalc.effectiveGainsRate.toFixed(1)}%</span>
+              </div>
             </div>
           </div>
         </div>

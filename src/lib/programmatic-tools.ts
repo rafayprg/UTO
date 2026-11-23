@@ -1560,6 +1560,108 @@ export function generateProgrammaticTools(): ToolDefinition[] {
       faq: [{ q: `What is double time pay?`, a: "Double time is 2.0x regular pay, required under specific state statutes (such as California after 12 hours in a single workday or 8 hours on the 7th consecutive day)." }],
       relatedSlugs: [`${s.slug}-paycheck-calculator`, `${s.slug}-hourly-to-salary-calculator`],
     });
+
+    // 7. Property Tax Calculator
+    programmaticList.push({
+      id: `prog-${s.slug}-property-tax-calculator`,
+      slug: `${s.slug}-property-tax-calculator`,
+      name: `${s.name} Property Tax Calculator`,
+      title: `${s.name} Property Tax Calculator (2026 Rates & Escrow)`,
+      shortDesc: `Calculate your annual and monthly property tax payments in ${s.name} based on assessed home values and county tax rates.`,
+      seoTitle: `${s.name} Property Tax Calculator 2026 – Tax Rates & Escrow`,
+      metaDescription: `Calculate your ${s.name} property taxes online. Check effective county rates, homestead exemptions, and monthly mortgage escrow. Free.`,
+      category: "finance",
+      group: "US State Property Taxes",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-tax-paycheck-engine",
+      preset: { stateCode: s.code, stateSlug: s.slug, calcMode: "property-tax" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["TX", "CA", "FL", "NY", "NJ", "IL"].includes(s.code),
+      publishWave: 2,
+      keywords: [
+        `${s.name.toLowerCase()} property tax calculator`,
+        `${s.slug} real estate tax`,
+        `${s.code.toLowerCase()} property tax rate 2026`,
+        "homestead exemption calculator",
+        "monthly mortgage escrow calculator",
+      ],
+      formulaExplanation: `Annual Property Tax in ${s.name} = (Assessed Home Value − Homestead Exemption) × (${s.avgPropertyTaxRate}% State Average Effective Rate). Monthly Escrow = Annual Tax ÷ 12. Benchmark median state home price: $${s.medianHomePrice.toLocaleString()}.`,
+      workedExamples: [
+        {
+          title: `Median Home in ${s.name} ($${s.medianHomePrice.toLocaleString()})`,
+          inputSummary: `$${s.medianHomePrice.toLocaleString()} assessed value with standard $25,000 homestead exemption at ${s.avgPropertyTaxRate}% effective rate.`,
+          resultSummary: `Annual tax: ~$${Math.round(Math.max(0, s.medianHomePrice - 25000) * (s.avgPropertyTaxRate / 100)).toLocaleString()}. Monthly escrow: ~$${Math.round((Math.max(0, s.medianHomePrice - 25000) * (s.avgPropertyTaxRate / 100)) / 12).toLocaleString()}/month.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `What is the average property tax rate in ${s.name}?`,
+          answer: `The average effective property tax rate in ${s.name} is ${s.avgPropertyTaxRate}%, though actual county and municipal rates vary across school districts.`,
+        },
+        {
+          question: `Does ${s.name} have a homestead exemption?`,
+          answer: `Yes, ${s.name} allows primary homeowners to reduce their taxable assessed property value through homestead exemptions, lowering annual tax liabilities.`,
+        },
+      ],
+      faq: [{ q: `How often are property taxes reassessed?`, a: "Most counties reassess property values every 1 to 3 years based on local market appraisals and statutory assessment ratios." }],
+      relatedSlugs: [`${s.slug}-mortgage-calculator`, `${s.slug}-income-tax-calculator`],
+    });
+
+    // 8. Capital Gains Calculator
+    programmaticList.push({
+      id: `prog-${s.slug}-capital-gains-calculator`,
+      slug: `${s.slug}-capital-gains-calculator`,
+      name: `${s.name} Capital Gains Tax Calculator`,
+      title: `${s.name} Capital Gains Tax Calculator (2026 Federal & State Rates)`,
+      shortDesc: `Estimate federal and ${s.name} state capital gains taxes on real estate, stocks, and crypto profits.`,
+      seoTitle: `${s.name} Capital Gains Tax Calculator 2026 – Federal & State`,
+      metaDescription: `Calculate short-term and long-term capital gains tax in ${s.name}. Compare 2026 IRS federal brackets and state capital gains tax rates. Free.`,
+      category: "finance",
+      group: "US Capital Gains & Investments",
+      region: "US",
+      cpcTier: "high",
+      engineType: "native",
+      componentKey: "state-tax-paycheck-engine",
+      preset: { stateCode: s.code, stateSlug: s.slug, calcMode: "capital-gains" },
+      status: "live",
+      indexable: true,
+      isWasm: false,
+      trending: ["CA", "NY", "FL", "TX", "WA", "NV"].includes(s.code),
+      publishWave: 2,
+      keywords: [
+        `${s.name.toLowerCase()} capital gains tax calculator`,
+        `${s.slug} capital gains rate`,
+        "2026 federal capital gains tax",
+        "long term vs short term capital gains",
+        "crypto capital gains tax calculator",
+      ],
+      formulaExplanation: `Capital Gains Tax in ${s.name} = (Net Profit × Federal Rate: 0%, 15%, or 20%) + (Net Profit × ${s.hasIncomeTax ? `${s.topMarginalRate}% State Rate` : "0% No State Tax"}) + 3.8% NIIT (if applicable).`,
+      workedExamples: [
+        {
+          title: `$35,000 Long-Term Gain in ${s.name}`,
+          inputSummary: `$50,000 purchase basis, $85,000 sale proceeds ($35,000 gain) held > 1 year with $95,000 household income.`,
+          resultSummary: `Federal 15% rate: $5,250. ${s.name} state tax: ${s.hasIncomeTax ? `~$${Math.round(35000 * (s.topMarginalRate / 100)).toLocaleString()}` : "$0"}. Net proceeds: ~$${Math.round(35000 - (5250 + (s.hasIncomeTax ? 35000 * (s.topMarginalRate / 100) : 0))).toLocaleString()}.`,
+        },
+      ],
+      faqs: [
+        {
+          question: `Does ${s.name} tax capital gains?`,
+          answer: s.hasIncomeTax
+            ? `${s.name} taxes capital gains as state taxable income at rates up to ${s.topMarginalRate}%.`
+            : `No. ${s.name} imposes 0% state capital gains tax on long-term investments, allowing you to pay only federal IRS taxes.`,
+        },
+        {
+          question: `What is the difference between short-term and long-term capital gains in ${s.name}?`,
+          answer: `Assets held for 1 year or less are short-term gains taxed at ordinary income tax brackets (up to 37% federal). Assets held longer than 1 year qualify for lower preferential federal rates (0%, 15%, or 20%).`,
+        },
+      ],
+      faq: [{ q: `What is the Net Investment Income Tax (NIIT)?`, a: "The NIIT is an additional 3.8% federal surtax on investment income for single filers with MAGI above $200,000 ($250,000 married filing jointly)." }],
+      relatedSlugs: [`${s.slug}-income-tax-calculator`, `${s.slug}-paycheck-calculator`],
+    });
   }
 
   return programmaticList;

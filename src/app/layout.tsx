@@ -21,6 +21,11 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
+  alternates: {
+    types: {
+      "application/rss+xml": "/feed.xml",
+    },
+  },
   authors: [{ name: "Localtools Engineering" }],
   generator: "Next.js 15",
   keywords: [

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { getPost, getPosts } from "@/lib/mdx";
 import { ToolEmbed } from "@/components/ToolEmbed";
+import { CiteWidget } from "@/components/CiteWidget";
 import { absolute, site } from "@/lib/site";
 import type { Metadata } from "next";
 
@@ -421,6 +422,14 @@ export default async function BlogPost({
           <span>Ad Slot — Localtools Guides</span>
         </div>
       </div>
+
+      {/* Organic Backlink & Citation Generator */}
+      <CiteWidget
+        title={post.frontmatter.title}
+        url={pageUrl}
+        authorName={post.author.name}
+        publishedYear={new Date(post.frontmatter.publishedAt).getFullYear().toString()}
+      />
 
       {/* Author Profile Box (E-E-A-T Core Standard) */}
       <section className="author-profile-card">

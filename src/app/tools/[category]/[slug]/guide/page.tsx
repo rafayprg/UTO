@@ -17,6 +17,7 @@ import { absolute } from "@/lib/site";
 import { generateToolGuide } from "@/lib/tool-guide-content";
 import { GuideJsonLd } from "@/components/seo/GuideJsonLd";
 import { AdSlot } from "@/components/AdSlot";
+import { CiteWidget } from "@/components/CiteWidget";
 
 type Props = { params: Promise<{ category: string; slug: string }> };
 export const dynamicParams = false;
@@ -331,6 +332,14 @@ export default async function ToolGuidePage({ params }: Props) {
           Open {tool.title} Live Workspace <ArrowRight size={17} />
         </Link>
       </div>
+
+      {/* Organic Backlink & Citation Generator */}
+      <CiteWidget
+        title={`Complete Guide to ${tool.title}`}
+        url={absolute(guideUrl)}
+        authorName="LocalTools Technical Editorial Board"
+        publishedYear="2026"
+      />
 
       {/* Related Tools */}
       {sameSuite.length > 0 && (
