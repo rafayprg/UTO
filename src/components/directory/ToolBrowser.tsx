@@ -1,11 +1,43 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ToolSummary } from "@/lib/published";
+import { groupAnchor } from "@/lib/group-anchor";
 
 type Props = { items: ToolSummary[]; label: string };
 const ALL = "All";
+const TOPIC_HASH_PREFIX = "#topic-";
+
+/**
+ * "#topic-…" links (from the topic grid) filter the list to that topic and jump to it,
+ * instead of smooth-scrolling past hundreds of rows. Without JS they still work as plain anchors.
+ */
+function useTopicLinks(groups: string[], setGroup: (group: string) => void) {
+  useEffect(() => {
+    const groupFor = (hash: string) => groups.find((name) => `#${groupAnchor(name)}` === hash);
+
+    const showTopic = (name: string) => {
+      setGroup(name);
+      requestAnimationFrame(() => document.getElementById("all-tools")?.scrollIntoView({ behavior: "instant", block: "start" }));
+    };
+
+    const onClick = (event: MouseEvent) => {
+      const link = (event.target as Element | null)?.closest?.("a[href^='#topic-']");
+      const name = link ? groupFor(link.getAttribute("href") ?? "") : undefined;
+      if (!name) return;
+      event.preventDefault();
+      history.replaceState(null, "", `#${groupAnchor(name)}`);
+      showTopic(name);
+    };
+
+    const initial = window.location.hash.startsWith(TOPIC_HASH_PREFIX) ? groupFor(window.location.hash) : undefined;
+    if (initial) showTopic(initial);
+
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, [groups, setGroup]);
+}
 
 /** Filterable list of tools. Every link is in the server HTML; filtering only hides rows. */
 export function ToolBrowser({ items, label }: Props) {
@@ -17,6 +49,8 @@ export function ToolBrowser({ items, label }: Props) {
     for (const item of items) counts.set(item.group, (counts.get(item.group) ?? 0) + 1);
     return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([name]) => name);
   }, [items]);
+
+  useTopicLinks(groups, setGroup);
 
   const terms = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
   const visible = items.filter((item) => {
@@ -31,7 +65,7 @@ export function ToolBrowser({ items, label }: Props) {
 
   return (
     <>
-      <div className="lt-filter">
+      <div className="lt-filter" id="all-tools">
         <div className="lt-filter__row">
           <input
             type="search"
@@ -73,7 +107,7 @@ export function ToolBrowser({ items, label }: Props) {
       )}
 
       {sections.map((section) => (
-        <section className="lt-group" key={section.name} aria-label={section.name}>
+        <section className="lt-group" key={section.name} id={groupAnchor(section.name)} aria-label={section.name}>
           <h2>
             {section.name} <small className="lt-num">{section.rows.length}</small>
           </h2>

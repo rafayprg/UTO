@@ -9,6 +9,7 @@ import { Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
 import "./ui.css";
 import "./engines.css";
+import "./directory.css";
 
 const schibsted = Schibsted_Grotesk({
   subsets: ["latin"],

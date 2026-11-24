@@ -1,0 +1,196 @@
+/* ==========================================================================
+   Category pages: hero, "Start here" cards, topic grid.
+   Uses the Workbench tokens from ui.css only.
+   ========================================================================== */
+
+/* ---------- Hero ---------- */
+.lt-cathero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+  padding-block: clamp(28px, 4vw, 56px) clamp(24px, 3vw, 40px);
+}
+.lt-cathero h1 {
+  margin-top: 14px;
+  font-size: var(--step-4);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  max-width: 18ch;
+}
+.lt-cathero__lede { margin-top: 14px; font-size: var(--step-1); max-width: 52ch; }
+.lt-cathero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 0;
+  list-style: none;
+}
+.lt-cathero__facts li {
+  padding: 8px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.9rem;
+  color: var(--graphite);
+}
+.lt-cathero__facts strong { color: var(--ink); font-weight: 700; }
+
+.lt-cathero__art {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-l);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  background: var(--ledger-tint);
+  box-shadow: 8px 8px 0 var(--marker);
+}
+.lt-cathero__art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.lt-cathero__art[data-has-art="false"] {
+  display: grid;
+  place-items: center;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 31px, var(--rule) 31px 32px),
+    repeating-linear-gradient(90deg, transparent 0 31px, var(--rule) 31px 32px),
+    var(--ledger-tint);
+}
+.lt-cathero__glyph {
+  display: grid;
+  place-items: center;
+  width: 132px;
+  height: 132px;
+  border-radius: var(--radius-l);
+  background: var(--surface);
+  color: var(--ledger);
+  border: 1.5px solid var(--ink);
+}
+
+/* ---------- Start here ---------- */
+.lt-starthere,
+.lt-topics { margin-top: clamp(28px, 4vw, 48px); }
+.lt-starthere h2,
+.lt-topics h2,
+.lt-alltools-heading {
+  font-size: var(--step-2);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.lt-alltools-heading { margin-top: clamp(36px, 5vw, 64px); }
+
+.lt-starthere__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.lt-startcard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 100%;
+  padding: 20px;
+  border-radius: var(--radius-m);
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.15s var(--ease), transform 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+.lt-startcard:hover { border-color: var(--ink); transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+.lt-startcard strong { font-size: 1.02rem; line-height: 1.3; font-weight: 700; }
+.lt-startcard__group {
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: var(--radius-s);
+  background: var(--ledger-tint);
+  color: var(--ledger);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.lt-startcard__desc {
+  font-size: 0.88rem;
+  color: var(--graphite);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.lt-startcard__go { margin-top: auto; padding-top: 6px; font-size: 0.85rem; font-weight: 600; color: var(--ledger); }
+
+/* ---------- Topic grid ---------- */
+.lt-topics__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.lt-topic {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px;
+  border-radius: var(--radius-m);
+  border: 1px solid var(--rule);
+  background: var(--surface);
+}
+.lt-topic h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.lt-topic h3 a { color: var(--ink); text-decoration: none; }
+.lt-topic h3 a:hover { color: var(--ledger); }
+.lt-topic h3 span { font-size: 0.82rem; font-weight: 600; color: var(--graphite); white-space: nowrap; }
+.lt-topic ul { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; margin: 0; padding: 0; list-style: none; }
+.lt-topic li a {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--rule-strong);
+  text-underline-offset: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-block: 3px;
+}
+.lt-topic li a:hover { color: var(--ledger); text-decoration-color: var(--ledger); }
+.lt-topic__more { margin-top: auto; font-size: 0.85rem; font-weight: 600; color: var(--ledger); }
+
+/* Anchored sections land below the sticky header. */
+.lt-group,
+#all-tools { scroll-margin-top: 88px; }
+
+/* ---------- Hub card artwork ---------- */
+.lt-catcard__art {
+  display: block;
+  margin: -22px -22px 4px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-m) var(--radius-m) 0 0;
+  border-bottom: 1px solid var(--rule);
+}
+.lt-catcard__art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 960px) {
+  .lt-starthere__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .lt-cathero { grid-template-columns: minmax(0, 1fr); }
+  .lt-cathero__art { order: -1; aspect-ratio: 16 / 8; box-shadow: 5px 5px 0 var(--marker); }
+  .lt-cathero__art[data-has-art="false"] { display: none; }
+  .lt-starthere__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lt-startcard { transition: none; }
+  .lt-startcard:hover { transform: none; }
+}

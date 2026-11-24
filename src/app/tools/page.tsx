@@ -3,7 +3,8 @@ import Link from "next/link";
 import { CategoryIcon } from "@/components/ToolIcon";
 import { SearchTrigger } from "@/components/layout/SearchDialog";
 import { site, absolute } from "@/lib/site";
-import { toolPath } from "@/lib/tools-registry";
+import { toolPath, type ToolCategory } from "@/lib/tools-registry";
+import { categoryArt } from "@/lib/category-art";
 import { categoryBlurbs, categoryKeys, categoryShortNames, popularIn, publishedTools, toolsIn } from "@/lib/published";
 
 const total = publishedTools.length.toLocaleString("en-US");
@@ -21,6 +22,23 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
+
+/** Category artwork when it exists, otherwise the small icon glyph. */
+function CategoryThumb({ category }: { category: ToolCategory }) {
+  const art = categoryArt(category);
+  if (!art) {
+    return (
+      <span className="lt-glyph">
+        <CategoryIcon category={category} size={18} />
+      </span>
+    );
+  }
+  return (
+    <span className="lt-catcard__art">
+      <img src={art} alt="" width={1600} height={1000} loading="lazy" decoding="async" />
+    </span>
+  );
+}
 
 export default function ToolsDirectoryPage() {
   const jsonLd = {
@@ -65,9 +83,7 @@ export default function ToolsDirectoryPage() {
       <div className="lt-catgrid" style={{ marginTop: 16 }}>
         {categoryKeys.map((key) => (
           <div className="lt-catcard" key={key}>
-            <span className="lt-glyph">
-              <CategoryIcon category={key} size={18} />
-            </span>
+            <CategoryThumb category={key} />
             <h2>
               <Link href={`/tools/${key}/`}>{categoryShortNames[key]}</Link>
             </h2>

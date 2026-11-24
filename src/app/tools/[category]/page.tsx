@@ -4,11 +4,16 @@ import { categories, isCategory, toolPath } from "@/lib/tools-registry";
 import { absolute } from "@/lib/site";
 import { ToolBrowser } from "@/components/directory/ToolBrowser";
 import { GuideSection } from "@/components/GuideSection";
-import { CategoryIcon } from "@/components/ToolIcon";
+import { CategoryHero } from "@/components/directory/CategoryHero";
+import { PopularTools } from "@/components/directory/PopularTools";
+import { TopicGrid } from "@/components/directory/TopicGrid";
+import { categoryArt } from "@/lib/category-art";
 import { categoryGuides, categoryFaqs } from "@/lib/guides";
-import { categoryBlurbs, categoryKeys, categoryShortNames, summarize, toolsIn } from "@/lib/published";
+import { categoryBlurbs, categoryKeys, categoryShortNames, popularIn, summarize, toolsIn } from "@/lib/published";
 
 type Props = { params: Promise<{ category: string }> };
+
+const POPULAR_COUNT = 6;
 
 export const dynamicParams = false;
 
@@ -23,13 +28,15 @@ export async function generateMetadata({ params }: Props) {
   const title = `${name} — Free & Private, No Sign-Up`;
   const description = `${toolsIn(category).length} free ${categoryShortNames[category].toLowerCase()} tools that run in your browser. ${categoryBlurbs[category]} Nothing is uploaded.`;
   const canonicalUrl = absolute(`/tools/${category}/`);
+  const art = categoryArt(category);
+  const images = art ? [{ url: absolute(art), width: 1600, height: 1000, alt: name }] : undefined;
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
     robots: { index: toolsIn(category).some((tool) => tool.indexable), follow: true },
-    openGraph: { title, description, url: canonicalUrl, type: "website" },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: { title, description, url: canonicalUrl, type: "website", images },
+    twitter: { card: "summary_large_image", title, description, images },
   };
 }
 
@@ -37,6 +44,7 @@ export default async function CategoryPage({ params }: Props) {
   const { category } = await params;
   if (!isCategory(category)) notFound();
   const list = toolsIn(category);
+  const summaries = list.map(summarize);
   const faqs = categoryFaqs[category];
 
   const schema = {
@@ -79,26 +87,22 @@ export default async function CategoryPage({ params }: Props) {
   return (
     <div className="lt-wrap">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
-      <header className="lt-page-head">
-        <nav className="lt-crumbs" aria-label="Breadcrumb">
-          <Link href="/">Home</Link>
-          <span aria-hidden="true">/</span>
-          <Link href="/tools/">All tools</Link>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page">{categoryShortNames[category]}</span>
-        </nav>
-        <div className="lt-page-head__title">
-          <span className="lt-glyph lt-glyph--lg">
-            <CategoryIcon category={category} size={26} />
-          </span>
-          <h1>{categories[category]}</h1>
-        </div>
-        <p className="lt-page-head__lede">
-          {list.length} free tools. {categoryBlurbs[category]} Everything runs in your browser.
-        </p>
-      </header>
+      <CategoryHero
+        category={category}
+        title={categories[category]}
+        shortName={categoryShortNames[category]}
+        lede={`${categoryBlurbs[category]} Every tool runs in your browser, so your numbers and files never leave your device.`}
+        toolCount={list.length}
+        topicCount={new Set(list.map((tool) => tool.group)).size}
+        art={categoryArt(category)}
+      />
 
-      <ToolBrowser items={list.map(summarize)} label={categoryShortNames[category].toLowerCase()} />
+      <PopularTools items={popularIn(category, POPULAR_COUNT).map(summarize)} />
+
+      <TopicGrid items={summaries} categoryName={categoryShortNames[category]} />
+
+      <h2 className="lt-alltools-heading">All {list.length.toLocaleString("en-US")} {categoryShortNames[category].toLowerCase()} tools</h2>
+      <ToolBrowser items={summaries} label={categoryShortNames[category].toLowerCase()} />
 
       <div className="lt-tool__layout">
         <div className="lt-prose">
